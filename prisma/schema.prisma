@@ -1,0 +1,319 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum tipoDocumento {
+  FATURA
+  RECIBO
+  FATURA_PROFORMA
+  FATURA_RECIBO
+}
+
+enum estadoCaixa {
+ABERTO
+FECHADO
+}
+enum localProduto {
+ ARMAZÉM 
+ LOJA
+}
+
+model clientes {
+  ID_cliente String @id @default(uuid())
+  numeroContribuinte String
+  nomeCliente String
+  moradaCliente String
+  telefoneCliente String
+  emailCliente String
+  transacaoes transacaoes[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+
+model funcionarios {
+	ID_funcionario String @id @default(uuid())
+  numeroBI String
+  nomeFuncionario String
+  senha String
+  moradaFuncionario String
+  telefoneFuncionario String
+  emailFuncionario String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  FuncionariosPermissoes funcionariosPermissoes[]
+  FuncionariosFuncoes funcionariosFuncoes[]
+  EntradasEstoque entradasEstoque[]
+  transacaoes transacaoes[]
+  transferencias transferencias[]
+  funcionariosCaixa funcionariosCaixa[]
+}
+
+
+model categoriasProdutos{
+  ID_categoriaProduto String @id @default(uuid())
+  nomeCategoria String
+  descricaoCategoria String
+  
+  produtos produtos[]
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model produtos {
+	ID_produto String @id @default(uuid())
+  ID_categoriaProduto String
+  referenciaProduto String
+  nomeProduto String
+  custoAquisicao String
+  precoVenda Decimal @db.Decimal(10 , 2)
+  quantidadeEstoque Int
+  dataValidade DateTime
+  EntradasEstoque entradasEstoque[]
+  produtosLocalizacoes produtosLocalizacoes[]
+  transacaoes transacaoes[]
+  alertas alertas[]
+  transferencias transferencias[]
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  categoriasProdutos categoriasProdutos @relation(fields: [ID_categoriaProduto], references: [ID_categoriaProduto], onDelete: Cascade, onUpdate: Cascade)
+}
+
+
+model fornecedores {
+  ID_fornecedor String @id @default(uuid())
+  nif String
+  nomeFornecedor String
+  moradaFornecedor String
+  telefoneFornecedor Int
+  emailFornecedor String
+
+  EstradasEstoque entradasEstoque[]
+  FuncionariosCaixa funcionariosCaixa []  
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model entradasEstoque {
+  ID_entradaEstoque String @id @default(uuid())
+	ID_fornecedor String
+  ID_produto String
+  ID_funcionario String
+  produtoRecebido String
+  quantidadeRecebida String
+  dataEntrada DateTime
+  custoUnitario Decimal  @db.Decimal(10 , 2)
+
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  Fornecedores fornecedores @relation(fields: [ID_fornecedor], references: [ID_fornecedor], onDelete: Cascade, onUpdate: Cascade)
+  Produtos produtos @relation(fields: [ID_produto], references: [ID_produto], onDelete: Cascade, onUpdate: Cascade)
+  funcionarios funcionarios @relation(fields: [ID_funcionario], references: [ID_funcionario], onDelete: Cascade, onUpdate: Cascade)
+
+}
+
+model transacaoes {
+	ID_transacao String @id @default(uuid())
+  ID_cliente String
+  ID_funcionario String
+  ID_produto String
+  numeroDocumento String
+  tipoDocumento tipoDocumento
+  dataEmissao DateTime
+  quantidadeVendida Int
+  precoUnitario Decimal @db.Decimal(10, 2)
+  valorTotalTransacao Decimal @db.Decimal(10, 2)
+  produtos produtos @relation(fields: [ID_produto], references: [ID_produto], onDelete: Cascade, onUpdate: Cascade)
+  clientes clientes @relation(fields: [ID_cliente], references: [ID_cliente], onDelete: Cascade, onUpdate: Cascade)
+  funcionarios funcionarios @relation(fields: [ID_funcionario], references: [ID_funcionario],onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model seccoes {
+	ID_seccao String @id @default(uuid())
+  nomeSeccao String
+  descricaoSeccao String
+  
+  localizacoes localizacoes[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model corredores {
+	ID_corredor String @id @default(uuid())
+  nomeCorredor String
+  descricaoCorredor String
+
+  Localizacoes localizacoes[]
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model prateleiras {
+	ID_prateleira String @id @default(uuid())
+  nomePrateleira String
+  descricaoPrateleira String
+
+  Localizacoes localizacoes[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model localizacoes {
+	ID_localizacao String @id @default(uuid())
+  ID_seccao String
+  ID_prateleira String
+  ID_corredor String
+  nomeLocalizacao String
+  descricaoLocalizacao String
+  
+  localProduto  localProduto
+  
+  seccoes seccoes @relation(fields: [ID_seccao],references: [ID_seccao],onDelete: Cascade, onUpdate: Cascade )
+  prateleiras prateleiras @relation(fields: [ID_prateleira], references: [ID_prateleira],onDelete: Cascade, onUpdate: Cascade)
+  corredores corredores @relation(fields: [ID_corredor], references: [ID_corredor],onDelete: Cascade, onUpdate: Cascade)
+  produtosLocalizacoes produtosLocalizacoes[]
+  transferencias transferencias[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model produtosLocalizacoes {
+  ID_produtoLocalizacao String @id @default(uuid())
+	ID_produto String 
+  ID_localizacao String
+  quantidadeProduto Int
+  quantidadeMinimaProduto Int
+
+  Produtos produtos @relation(fields: [ID_produto], references: [ID_produto], onDelete: Cascade, onUpdate: Cascade)
+  Localizacoes localizacoes @relation(fields: [ID_localizacao], references: [ID_localizacao],onDelete: Cascade, onUpdate: Cascade)
+
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model transferencias {
+	ID_transferencia String @id @default(uuid())
+  ID_produto String
+  ID_funcionario String
+  ID_localizacao String
+  dataTransferencia DateTime
+  quantidadeTransferida Int
+  funcionarios funcionarios @relation(fields: [ID_funcionario], references: [ID_funcionario], onDelete: Cascade, onUpdate: Cascade)
+  Produtos produtos @relation(fields: [ID_produto], references: [ID_produto],onDelete: Cascade, onUpdate: Cascade)
+  Localizacoes localizacoes @relation(fields: [ID_localizacao], references: [ID_localizacao],onDelete: Cascade, onUpdate: Cascade)
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model caixas {
+	ID_caixa String @id @default(uuid())
+  nomeCaixa String
+  descricaoCaixa String
+
+  funcionariosCaixa funcionariosCaixa []
+  alertas alertas[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model funcionariosCaixa {
+  ID_funcionarioCaixa String @id @default(uuid())
+	ID_caixa String
+  ID_funcionario String
+  estadoCaixa estadoCaixa
+  quantidadaFaturada Decimal @db.Decimal(10, 2)
+  horarioAbertura DateTime
+  horarioFechamento DateTime
+
+  caixas caixas @relation(fields: [ID_caixa], references: [ID_caixa], onDelete: Cascade, onUpdate: Cascade)
+  Funcionarios funcionarios @relation(fields: [ID_funcionario], references: [ID_funcionario],onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  fornecedores fornecedores[]
+}
+
+model alertas {
+	ID_alerta String @id @default(uuid())
+  ID_caixa String
+  ID_produto String
+  nomeAlerta String
+  descricaoAlerta String
+  caixas caixas @relation(fields: [ID_caixa], references: [ID_caixa],onDelete: Cascade, onUpdate: Cascade)
+  produtos produtos @relation(fields: [ID_produto], references: [ID_produto],onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model funcoes {
+	ID_funcao String @id @default(uuid())
+  nome String
+  descricao String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  funcionariosFuncoes funcionariosFuncoes[]
+  funcoesPermissoes funcoesPermissoes[]
+}
+
+model permissoes {
+	ID_permissao String @id @default(uuid())
+  nome String
+  descricao String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  funcionariosPermissoes funcionariosPermissoes[]
+  funcoesPermissoes funcoesPermissoes[]
+}
+
+model funcionariosFuncoes {
+  ID_funcionarioFuncao String @id @default(uuid())
+	ID_funcionario String
+  ID_funcao String
+  funcionarios funcionarios @relation(fields: [ID_funcionario], references: [ID_funcionario], onDelete: Cascade, onUpdate: Cascade)
+  funcoes funcoes @relation(fields: [ID_funcao], references: [ID_funcao], onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model funcionariosPermissoes {
+  ID_funcionarioPermissao String @id @default(uuid())
+	ID_funcionario String
+  ID_permissao String
+  funcionarios funcionarios @relation(fields: [ID_funcionario], references: [ID_funcionario], onDelete: Cascade, onUpdate: Cascade)
+  Permissoes permissoes @relation(fields: [ID_permissao], references: [ID_permissao], onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model funcoesPermissoes {
+  ID_funcaoPermissao String @id @default(uuid())
+	ID_funcao String
+  ID_permissao String
+  funcoes funcoes @relation(fields: [ID_funcao], references: [ID_funcao],onDelete: Cascade, onUpdate: Cascade)
+  Permissoes permissoes @relation(fields: [ID_permissao], references: [ID_permissao], onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
