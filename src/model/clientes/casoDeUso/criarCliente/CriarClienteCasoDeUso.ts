@@ -5,7 +5,7 @@ import { ClienteRepositorio } from "../../repositorioCliente/implementacoes/Repo
 class CriarClienteCasoDeUso{
     async execute({emailCliente, moradaCliente, nomeCliente, numeroContribuinte, telefoneCliente}: DadosCliente): Promise<clientes> {
         const repositorioCliente = new ClienteRepositorio()
-        const existeEmail= await repositorioCliente.listarEmailCliente(emailCliente)
+        const existeEmail = await repositorioCliente.listarEmailCliente(emailCliente)
         if(existeEmail){
             throw new Error("Já existe um cliente com esse email")
         }
