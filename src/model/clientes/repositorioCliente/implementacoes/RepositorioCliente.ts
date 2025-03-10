@@ -44,6 +44,26 @@ class ClienteRepositorio implements IClientes {
       undefined;
     return listaClientePeloNome;
   }
+  async listarEmailCliente(emailCliente: string): Promise<clientes | undefined> {
+    const listarEmailCliente =
+      (await prisma.clientes.findFirst({ where: { emailCliente } })) ||
+      undefined;
+    return listarEmailCliente;
+  }
+  async listarTelefoneCliente(telefoneCliente: string): Promise<clientes | undefined> {
+    const listarTelefoneCliente =
+      (await prisma.clientes.findFirst({ where: { telefoneCliente } })) ||
+      undefined;
+    return listarTelefoneCliente;
+    
+  }
+  async listarNumeroDeContribuinte(numeroContribuinte: string): Promise<clientes | undefined> {
+    const listarNumeroDeContribuinte =
+      (await prisma.clientes.findFirst({ where: { numeroContribuinte } })) ||
+      undefined;
+    return listarNumeroDeContribuinte;
+    
+  }
 
   async eliminarCliente(id: string): Promise<void> {
     await prisma.clientes.delete({ where: { ID_cliente: id } });
@@ -68,6 +88,7 @@ class ClienteRepositorio implements IClientes {
     });
     return atualizarCliente;
   }
+
 }
 
 export { ClienteRepositorio };

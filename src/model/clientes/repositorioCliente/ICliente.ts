@@ -16,4 +16,9 @@ export interface IClientes {
   listarUmClientePeloId(id: string): Promise<clientes | undefined>;
   atualizarCliente({}: DadosCliente): Promise<clientes>;
   eliminarCliente(id: string): Promise<void>;
+  listarEmailCliente(emailCliente: string): Promise<clientes | undefined>;
+  listarTelefoneCliente(telefoneCliente: string): Promise<clientes | undefined>;
+  listarNumeroDeContribuinte(
+    numeroContribuinte: string
+  ): Promise<clientes | undefined>;
 }
