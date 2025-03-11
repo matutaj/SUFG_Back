@@ -8,3 +8,4 @@ class ListarCorredorPeloNomeController {
         return res.status(201).json(result);
     }
 }
+export {ListarCorredorPeloNomeController}
