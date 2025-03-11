@@ -2,9 +2,9 @@ import { Router } from "express";
 
 import { CriarFornecedorController } from "../model/fornecedores/casoDeUso/CriarFornecedorController";
 
-const fornecedorRoute = Router();
+const fornecedorRouter = Router();
 const criarFornecedor = new CriarFornecedorController();
 
-fornecedorRoute.post("/", criarFornecedor.handle);
+fornecedorRouter.post("/", criarFornecedor.handle);
 
-export { fornecedorRoute };
+export { fornecedorRouter };

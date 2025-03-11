@@ -2,10 +2,10 @@ import { Router } from "express";
 
 import { CriarCategoriaProdutoController } from "../model/categoriaProdutos/casoDeUso/CriarCategoriaProdutoController";
 
-const categoriaProdutoRoutes = Router();
+const categoriaProdutoRouter = Router();
 
 const criarCategoriaProduto = new CriarCategoriaProdutoController();
 
-categoriaProdutoRoutes.post("/", criarCategoriaProduto.handle);
+categoriaProdutoRouter.post("/", criarCategoriaProduto.handle);
 
-export { categoriaProdutoRoutes };
+export { categoriaProdutoRouter };
