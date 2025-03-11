@@ -1,4 +1,4 @@
-import { ListarTodosClienteCasoDeUso } from "./ListarTodosclienteCasoDeUso";
+import { ListarTodosClienteCasoDeUso } from "./ListarTodosClienteCasoDeUso";
 import { Request, Response } from "express";
 class ListarTodosClienteController {
   async handle(req: Request, res: Response): Promise<any> {
