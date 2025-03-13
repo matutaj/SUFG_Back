@@ -19,4 +19,7 @@ export interface IFuncionario {
   ): Promise<funcionarios | undefined>;
   atualizarFuncionario({}: DadosFuncionario): Promise<funcionarios>;
   eliminarFuncionario(id: string): Promise<void>;
+  listarTelefoneFuncionario(telefoneFuncionario: string): Promise<funcionarios | undefined>;
+  listarEmailFuncionario(emailFuncionario: string): Promise<funcionarios | undefined>;
+  listarNumeroContribuinteFuncionario(numeroBI: string): Promise<funcionarios | undefined>;
 }

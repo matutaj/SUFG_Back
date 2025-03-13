@@ -35,5 +35,9 @@ class PermissaoRepositorio implements IPermissao {
     async eliminarPermissao(ID_permissao: string): Promise<void> {
         await prisma.permissoes.delete({ where: { ID_permissao } });
     }
+    async listarUmaPermissaoPeloNome(nomePermissao: string): Promise<permissoes | undefined> {
+        const listarUmaPermissaoPeloNome = await prisma.permissoes.findFirst({ where: { nome: nomePermissao } }) || undefined;
+        return listarUmaPermissaoPeloNome;
+    }
 }
 export {PermissaoRepositorio}

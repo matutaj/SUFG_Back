@@ -36,6 +36,10 @@ class FuncaoRepositorio implements IFuncao {
     async eliminarFuncao(id: string): Promise<void> {
         await prisma.funcoes.delete({ where: { ID_funcao: id } });
     }
-    
+    async listarFuncaoPeloNome(nomeFuncao: string): Promise<funcoes | undefined> {
+        const listarFuncaoPeloNome = await prisma.funcoes.findFirst({ where: { nome: nomeFuncao } }) || undefined;
+        return listarFuncaoPeloNome;
+    }
 
 }
+export {FuncaoRepositorio}
