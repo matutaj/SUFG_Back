@@ -9,6 +9,8 @@ enum TipoDocumento {
 
 export interface DadosTransacao{
     ID_transacao?: string
+    ID_cliente: string
+    ID_caixa: string
     numeroDocumento: string
     tipoDocumento: TipoDocumento
     dataEmissao: Date

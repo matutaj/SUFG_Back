@@ -1,7 +1,7 @@
 import { transferencias } from "@prisma/client";
 
 export interface DadosTransferencia {
-    ID_transferencia: string
+    ID_transferencia?: string
     ID_produto: string
     ID_funcionario: string
     ID_localizacao: string

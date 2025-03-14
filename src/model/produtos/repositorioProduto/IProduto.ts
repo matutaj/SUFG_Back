@@ -5,6 +5,7 @@ export interface DadosProduto {
     ID_categoriaProduto: string
     referenciaProduto: string
     nomeProduto: string
+    descricaoProduto: string
     custoAquisicao: string
     precoVenda: number
     quantidadeEstoque: number
