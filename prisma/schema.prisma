@@ -128,6 +128,18 @@ model entradasEstoque {
   funcionarios funcionarios @relation(fields: [id_funcionario], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
 }
+model caixas {
+	id String @id @default(uuid())
+  nomeCaixa String
+  descricaoCaixa String
+
+  funcionariosCaixa funcionariosCaixa []
+  alertas alertas[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  transacaoes transacaoes[]
+}
 
 model transacaoes {
 	id String @id @default(uuid())
@@ -228,19 +240,6 @@ model transferencias {
   
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-}
-
-model caixas {
-	id String @id @default(uuid())
-  nomeCaixa String
-  descricaoCaixa String
-
-  funcionariosCaixa funcionariosCaixa []
-  alertas alertas[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-
-  transacaoes transacaoes[]
 }
 
 model funcionariosCaixa {
