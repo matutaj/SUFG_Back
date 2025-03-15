@@ -13,5 +13,6 @@ export interface DadosFuncionarioCaixa {
 export interface IFuncionarioCaixa {
     criarFuncionarioCaixa(dadosFuncionarioCaixa: DadosFuncionarioCaixa): Promise<funcionariosCaixa>;
     listarTodosFuncionariosCaixa(): Promise<funcionariosCaixa[]>;
+    listarUmFuncionarioCaixaPelaAbertura(horarioAbertura:Date):Promise<funcionariosCaixa | undefined> 
     listarUmFuncionarioCaixaPeloId(id: string): Promise<funcionariosCaixa | undefined>;   
 }   
