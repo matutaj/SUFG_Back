@@ -9,3 +9,4 @@ class CriarFuncaoController{
         return res.status(201).json(result);
     }
 }
+export {CriarFuncaoController}

@@ -1,6 +1,5 @@
 import { Router } from "express";
-
-import { CriarSeccaoController } from "../model/seccoes/casoDeUso/CriarSeccaoController";
+import { CriarSeccaoController } from "../model/seccoes/casoDeUso/criarSeccao/CriarSeccaoController";
 
 const seccaoRouter = Router();
 

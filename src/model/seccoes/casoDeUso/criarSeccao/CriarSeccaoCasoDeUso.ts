@@ -1,6 +1,7 @@
 import { seccoes } from "@prisma/client";
-import { DadosSeccao } from "../repositorioSeccoes/ISeccao";
-import { SeccaoRepositorio } from "../repositorioSeccoes/Implementacoes/RepositorioSeccao";
+import { DadosSeccao } from "../../repositorioSeccoes/ISeccao";
+import { SeccaoRepositorio } from "../../repositorioSeccoes/Implementacoes/RepositorioSeccao";
+
 
 class CriarSeccaoCasoDeUso {
   async execute({

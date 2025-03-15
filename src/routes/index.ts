@@ -5,8 +5,15 @@ import { categoriaProdutoRouter } from "./categoriaProduto.routes";
 import { fornecedorRouter } from "./fornecedor.routes";
 import { prateleiraRouter } from "./prateleira.routes";
 import { seccaoRouter } from "./seccao.routes";
+import { transacaoRouter } from "./transacao.routes";
+import { transferenciaRouter } from "./transferencia.routes";
+import { funcaoRouter } from "./funcao.routes";
+import { produtoRouter } from "./produto.routes";
 const routes = Router();
-
+routes.use("/Produto", produtoRouter);
+routes.use("/Funcao", funcaoRouter);
+routes.use("/Transferencia", transferenciaRouter);
+routes.use("/Transacao", transacaoRouter);
 routes.use("/Clientes", clientesRouter);
 routes.use("/Corredores", corredorRouter);
 routes.use("/CategoriaProduto", categoriaProdutoRouter);
