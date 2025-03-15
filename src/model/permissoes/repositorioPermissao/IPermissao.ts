@@ -1,7 +1,7 @@
 import { permissoes } from "@prisma/client";
 
 export interface DadosPermissao {
-    ID_permissao?: string;
+    id?: string;
     nome: string;
     descricao: string;
 }

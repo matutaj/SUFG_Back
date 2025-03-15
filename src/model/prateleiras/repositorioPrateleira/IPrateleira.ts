@@ -1,7 +1,7 @@
 import { prateleiras } from "@prisma/client";
 
 export interface DadosPrateleira {
-    ID_prateleira?: string;
+    id?: string;
     nomePrateleira: string;
     descricaoPrateleira: string;
 }

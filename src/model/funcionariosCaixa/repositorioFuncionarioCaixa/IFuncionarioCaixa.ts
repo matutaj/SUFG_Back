@@ -1,13 +1,10 @@
-import { funcionariosCaixa } from "@prisma/client";
-export enum EstadoCaixa {
-    ABERTO = "ABERTO",
-    FECHADO = "FECHADO",  
-}
+import { funcionariosCaixa, estadoCaixa } from "@prisma/client";
+
 export interface DadosFuncionarioCaixa {
-    ID_funcionarioCaixa: string;
-    ID_caixa: string;
-    ID_funcionario: string;
-    estadoCaixa: EstadoCaixa;
+    id?: string;
+    id_caixa: string;
+    id_funcionario: string;
+    estadoCaixa: estadoCaixa;
     quantidadaFaturada: number;
     horarioAbertura: Date;
     horarioFechamento: Date;

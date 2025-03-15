@@ -27,10 +27,10 @@ class ClienteRepositorio implements IClientes {
     return listarTodosClientes;
   }
   async listarUmClientePeloId(
-    ID_cliente: string
+    id: string
   ): Promise<clientes | undefined> {
     const listarUmClientePeloId =
-      (await prisma.clientes.findUnique({ where: { ID_cliente } })) ||
+      (await prisma.clientes.findUnique({ where: { id } })) ||
       undefined;
 
     return listarUmClientePeloId;
@@ -66,7 +66,7 @@ class ClienteRepositorio implements IClientes {
   }
 
   async eliminarCliente(id: string): Promise<void> {
-    await prisma.clientes.delete({ where: { ID_cliente: id } });
+    await prisma.clientes.delete({ where: { id } });
   }
   async atualizarCliente({
     emailCliente,
@@ -74,10 +74,10 @@ class ClienteRepositorio implements IClientes {
     nomeCliente,
     numeroContribuinte,
     telefoneCliente,
-    ID_cliente,
+    id,
   }: DadosCliente): Promise<clientes> {
     const atualizarCliente = await prisma.clientes.update({
-      where: { ID_cliente },
+      where: { id },
       data: {
         emailCliente,
         moradaCliente,

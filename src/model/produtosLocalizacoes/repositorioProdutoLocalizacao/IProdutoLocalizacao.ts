@@ -1,9 +1,9 @@
 import { produtosLocalizacoes } from "@prisma/client";
 
 export interface DadosProdutoLocalizacao {
-    ID_produtoLocalizacao: string
-	ID_produto: string
-    ID_localizacao: string
+    id?: string
+	id_produto: string
+    id_localizacao: string
     quantidadeProduto: number
     quantidadeMinimaProduto: number
 }

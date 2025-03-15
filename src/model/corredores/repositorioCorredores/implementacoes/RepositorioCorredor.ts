@@ -14,7 +14,7 @@ class CorredorRepositorio implements ICorredor {
     }
 
     async listarUmCorredorPeloId(id: string): Promise<corredores | undefined> {
-        const listarUmCorredorPeloId = await prisma.corredores.findUnique({ where: { ID_corredor: id } }) || undefined
+        const listarUmCorredorPeloId = await prisma.corredores.findUnique({ where: { id } }) || undefined
         return listarUmCorredorPeloId;
     }
 
@@ -23,13 +23,13 @@ class CorredorRepositorio implements ICorredor {
         return listarUmCorredorPeloNome;
     }
 
-    async atualizarCorredor({ID_corredor, descricaoCorredor, nomeCorredor }: DadosCorredor): Promise<corredores> {
-        const corredor = await prisma.corredores.update({ where: { ID_corredor }, data: {descricaoCorredor, nomeCorredor} });
+    async atualizarCorredor({id, descricaoCorredor, nomeCorredor }: DadosCorredor): Promise<corredores> {
+        const corredor = await prisma.corredores.update({ where: { id }, data: {descricaoCorredor, nomeCorredor} });
         return corredor;
     }
 
     async eliminarCorredor(id: string): Promise<void> {
-        await prisma.corredores.delete({ where: { ID_corredor: id } });
+        await prisma.corredores.delete({ where: { id } });
     }
     
 }

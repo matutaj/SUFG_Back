@@ -1,7 +1,7 @@
 import { funcoes } from "@prisma/client";
 
 export interface DadosFuncao {
-    ID_funcao?: string;
+    id?: string;
     descricao: string;
     nome: string;
 }

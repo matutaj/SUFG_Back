@@ -1,18 +1,13 @@
-import { transacaoes } from "@prisma/client"
-
-enum TipoDocumento {
-  FATURA = 'FATURA',
-  RECIBO = 'RECIBO',
-  FATURA_PROFORMA = 'FATURA_PROFORMA',
-  FATURA_RECIBO = 'FATURA_RECIBO',
-}
+import { transacaoes, tipoDocumento } from "@prisma/client"
 
 export interface DadosTransacao{
-    ID_transacao?: string
-    ID_cliente: string
-    ID_caixa: string
+    id?: string
+    id_cliente: string
+    id_caixa: string
+    id_produto: string
+    id_funcionario: string
     numeroDocumento: string
-    tipoDocumento: TipoDocumento
+    tipoDocumento: tipoDocumento
     dataEmissao: Date
     quantidadeVendida: number
     precoUnitario: number

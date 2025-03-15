@@ -1,7 +1,7 @@
 import { caixas } from "@prisma/client"
 
 export interface DadosCaixa{
-    ID_caixa?: string
+    id?: string
     nomeCaixa: string
     descricaoCaixa: string
 }

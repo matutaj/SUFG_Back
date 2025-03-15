@@ -1,7 +1,7 @@
 import { fornecedores } from "@prisma/client";
 
 export interface DadosFornecedor {
-    ID_fornecedor?: string;
+    id?: string;
     nif: string;
     nomeFornecedor: string;
     moradaFornecedor: string;

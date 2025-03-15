@@ -1,7 +1,7 @@
 import { categoriasProdutos } from "@prisma/client";
 
 export interface DadosCategoriaProduto {
-    ID_categoriaProduto?: string;
+    id?: string;
     nomeCategoria: string;
     descricaoCategoria: string;
 }

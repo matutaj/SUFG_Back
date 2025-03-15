@@ -1,9 +1,9 @@
 import { funcionariosPermissoes } from "@prisma/client";
 
 export interface DadosFuncionarioPermissao {
-    ID_funcionarioPermissao: string;
-    ID_funcionario: string;  
-    ID_permissao: string;
+    id: string;
+    id_funcionario: string;  
+    id_permissao: string;
 }
 export interface IFuncionarioPermissao{
     criarFuncionarioPermissao({}: DadosFuncionarioPermissao): Promise<funcionariosPermissoes>

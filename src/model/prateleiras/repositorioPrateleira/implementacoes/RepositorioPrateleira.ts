@@ -19,7 +19,7 @@ class PrateleiraRepositorio implements IPrateleira {
     }
 
     async listarUmaPrateleiraPeloId(id: string): Promise<prateleiras | undefined> {
-        const listarUmaPrateleiraPeloId = await prisma.prateleiras.findUnique({ where: { ID_prateleira: id } }) || undefined    
+        const listarUmaPrateleiraPeloId = await prisma.prateleiras.findUnique({ where: { id } }) || undefined    
         return listarUmaPrateleiraPeloId;
     }
 
@@ -28,9 +28,9 @@ class PrateleiraRepositorio implements IPrateleira {
         return listarUmaPrateleiraPeloNome;
     }
 
-    async atualizarPrateleira({ID_prateleira, descricaoPrateleira, nomePrateleira}: DadosPrateleira): Promise<prateleiras> {
+    async atualizarPrateleira({id, descricaoPrateleira, nomePrateleira}: DadosPrateleira): Promise<prateleiras> {
         const atualizarPrateleira = await prisma.prateleiras.update({
-            where: { ID_prateleira },
+            where: { id },
             data: {
                 descricaoPrateleira,
                 nomePrateleira
@@ -40,7 +40,7 @@ class PrateleiraRepositorio implements IPrateleira {
     }
 
     async eliminarPrateleira(id: string): Promise<void> {    
-        await prisma.prateleiras.delete({ where: { ID_prateleira: id } });
+        await prisma.prateleiras.delete({ where: { id } });
     }
 }
 export { PrateleiraRepositorio }

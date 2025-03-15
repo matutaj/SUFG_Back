@@ -3,30 +3,30 @@ import { prisma } from "../../../../prisma/client";
 import { DadosFuncionarioPermissao, IFuncionarioPermissao } from "../IFuncionarioPermissao";
 
 class FuncionarioPermissaoRepositorio {
-    async criarFuncionarioPermissao({ID_funcionario, ID_permissao}: DadosFuncionarioPermissao): Promise<funcionariosPermissoes> {
-        const funcionarioPermissao = await prisma.funcionariosPermissoes.create({ data: { ID_funcionario, ID_permissao } });
+    async criarFuncionarioPermissao({id_funcionario, id_permissao}: DadosFuncionarioPermissao): Promise<funcionariosPermissoes> {
+        const funcionarioPermissao = await prisma.funcionariosPermissoes.create({ data: { id_funcionario, id_permissao } });
         return funcionarioPermissao;
     }
     async listarTodosFuncionariosPermissoes(): Promise<funcionariosPermissoes[]> {
         const listarTodosFuncionariosPermissoes = await prisma.funcionariosPermissoes.findMany();
         return listarTodosFuncionariosPermissoes;
     }
-    async listarUmFuncionarioPermissaoPeloId(ID_funcionarioPermissao: string): Promise<funcionariosPermissoes | undefined> {
-        const listarUmFuncionarioPermissaoPeloId = await prisma.funcionariosPermissoes.findUnique({ where: { ID_funcionarioPermissao } }) || undefined
+    async listarUmFuncionarioPermissaoPeloId(id: string): Promise<funcionariosPermissoes | undefined> {
+        const listarUmFuncionarioPermissaoPeloId = await prisma.funcionariosPermissoes.findUnique({ where: { id } }) || undefined
         return listarUmFuncionarioPermissaoPeloId;
     }
-    async atualizarFuncionarioPermissao({ID_funcionario, ID_permissao, ID_funcionarioPermissao}: DadosFuncionarioPermissao): Promise<funcionariosPermissoes>{
+    async atualizarFuncionarioPermissao({id_funcionario, id_permissao, id}: DadosFuncionarioPermissao): Promise<funcionariosPermissoes>{
         const atualizarFuncionarioPermissao = await prisma.funcionariosPermissoes.update({
-            where: {ID_funcionarioPermissao},
+            where: {id},
             data: {
-                ID_funcionario,
-                ID_permissao
+                id_funcionario,
+                id_permissao
             }
         })
         return atualizarFuncionarioPermissao
     }
-    async eliminarFuncionarioPermissao(ID_funcionarioPermissao: string): Promise<void>{
-        await prisma.funcionariosPermissoes.delete({where:{ID_funcionarioPermissao}})
+    async eliminarFuncionarioPermissao(id: string): Promise<void>{
+        await prisma.funcionariosPermissoes.delete({where:{id}})
     }
 }
 export {FuncionarioPermissaoRepositorio}

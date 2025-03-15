@@ -33,7 +33,7 @@ class FuncionarioRepositorio implements IFuncionario {
     const listarUmFuncionarioPeloId =
       (await prisma.funcionarios.findUnique({
         where: {
-          ID_funcionario: id,
+          id,
         },
       })) || undefined;
     return listarUmFuncionarioPeloId;
@@ -56,11 +56,11 @@ class FuncionarioRepositorio implements IFuncionario {
     moradaFuncionario,
     numeroBI,
     senha,
-    ID_funcionario,
+    id,
   }: DadosFuncionario): Promise<funcionarios> {
     const atualizarFuncionario = await prisma.funcionarios.update({
       where: {
-        ID_funcionario,
+        id,
       },
       data: {
         emailFuncionario,
@@ -76,7 +76,7 @@ class FuncionarioRepositorio implements IFuncionario {
   async eliminarFuncionario(id: string): Promise<void> {
     await prisma.funcionarios.delete({
       where: {
-        ID_funcionario: id,
+        id,
       },
     });
   }

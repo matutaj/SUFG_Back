@@ -20,7 +20,7 @@ class CategoriaProdutoRepositorio implements ICategoriaProduto {
         const listarUmaCategoriaProdutoPeloId = 
         (await prisma.categoriasProdutos.findUnique({
             where: {
-                ID_categoriaProduto: id,
+                id,
         },
         })) || undefined
         return listarUmaCategoriaProdutoPeloId
@@ -29,10 +29,10 @@ class CategoriaProdutoRepositorio implements ICategoriaProduto {
         const listarUmaCategoriaProdutoPeloNome = (await prisma.categoriasProdutos.findFirst({where: { nomeCategoria}})) || undefined
         return listarUmaCategoriaProdutoPeloNome
     }
-    async atualizarCategoriaProduto({descricaoCategoria, nomeCategoria, ID_categoriaProduto }: DadosCategoriaProduto): Promise<categoriasProdutos> {
+    async atualizarCategoriaProduto({descricaoCategoria, nomeCategoria, id }: DadosCategoriaProduto): Promise<categoriasProdutos> {
         const atualizarCategoriaProduto = await prisma.categoriasProdutos.update({
             where: {
-                ID_categoriaProduto
+                id
             },
             data: {
                 descricaoCategoria, 
@@ -44,7 +44,7 @@ class CategoriaProdutoRepositorio implements ICategoriaProduto {
     async eliminarCategoriaProduto(id: string): Promise<void> {
         await prisma.categoriasProdutos.delete({
             where: {
-                ID_categoriaProduto: id,
+                id,
             }
         })
     }

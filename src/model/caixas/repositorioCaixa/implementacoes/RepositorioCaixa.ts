@@ -17,16 +17,16 @@ class CaixaRepositorio implements ICaixa {
         return listarTodosCaixas
     }
     async listarUmCaixaPeloId(id: string): Promise<caixas | undefined> {
-        const listarUmCaixaPeloId = (await prisma.caixas.findUnique({where: {ID_caixa: id}})) || undefined
+        const listarUmCaixaPeloId = (await prisma.caixas.findUnique({where: {id}})) || undefined
         return listarUmCaixaPeloId
     }
     async listarUmCaixaPeloNome(nomeCaixa: string): Promise<caixas | undefined> {
         const listarUmCaixaPeloNome = (await prisma.caixas.findFirst({where: {nomeCaixa}})) || undefined
         return listarUmCaixaPeloNome
     }
-    async atualizarCaixa({descricaoCaixa, nomeCaixa, ID_caixa}: DadosCaixa): Promise<caixas> {
+    async atualizarCaixa({descricaoCaixa, nomeCaixa, id}: DadosCaixa): Promise<caixas> {
         const atualizarCaixa = await prisma.caixas.update({
-            where: {ID_caixa},
+            where: {id},
             data: {
                 descricaoCaixa,
                 nomeCaixa,
@@ -35,7 +35,7 @@ class CaixaRepositorio implements ICaixa {
         return atualizarCaixa
     }
     async eliminarCaixa(id: string): Promise<void> {
-        await prisma.caixas.delete({where: {ID_caixa: id}})
+        await prisma.caixas.delete({where: {id}})
     }
 }
 export {CaixaRepositorio}

@@ -1,10 +1,10 @@
 import { entradasEstoque } from "@prisma/client"
 
 export interface DadosEntradaEstoque{
-    ID_entradaEstoque?: string 
-	ID_fornecedor: string
-    ID_produto: string
-    ID_funcionario: string
+    id?: string 
+	id_fornecedor: string
+    id_produto: string
+    id_funcionario: string
     produtoRecebido: string
     quantidadeRecebida: string
     dataEntrada: Date

@@ -1,7 +1,7 @@
 import { funcionarios } from "@prisma/client";
 
 export interface DadosFuncionario {
-  ID_funcionario?: string;
+  id?: string;
   numeroBI: string;
   nomeFuncionario: string;
   senha: string;

@@ -4,7 +4,7 @@ import { prisma } from "../../../../prisma/client";
 
 
 class ProdutoRepositorio implements IProduto{
-    async criarProduto({custoAquisicao, dataValidade, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto}: DadosProduto): Promise<produtos> {
+    async criarProduto({custoAquisicao, dataValidade, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto, id_categoriaProduto}: DadosProduto): Promise<produtos> {
         const criarProduto = await prisma.produtos.create({
             data: {
                 custoAquisicao,
@@ -12,7 +12,12 @@ class ProdutoRepositorio implements IProduto{
                 nomeProduto,
                 precoVenda,
                 quantidadeEstoque,
-                referenciaProduto
+                referenciaProduto,
+                categoriasProdutos: {
+                    connect: {
+                        id: id_categoriaProduto
+                    }
+                }
             }
         });
         return criarProduto;   
@@ -23,8 +28,8 @@ class ProdutoRepositorio implements IProduto{
         return todosProdutos;
     }
 
-    async listarUmProdutoPorId(ID_produto: string): Promise<produtos | undefined> { 
-        const listarUmProdutoPorId = await prisma.produtos.findUnique({ where: { ID_produto } }) || undefined;
+    async listarUmProdutoPorId(id: string): Promise<produtos | undefined> { 
+        const listarUmProdutoPorId = await prisma.produtos.findUnique({ where: { id } }) || undefined;
         return listarUmProdutoPorId;
     }
 
@@ -33,9 +38,9 @@ class ProdutoRepositorio implements IProduto{
         return listarUmProdutoPeloNome;
     }
 
-    async atualizarProduto({ID_produto, custoAquisicao, dataValidade, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto}: DadosProduto): Promise<produtos> {
+    async atualizarProduto({id, custoAquisicao, dataValidade, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto}: DadosProduto): Promise<produtos> {
         const atualizarProduto = await prisma.produtos.update({
-            where: { ID_produto },
+            where: { id },
             data: {
                 custoAquisicao,
                 dataValidade,
@@ -48,8 +53,8 @@ class ProdutoRepositorio implements IProduto{
         return atualizarProduto;
     }
 
-    async eliminarProduto(ID_produto: string): Promise<void> {
-        await prisma.produtos.delete({ where: { ID_produto } });
+    async eliminarProduto(id: string): Promise<void> {
+        await prisma.produtos.delete({ where: { id } });
     }
 
 }

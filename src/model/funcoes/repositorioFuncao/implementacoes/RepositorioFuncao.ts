@@ -19,13 +19,13 @@ class FuncaoRepositorio implements IFuncao {
     }
 
     async listarFuncaoPeloId(id: string): Promise<funcoes | undefined> {
-        const listarFuncaoPeloId = await prisma.funcoes.findUnique({ where: { ID_funcao: id } }) || undefined;
+        const listarFuncaoPeloId = await prisma.funcoes.findUnique({ where: { id } }) || undefined;
         return listarFuncaoPeloId;
     }
 
-    async atualizarFuncao({ID_funcao, descricao, nome}: DadosFuncao): Promise<funcoes> {
+    async atualizarFuncao({id, descricao, nome}: DadosFuncao): Promise<funcoes> {
         const atualizarFuncao = await prisma.funcoes.update({
-            where: { ID_funcao },
+            where: { id },
             data: {
                 descricao,
                 nome,
@@ -34,7 +34,7 @@ class FuncaoRepositorio implements IFuncao {
         return atualizarFuncao;
     }
     async eliminarFuncao(id: string): Promise<void> {
-        await prisma.funcoes.delete({ where: { ID_funcao: id } });
+        await prisma.funcoes.delete({ where: { id } });
     }
     async listarFuncaoPeloNome(nomeFuncao: string): Promise<funcoes | undefined> {
         const listarFuncaoPeloNome = await prisma.funcoes.findFirst({ where: { nome: nomeFuncao } }) || undefined;

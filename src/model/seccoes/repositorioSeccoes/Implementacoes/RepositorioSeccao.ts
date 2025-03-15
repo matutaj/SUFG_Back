@@ -17,7 +17,7 @@ class SeccaoRepositorio implements ISeccao {
     }
 
     async listarUmaSeccaoPeloId(id: string): Promise<seccoes | undefined> {
-        const listarUmSeccaoPeloId = await prisma.seccoes.findUnique({ where: { ID_seccao: id } }) || undefined
+        const listarUmSeccaoPeloId = await prisma.seccoes.findUnique({ where: { id } }) || undefined
         return listarUmSeccaoPeloId;
     }
 
@@ -26,13 +26,13 @@ class SeccaoRepositorio implements ISeccao {
         return listarUmSeccaoPeloNome;
     }
 
-    async atualizarSeccao({ID_seccao, nomeSeccao, descricaoSeccao}: DadosSeccao): Promise<seccoes> {
-        const atualizarSeccao = await prisma.seccoes.update({ where: { ID_seccao }, data: { nomeSeccao, descricaoSeccao } });
+    async atualizarSeccao({id, nomeSeccao, descricaoSeccao}: DadosSeccao): Promise<seccoes> {
+        const atualizarSeccao = await prisma.seccoes.update({ where: { id }, data: { nomeSeccao, descricaoSeccao } });
         return atualizarSeccao;
     }
 
     async eliminarSeccao(id: string): Promise<void> {
-        await prisma.seccoes.delete({ where: { ID_seccao: id } });
+        await prisma.seccoes.delete({ where: { id } });
     }
     
 }

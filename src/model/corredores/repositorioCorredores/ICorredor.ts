@@ -1,7 +1,7 @@
 import { corredores } from "@prisma/client";
 
 export interface DadosCorredor {
-    ID_corredor?: string;
+    id?: string;
     nomeCorredor: string;
     descricaoCorredor: string;
 }

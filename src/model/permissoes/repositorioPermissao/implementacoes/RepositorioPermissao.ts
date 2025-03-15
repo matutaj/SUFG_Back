@@ -17,14 +17,14 @@ class PermissaoRepositorio implements IPermissao {
         return todasPermissoes;
     }
 
-    async listarUmaPermissaoPorID(ID_permissao: string): Promise<permissoes | undefined> {
-        const listarUmaPermissaoPorID = await prisma.permissoes.findUnique({ where: { ID_permissao } }) || undefined;
+    async listarUmaPermissaoPorID(id: string): Promise<permissoes | undefined> {
+        const listarUmaPermissaoPorID = await prisma.permissoes.findUnique({ where: { id } }) || undefined;
         return listarUmaPermissaoPorID;
     }
 
-    async atualizarPermissao({descricao, nome, ID_permissao}: DadosPermissao): Promise<permissoes> {
+    async atualizarPermissao({descricao, nome, id}: DadosPermissao): Promise<permissoes> {
         const atualizarPermissao = await prisma.permissoes.update({
-            where: { ID_permissao },
+            where: { id },
             data: {
                 descricao,
                 nome,
@@ -32,8 +32,8 @@ class PermissaoRepositorio implements IPermissao {
         });
         return atualizarPermissao;
     }
-    async eliminarPermissao(ID_permissao: string): Promise<void> {
-        await prisma.permissoes.delete({ where: { ID_permissao } });
+    async eliminarPermissao(id: string): Promise<void> {
+        await prisma.permissoes.delete({ where: { id } });
     }
     async listarUmaPermissaoPeloNome(nomePermissao: string): Promise<permissoes | undefined> {
         const listarUmaPermissaoPeloNome = await prisma.permissoes.findFirst({ where: { nome: nomePermissao } }) || undefined;

@@ -12,15 +12,15 @@ class FornecedorRepositorio implements IFornecedor {
         return listarTodosFornecedores;
     }
     async listarUmFornecedorPeloId(id: string): Promise<fornecedores | undefined> {
-        const listarUmFornecedorPeloId = await prisma.fornecedores.findUnique({ where: { ID_fornecedor: id } }) || undefined
+        const listarUmFornecedorPeloId = await prisma.fornecedores.findUnique({ where: { id } }) || undefined
         return listarUmFornecedorPeloId;
     }
     async listarUmFornecedorPeloNome(nomeFornecedor: string): Promise<fornecedores | undefined> {
         const listarUmFornecedorPeloNome = await prisma.fornecedores.findFirst({ where: { nomeFornecedor } }) || undefined
         return listarUmFornecedorPeloNome;
     }
-    async atualizarFornecedor({ID_fornecedor, emailFornecedor, moradaFornecedor, nif, nomeFornecedor, telefoneFornecedor }: DadosFornecedor): Promise<fornecedores> {
-        const atualizarFornecedor = await prisma.fornecedores.update({ where: { ID_fornecedor }, data: { emailFornecedor, moradaFornecedor, nif, nomeFornecedor, telefoneFornecedor } });
+    async atualizarFornecedor({id, emailFornecedor, moradaFornecedor, nif, nomeFornecedor, telefoneFornecedor }: DadosFornecedor): Promise<fornecedores> {
+        const atualizarFornecedor = await prisma.fornecedores.update({ where: { id }, data: { emailFornecedor, moradaFornecedor, nif, nomeFornecedor, telefoneFornecedor } });
         return atualizarFornecedor;
     }
     async eliminarFornecedor(id: string): Promise<void> {

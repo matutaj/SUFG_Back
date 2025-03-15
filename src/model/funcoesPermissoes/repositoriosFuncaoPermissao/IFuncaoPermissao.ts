@@ -1,9 +1,9 @@
 import { funcoesPermissoes } from "@prisma/client";
 
 export interface DadosFuncaoPermissao{
-    ID_funcaoPermissao: string
-    ID_funcao: string
-    ID_permissao: string
+    id: string
+    id_funcao: string
+    id_permissao: string
 }
 
 export interface IFuncaoPermissao{

@@ -3,16 +3,16 @@ import { DadosEntradaEstoque, IEntradaEstoque } from "../IEntradaEstoque";
 import { prisma } from "../../../../prisma/client";
 
 class EntradaEstoqueRepositorio implements IEntradaEstoque{
-    async criarEntradaEstoque({custoUnitario, dataEntrada, produtoRecebido, quantidadeRecebida}: DadosEntradaEstoque): Promise<entradasEstoque> {
+    async criarEntradaEstoque({custoUnitario, dataEntrada, produtoRecebido, quantidadeRecebida, id_fornecedor, id_produto, id_funcionario}: DadosEntradaEstoque): Promise<entradasEstoque> {
         const criarEntradaEstoque = await prisma.entradasEstoque.create({
             data: {
                 custoUnitario,
                 dataEntrada,
                 produtoRecebido,
                 quantidadeRecebida,
-                Fornecedores: { connect: { ID_fornecedor: 'your_fornecedor_id' } },
-                Produtos: { connect: { ID_produto: 'your_produto_id' } },
-                funcionarios: { connect: { ID_funcionario: 'your_funcionario_id' } },
+                Fornecedores: { connect: { id: id_fornecedor } },
+                Produtos: { connect: { id: id_produto } },
+                funcionarios: { connect: { id: id_funcionario } },
             
             }
         })

@@ -3,11 +3,11 @@ import { DadosFuncaoPermissao, IFuncaoPermissao } from "../IFuncaoPermissao";
 import { prisma } from "../../../../prisma/client";
 
 class FuncaoPermissaoRepositorio implements IFuncaoPermissao {
-    async criarFuncaoPermissao({ID_funcao, ID_permissao}: DadosFuncaoPermissao): Promise<funcoesPermissoes> {
+    async criarFuncaoPermissao({id_funcao, id_permissao}: DadosFuncaoPermissao): Promise<funcoesPermissoes> {
         const criarFuncaoPermissao = await prisma.funcoesPermissoes.create({
             data: {
-                ID_funcao,
-                ID_permissao,
+                id_funcao,
+                id_permissao,
             },
         });
         return criarFuncaoPermissao;
@@ -16,24 +16,24 @@ class FuncaoPermissaoRepositorio implements IFuncaoPermissao {
         const listarTodasFuncoesPermissoes = await prisma.funcoesPermissoes.findMany();
         return listarTodasFuncoesPermissoes;
     }
-    async listarUmaFuncaoPermissaoPeloId(ID_funcaoPermissao: string): Promise<funcoesPermissoes | undefined> {
-        const listarUmaFuncaoPermissaoPeloId = await prisma.funcoesPermissoes.findUnique({ where: { ID_funcaoPermissao } }) || undefined;
+    async listarUmaFuncaoPermissaoPeloId(id: string): Promise<funcoesPermissoes | undefined> {
+        const listarUmaFuncaoPermissaoPeloId = await prisma.funcoesPermissoes.findUnique({ where: { id } }) || undefined;
         return listarUmaFuncaoPermissaoPeloId;   
     }
-    async atualizarFuncaoPermissao({ ID_funcao, ID_permissao}: DadosFuncaoPermissao): Promise<funcoesPermissoes> {
+    async atualizarFuncaoPermissao({ id_funcao, id_permissao, id}: DadosFuncaoPermissao): Promise<funcoesPermissoes> {
         const atualizarFuncaoPermissao = await prisma.funcoesPermissoes.update({
             where: {
-                ID_funcaoPermissao: ID_funcao,
+                id
             },
             data: {
-                ID_funcao,
-                ID_permissao,
+                id_funcao,
+                id_permissao,
             },
         });
         return atualizarFuncaoPermissao;
     }
-    async eliminarFuncaoPermissao(ID_funcaoPermissao: string): Promise<void> {
-        await prisma.funcoesPermissoes.delete({ where: { ID_funcaoPermissao } });
+    async eliminarFuncaoPermissao(id: string): Promise<void> {
+        await prisma.funcoesPermissoes.delete({ where: { id } });
     }
 }
 export {FuncaoPermissaoRepositorio}
