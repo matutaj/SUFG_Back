@@ -4,8 +4,8 @@ import { prisma } from "../../../../prisma/client";
 
 
 class TransferenciaRepositorio implements ITransferencia {
-    async criarTransferencia({ ID_funcionario, ID_localizacao, ID_produto, dataTransferencia, quantidadeTransferida}: DadosTransferencia): Promise<transferencias> {
-        const criarTransferencia = await prisma.transferencias.create({ data: { ID_funcionario, ID_localizacao, ID_produto, dataTransferencia, quantidadeTransferida } });
+    async criarTransferencia({ id_funcionario, id_localizacao, id_produto, dataTransferencia, quantidadeTransferida}: DadosTransferencia): Promise<transferencias> {
+        const criarTransferencia = await prisma.transferencias.create({ data: { id_funcionario, id_localizacao, id_produto, dataTransferencia, quantidadeTransferida } });
         return criarTransferencia;
     }
 
@@ -14,13 +14,13 @@ class TransferenciaRepositorio implements ITransferencia {
         return listarTodasTransferencias;
     }
 
-    async listarUmaTransferenciaPorId(ID_transferencia: string): Promise<transferencias | undefined> {
-        const listarUmaTransferenciaPorId = await prisma.transferencias.findUnique({ where: { ID_transferencia } }) || undefined;
+    async listarUmaTransferenciaPorId(id: string): Promise<transferencias | undefined> {
+        const listarUmaTransferenciaPorId = await prisma.transferencias.findUnique({ where: { id } }) || undefined;
         return listarUmaTransferenciaPorId;
     }
 
-    async eliminarTransferencia(ID_transferencia: string): Promise<void> {
-        await prisma.transferencias.delete({ where: { ID_transferencia } });
+    async eliminarTransferencia(id: string): Promise<void> {
+        await prisma.transferencias.delete({ where: { id } });
     }
 
 }
