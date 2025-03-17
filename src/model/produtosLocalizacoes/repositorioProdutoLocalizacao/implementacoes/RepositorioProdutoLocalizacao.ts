@@ -3,8 +3,8 @@ import { DadosProdutoLocalizacao, IProdutoLocalizacao } from "../IProdutoLocaliz
 import { prisma } from "../../../../prisma/client";
 
 class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
-    async criarProdutoLocalizacao({ id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
-        const criarProdutoLocalizacao = await prisma.produtosLocalizacoes.create({ data: { id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto } });
+    async criarProdutoLocalizacao({ id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto, id_corredor, id_prateleira, id_seccao }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
+        const criarProdutoLocalizacao = await prisma.produtosLocalizacoes.create({ data: { id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto, id_corredor, id_prateleira, id_seccao} });
         return criarProdutoLocalizacao;
     }
     async listarTodosProdutosLocalizacoes(): Promise<produtosLocalizacoes[]> {
@@ -15,10 +15,10 @@ class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
         const listarUmProdutoLocalizacaoPorId = await prisma.produtosLocalizacoes.findUnique({ where: { id } }) || undefined;
         return listarUmProdutoLocalizacaoPorId;
     }
-    async atualizarProdutoLocalizacao({ id, id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
+    async atualizarProdutoLocalizacao({ id, id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto, id_corredor, id_prateleira, id_seccao }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
         const atualizarProdutoLocalizacao = await prisma.produtosLocalizacoes.update({
             where: { id },
-            data: { id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto }
+            data: { id_produto, id_localizacao, quantidadeProduto, quantidadeMinimaProduto, id_corredor, id_prateleira, id_seccao }
         });
         return atualizarProdutoLocalizacao;
     }

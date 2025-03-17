@@ -2,9 +2,6 @@ import { localizacoes, localProduto} from "@prisma/client"
 
 export interface DadosLocalizacao{
     id?: string
-    id_seccao: string
-    id_prateleira: string
-    id_corredor: string
     nomeLocalizacao: string
     descricaoLocalizacao: string
     localProduto: localProduto
