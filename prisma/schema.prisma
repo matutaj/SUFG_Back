@@ -152,6 +152,7 @@ model vendas {
   valorTotal Decimal @db.Decimal(10, 2)
   clientes clientes @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: Cascade)
   funcionariosCaixa funcionariosCaixa @relation(fields: [id_funcionarioCaixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vendasProdutos vendasProdutos[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -161,7 +162,7 @@ model vendasProdutos {
   id_venda String
   quantidadeVendida Int
   produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
+  vendas vendas @relation(fields: [id_venda], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model seccoes {
