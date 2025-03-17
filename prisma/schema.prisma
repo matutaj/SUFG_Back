@@ -36,7 +36,7 @@ model clientes {
   moradaCliente String?
   telefoneCliente String?
   emailCliente String?
-  transacaoes transacaoes[]
+  vendas vendas[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -55,7 +55,6 @@ model funcionarios {
   FuncionariosPermissoes funcionariosPermissoes[]
   FuncionariosFuncoes funcionariosFuncoes[]
   EntradasEstoque entradasEstoque[]
-  transacaoes transacaoes[]
   transferencias transferencias[]
   funcionariosCaixa funcionariosCaixa[]
 }
@@ -80,18 +79,21 @@ model produtos {
   custoAquisicao String
   precoVenda Decimal @db.Decimal(10 , 2)
   quantidadeEstoque Int
-  dataValidade DateTime
+  unidadeMedida String
+  unidadeConteudo String
+  codigoBarras String
   EntradasEstoque entradasEstoque[]
   produtosLocalizacoes produtosLocalizacoes[]
-  transacaoes transacaoes[]
   alertas alertas[]
   transferencias transferencias[]
+  vendasProdutos vendasProdutos[]
   
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   
   categoriasProdutos categoriasProdutos @relation(fields: [id_categoriaProduto], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
+
 
 
 model fornecedores {
@@ -118,6 +120,8 @@ model entradasEstoque {
   quantidadeRecebida String
   dataEntrada DateTime
   custoUnitario Decimal  @db.Decimal(10 , 2)
+  lote String
+  dataValidadeLote DateTime
 
   
   createdAt    DateTime      @default(now())
@@ -138,27 +142,29 @@ model caixas {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  transacaoes transacaoes[]
 }
 
-model transacaoes {
+model vendas {
 	id String @id @default(uuid())
   id_cliente String
-  id_funcionario String
-  id_produto String
-  id_caixa String
+  id_funcionarioCaixa String
   numeroDocumento String
   tipoDocumento tipoDocumento
   dataEmissao DateTime
-  quantidadeVendida Int
-  precoUnitario Decimal @db.Decimal(10, 2)
-  valorTotalTransacao Decimal @db.Decimal(10, 2)
-  caixas caixas @relation(fields: [id_caixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dataValidade DateTime
+  valorTotal Decimal @db.Decimal(10, 2)
   clientes clientes @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  funcionarios funcionarios @relation(fields: [id_funcionario], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  funcionariosCaixa funcionariosCaixa @relation(fields: [id_funcionarioCaixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+}
+model vendasProdutos {
+  id String @id @default(uuid())
+  id_produto String
+  id_venda String
+  quantidadeVendida Int
+  produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
 }
 
 model seccoes {
@@ -166,7 +172,8 @@ model seccoes {
   nomeSeccao String
   descricaoSeccao String
   
-  localizacoes localizacoes[]
+  produtosLocalizacoes produtosLocalizacoes[]
+
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -177,7 +184,8 @@ model corredores {
   nomeCorredor String
   descricaoCorredor String
 
-  Localizacoes localizacoes[]
+  produtosLocalizacoes produtosLocalizacoes[]
+
 
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -188,24 +196,20 @@ model prateleiras {
   nomePrateleira String
   descricaoPrateleira String
 
-  Localizacoes localizacoes[]
+  produtosLocalizacoes produtosLocalizacoes[]
+
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
 
 model localizacoes {
 	id String @id @default(uuid())
-  id_seccao String
-  id_prateleira String
-  id_corredor String
   nomeLocalizacao String
   descricaoLocalizacao String
   
   localProduto  localProduto
   
-  seccoes seccoes @relation(fields: [id_seccao],references: [id],onDelete: Cascade, onUpdate: Cascade )
-  prateleiras prateleiras @relation(fields: [id_prateleira], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  corredores corredores @relation(fields: [id_corredor], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  
   produtosLocalizacoes produtosLocalizacoes[]
   transferencias transferencias[]
   createdAt    DateTime      @default(now())
@@ -216,12 +220,17 @@ model produtosLocalizacoes {
   id String @id @default(uuid())
 	id_produto String 
   id_localizacao String
+  id_seccao String
+  id_prateleira String
+  id_corredor String
   quantidadeProduto Int
   quantidadeMinimaProduto Int
 
-  Produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Localizacoes localizacoes @relation(fields: [id_localizacao], references: [id],onDelete: Cascade, onUpdate: Cascade)
-
+  seccoes seccoes @relation(fields: [id_seccao],references: [id],onDelete: Cascade, onUpdate: Cascade )
+  prateleiras prateleiras @relation(fields: [id_prateleira], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  corredores corredores @relation(fields: [id_corredor], references: [id],onDelete: Cascade, onUpdate: Cascade)
   
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -255,7 +264,7 @@ model funcionariosCaixa {
   Funcionarios funcionarios @relation(fields: [id_funcionario], references: [id],onDelete: Cascade, onUpdate: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-
+  vendas vendas[]
   fornecedores fornecedores[]
 }
 
