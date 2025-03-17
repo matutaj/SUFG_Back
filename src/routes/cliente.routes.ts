@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { CriarClienteController } from "../model/clientes/casoDeUso/criarCliente/CriarClienteController";
 import { ListarClientePeloNomeController } from "../model/clientes/casoDeUso/listarClientePeloNome/ListarClientePeloNomeController";
-import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosClientes/ListarTodosClienteController";
+import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosclientes/ListarTodosClienteController";
 const clientesRouter = Router();
 
 const criarClienteController = new CriarClienteController();
