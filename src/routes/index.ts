@@ -11,6 +11,7 @@ import { funcaoRouter } from "./funcao.routes";
 import { produtoRouter } from "./produto.routes";
 import { caixaRouter } from "./caixa.routes";
 import { funcionarioRouter } from "./funcionario.routes";
+import { funcionariorCaixaRouter } from "./funcionarioCaixa.routes";
 const routes = Router();
 routes.use("/Produto", produtoRouter);
 routes.use("/Funcao", funcaoRouter);
@@ -24,5 +25,6 @@ routes.use("/Prateleira", prateleiraRouter);
 routes.use("/Seccao", seccaoRouter);
 routes.use("/Caixa", caixaRouter);
 routes.use("/Funcionario", funcionarioRouter);
+routes.use("/funcionarioCaixa", funcionariorCaixaRouter);
 
 export { routes };

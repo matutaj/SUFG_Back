@@ -20,10 +20,7 @@ enum tipoDocumento {
   FATURA_RECIBO
 }
 
-enum estadoCaixa {
-  ABERTO
-  FECHADO
-}
+
 enum localProduto {
   ARMAZÉM 
   LOJA
@@ -255,7 +252,7 @@ model funcionariosCaixa {
   id String @id @default(uuid())
 	id_caixa String
   id_funcionario String
-  estadoCaixa estadoCaixa
+  estadoCaixa Boolean
   quantidadaFaturada Decimal @db.Decimal(10, 2)
   horarioAbertura DateTime
   horarioFechamento DateTime
