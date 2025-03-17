@@ -7,8 +7,8 @@ const criarFornecedor = new CriarFornecedorController();
 const listarFornecedorPeloNome = new ListarFornecedorPeloNomeController();
 const listarTodosFornecedores = new ListarTodosFornecedoresController();
 
-fornecedorRouter.get("/listarTodosFornecedores", listarTodosFornecedores.handle);
-fornecedorRouter.get("/listarFornecedorPeloNome/:nomeFornecedor", listarFornecedorPeloNome.handle);
+fornecedorRouter.get("/", listarTodosFornecedores.handle);
+fornecedorRouter.get("/:nomeFornecedor", listarFornecedorPeloNome.handle);
 fornecedorRouter.post("/", criarFornecedor.handle);
 
 export { fornecedorRouter };
