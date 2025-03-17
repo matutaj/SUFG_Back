@@ -14,6 +14,8 @@ import { funcionarioRouter } from "./funcionario.routes";
 import { funcionariorCaixaRouter } from "./funcionarioCaixa.routes";
 import { localizacaoRouter } from "./localizacao.routes";
 import { permissaoRouter } from "./permissao.routes";
+import { produtoLocalizacaoRouter } from "./produtoLocalizacao.routes";
+import { vendaProdutoRouter } from "./vendaProdutos.routes";
 
 const routes = Router();
 routes.use("/Produto", produtoRouter);
@@ -31,5 +33,7 @@ routes.use("/Funcionario", funcionarioRouter);
 routes.use("/funcionarioCaixa", funcionariorCaixaRouter);
 routes.use("/Localizacao", localizacaoRouter);
 routes.use("/Permissao", permissaoRouter);
+routes.use("/ProdutoLocalizacao", produtoLocalizacaoRouter);
+routes.use("/vendaProduto", vendaProdutoRouter);
 
 export { routes };
