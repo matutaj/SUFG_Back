@@ -1,6 +1,9 @@
 import { transferencias } from "@prisma/client";
 import { DadosTransferencia } from "../../repositorioTransferencia/ITransferencia";
 import { TransferenciaRepositorio } from "../../repositorioTransferencia/implementacoes/RepositorioTransferencia";
+import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
+import { LocalizacaoRepositorio } from "../../../localizacoes/repositorioLocalizacao/implementacoes/RepositorioLocalizacao";
+import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 class CriarTransferenciaCasoDeUso {
   async execute({
     id_funcionario,
@@ -10,11 +13,27 @@ class CriarTransferenciaCasoDeUso {
     quantidadeTransferida,
   }: DadosTransferencia): Promise<transferencias> {
     const repositorioTransferencia = new TransferenciaRepositorio();
-    const existeData =
-      await repositorioTransferencia.listarTodasTransferencias();
-    if (!existeData) {
-      throw new Error("Nenhuma transferencia cadastrada");
+    const repositorioFuncionario = new FuncionarioRepositorio();
+    const repositorioLocalizacao = new LocalizacaoRepositorio();
+    const repositorioProduto = new ProdutoRepositorio();
+
+    const existeProdutoId = await repositorioProduto.listarUmProdutoPorId(
+      id_produto
+    );
+    if (!existeProdutoId) {
+      throw new Error("Não existe um produto com esse id");
     }
+    const existeFuncionario =
+      await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
+    if (!existeFuncionario) {
+      throw new Error("Não existe um funcionario com esse id");
+    }
+    const existeLocalizacao =
+      await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
+    if (!existeLocalizacao) {
+      throw new Error("Não existe uma localização com esse id");
+    }
+
     const result = await repositorioTransferencia.criarTransferencia({
       id_funcionario,
       id_localizacao,
