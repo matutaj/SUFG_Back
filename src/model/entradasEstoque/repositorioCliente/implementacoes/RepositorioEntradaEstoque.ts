@@ -10,9 +10,9 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque{
                 dataEntrada,
                 produtoRecebido,
                 quantidadeRecebida,
-                Fornecedores: { connect: { id: id_fornecedor } },
-                Produtos: { connect: { id: id_produto } },
-                funcionarios: { connect: { id: id_funcionario } },
+                id_fornecedor,
+                id_produto,
+                id_funcionario
             
             }
         })

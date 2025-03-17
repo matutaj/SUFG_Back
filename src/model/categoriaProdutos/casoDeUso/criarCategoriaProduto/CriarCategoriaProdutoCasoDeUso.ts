@@ -1,6 +1,6 @@
 import { categoriasProdutos } from "@prisma/client";
-import { DadosCategoriaProduto } from "../repositorioCategoriaProduto/ICategoriaProduto";
-import { CategoriaProdutoRepositorio } from "../repositorioCategoriaProduto/implementacoes/RepositorioCategoriaProduto";
+import { DadosCategoriaProduto } from "../../repositorioCategoriaProduto/ICategoriaProduto";
+import { CategoriaProdutoRepositorio } from "../../repositorioCategoriaProduto/implementacoes/RepositorioCategoriaProduto";
 
 class CriarCategoriaProdutoCasoDeUso {
   async execute({

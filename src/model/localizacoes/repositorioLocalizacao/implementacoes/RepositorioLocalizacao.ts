@@ -6,18 +6,12 @@ class LocalizacaoRepositorio implements ILocalizacao {
     async criarLocalizacao({id_seccao, id_prateleira, id_corredor, nomeLocalizacao, descricaoLocalizacao, localProduto}: DadosLocalizacao): Promise<localizacoes> {
         const localizacao = await prisma.localizacoes.create({ 
             data: {
-                seccoes: {
-                    connect: {id: id_seccao}
-                },
-                prateleiras: {
-                    connect: {id: id_prateleira}
-                },
-                corredores: {
-                    connect: {id: id_corredor}
-                },
                 nomeLocalizacao,
                 descricaoLocalizacao,
-                localProduto
+                localProduto,
+                id_corredor,
+                id_prateleira,
+                id_seccao
         } });
         return localizacao;
     }

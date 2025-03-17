@@ -12,14 +12,11 @@ class TransacaoRepositorio implements ITransacao{
                 quantidadeVendida, 
                 tipoDocumento, 
                 valorTotalTransacao,
-                produtos: { connect:{ id: id_produto}},
-                clientes: { connect:{ id: id_cliente}},
-                funcionarios: { connect:{ id: id_funcionario}},
-                caixas: { connect:{ id: id_caixa}},
-                    
-                
-                
-                },
+                id_cliente, 
+                id_funcionario, 
+                id_produto, 
+                id_caixa
+            },
         })
         return criarTransacao
     }

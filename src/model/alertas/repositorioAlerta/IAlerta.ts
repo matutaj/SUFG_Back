@@ -1,8 +1,8 @@
 import { alertas } from "@prisma/client"
 export interface DadosAlerta{
     id?: string
-    id_caixa?: string
-    id_produto?: string
+    id_caixa: string
+    id_produto: string
     descricaoAlerta: string
     nomeAlerta: string
 }

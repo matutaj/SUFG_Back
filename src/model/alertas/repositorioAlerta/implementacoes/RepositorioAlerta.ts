@@ -7,12 +7,8 @@ class AlertaRepositorio implements IAlerta {
             data: {
                 descricaoAlerta,
                 nomeAlerta,
-                caixas: {
-                    connect: {id: id_caixa}
-                },
-                produtos: {
-                    connect: {id: id_produto}
-                }
+                id_caixa,
+                id_produto,
             }
 
         });

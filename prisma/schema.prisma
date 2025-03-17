@@ -31,11 +31,11 @@ enum localProduto {
 
 model clientes {
   id String @id @default(uuid())
-  numeroContribuinte String
-  nomeCliente String
-  moradaCliente String
-  telefoneCliente String
-  emailCliente String
+  numeroContribuinte String?
+  nomeCliente String?
+  moradaCliente String?
+  telefoneCliente String?
+  emailCliente String?
   transacaoes transacaoes[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
