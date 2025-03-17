@@ -4,20 +4,18 @@ import { prisma } from "../../../../prisma/client";
 
 
 class ProdutoRepositorio implements IProduto{
-    async criarProduto({custoAquisicao, dataValidade, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto, id_categoriaProduto}: DadosProduto): Promise<produtos> {
+    async criarProduto({custoAquisicao, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto, id_categoriaProduto, codigoBarras, unidadeConteudo, unidadeMedida}: DadosProduto): Promise<produtos> {
         const criarProduto = await prisma.produtos.create({
             data: {
                 custoAquisicao,
-                dataValidade,
+                codigoBarras,
                 nomeProduto,
                 precoVenda,
                 quantidadeEstoque,
                 referenciaProduto,
-                categoriasProdutos: {
-                    connect: {
-                        id: id_categoriaProduto
-                    }
-                }
+                unidadeConteudo,
+                unidadeMedida,
+                id_categoriaProduto,
             }
         });
         return criarProduto;   
@@ -38,16 +36,19 @@ class ProdutoRepositorio implements IProduto{
         return listarUmProdutoPeloNome;
     }
 
-    async atualizarProduto({id, custoAquisicao, dataValidade, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto}: DadosProduto): Promise<produtos> {
+    async atualizarProduto({id, custoAquisicao, nomeProduto, precoVenda, quantidadeEstoque, referenciaProduto, codigoBarras, id_categoriaProduto, unidadeConteudo, unidadeMedida}: DadosProduto): Promise<produtos> {
         const atualizarProduto = await prisma.produtos.update({
             where: { id },
             data: {
                 custoAquisicao,
-                dataValidade,
+                codigoBarras,
+                unidadeConteudo,
+                unidadeMedida,
                 nomeProduto,
                 precoVenda,
                 quantidadeEstoque,
-                referenciaProduto
+                referenciaProduto,
+                id_categoriaProduto
             }
         });
         return atualizarProduto;

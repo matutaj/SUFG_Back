@@ -9,3 +9,4 @@ class ListarProdutoPeloNomeController {
         return res.status(201).json(produto);
     }
 }
+export { ListarProdutoPeloNomeController };
