@@ -13,6 +13,7 @@ import { caixaRouter } from "./caixa.routes";
 import { funcionarioRouter } from "./funcionario.routes";
 import { funcionariorCaixaRouter } from "./funcionarioCaixa.routes";
 import { localizacaoRouter } from "./localizacao.routes";
+import { permissaoRouter } from "./permissao.routes";
 
 const routes = Router();
 routes.use("/Produto", produtoRouter);
@@ -29,5 +30,6 @@ routes.use("/Caixa", caixaRouter);
 routes.use("/Funcionario", funcionarioRouter);
 routes.use("/funcionarioCaixa", funcionariorCaixaRouter);
 routes.use("/Localizacao", localizacaoRouter);
+routes.use("/Permissao", permissaoRouter);
 
 export { routes };
