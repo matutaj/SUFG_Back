@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CriarFuncionarioCaixaCasodeUso } from "./CriarFuncionarioCaixaCasoDeUso";
-import { criarFuncionarioCaixaSchema } from "../../../../schema/funcionarioCaixa";
+import { criarFuncionarioCaixaSchema } from "../../../../schema/funcionariosCaixa";
 class CriarFuncionarioCaixaController {
   async handle(req: Request, res: Response): Promise<any> {
     const funcionarioCaixaCasoDeUso = new CriarFuncionarioCaixaCasodeUso();
