@@ -1,7 +1,7 @@
 import { funcionariosPermissoes } from "@prisma/client";
 
 export interface DadosFuncionarioPermissao {
-    id: string;
+    id?: string;
     id_funcionario: string;  
     id_permissao: string;
 }
