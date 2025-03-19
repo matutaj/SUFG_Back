@@ -7,5 +7,4 @@ class ListarTodosClienteController {
     return res.status(201).json(result);
   }
 }
-
 export { ListarTodosClienteController };

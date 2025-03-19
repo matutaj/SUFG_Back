@@ -9,6 +9,8 @@ export interface DadosEntradaEstoque{
     quantidadeRecebida: string
     dataEntrada: Date
     custoUnitario: number
+    lote: string
+    dataValidadeLote: Date
 }
 export interface IEntradaEstoque{
     criarEntradaEstoque({}: DadosEntradaEstoque): Promise<entradasEstoque>

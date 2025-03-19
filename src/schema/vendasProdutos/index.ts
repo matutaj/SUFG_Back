@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 
 const criarVendaProdutoSchema = Yup.object().shape({
-    id_venda: Yup.string(),
-    id_produto: Yup.string(),
-    quantidadeProduto: Yup.number(),
+    id_venda: Yup.string().required(),
+    id_produto: Yup.string().required(),
+    quantidadeProduto: Yup.number().required(),
 });
 export { criarVendaProdutoSchema };
