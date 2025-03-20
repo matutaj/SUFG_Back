@@ -16,8 +16,8 @@ class FuncaoPermissaoRepositorio implements IFuncaoPermissao {
         const listarTodasFuncoesPermissoes = await prisma.funcoesPermissoes.findMany();
         return listarTodasFuncoesPermissoes;
     }
-    async listarUmaFuncaoPermissaoPeloId(id: string): Promise<funcoesPermissoes | undefined> {
-        const listarUmaFuncaoPermissaoPeloId = await prisma.funcoesPermissoes.findUnique({ where: { id } }) || undefined;
+    async listarUmaFuncaoPermissaoPeloId(id_funcao: string, id_permissao: string): Promise<funcoesPermissoes | undefined> {
+        const listarUmaFuncaoPermissaoPeloId = await prisma.funcoesPermissoes.findFirst({ where: {id_funcao, id_permissao } }) || undefined;
         return listarUmaFuncaoPermissaoPeloId;   
     }
     async atualizarFuncaoPermissao({ id_funcao, id_permissao, id}: DadosFuncaoPermissao): Promise<funcoesPermissoes> {

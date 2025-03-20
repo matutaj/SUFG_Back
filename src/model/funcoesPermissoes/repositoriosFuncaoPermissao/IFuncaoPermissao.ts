@@ -9,7 +9,7 @@ export interface DadosFuncaoPermissao{
 export interface IFuncaoPermissao{
     criarFuncaoPermissao({}: DadosFuncaoPermissao): Promise<funcoesPermissoes>
     listarTodasFuncoesPermissoes(): Promise<funcoesPermissoes[]>
-    listarUmaFuncaoPermissaoPeloId(ID_funcaoPermissao: string): Promise<funcoesPermissoes | undefined>
+    listarUmaFuncaoPermissaoPeloId({id_funcao: string, id_permissao: string }): Promise<funcoesPermissoes | undefined>
     atualizarFuncaoPermissao({}: DadosFuncaoPermissao): Promise<funcoesPermissoes>
-    eliminarFuncaoPermissao(ID_funcaoPermissao: string): Promise<void>
+    eliminarFuncaoPermissao(id_funcaoPermissao: string): Promise<void>
 }
