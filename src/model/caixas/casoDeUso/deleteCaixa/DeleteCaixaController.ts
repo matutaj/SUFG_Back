@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { DeleteCaixaCasoDeUso } from "./DeleteCaixaCasoDeUso";
 
-class DeleteCaixaCcontroller {
+class DeleteCaixaController {
     async handle(req: Request, res: Response) {
         const { id } = req.params;
         const deleteCaixaCasoDeUso = new DeleteCaixaCasoDeUso();
@@ -9,3 +9,4 @@ class DeleteCaixaCcontroller {
         res.status(200).send("Caixa eliminado com sucesso");
     }
 }
+export { DeleteCaixaController };

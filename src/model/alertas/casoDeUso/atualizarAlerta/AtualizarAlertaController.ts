@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AtualizarAlertaCasoDeUso } from "./AtualizarAlertaCasoDeUso";
 
 class AtualizarAlertaController {
-    async handle(req: Request, res: Response) {
+    async handle(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
         const { id_caixa, id_produto, descricaoAlerta, nomeAlerta } = req.body;
 

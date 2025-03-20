@@ -3,7 +3,7 @@ import { AtualizarPrateleiraCasoDeUso } from "./AtualizarPrateleiraCasoDeUso";
 import { string } from "yup";
 
 class AtualizarPrateleiraController {
-    async handle(req: Request, res: Response) {
+    async handle(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
         const { nomePrateleira, descricaoPrateleira } = req.body;
 
