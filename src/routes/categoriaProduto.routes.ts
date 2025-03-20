@@ -12,9 +12,6 @@ categoriaProdutoRouter.get("/", listarTodasCategoriasProdutos.handle);
 const listarCategoriaProduto = new ListarCategoriaProdutoPeloNomeController();
 
 categoriaProdutoRouter.get("/:nomeCategoria", listarCategoriaProduto.handle);
-
-const criarCategoriaProduto = new CriarCategoriaProdutoController();
-
 categoriaProdutoRouter.post("/", criarCategoriaProduto.handle);
 
 export { categoriaProdutoRouter };
