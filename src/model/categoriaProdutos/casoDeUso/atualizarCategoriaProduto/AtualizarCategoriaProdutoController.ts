@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AtualizarCategoriaProdutoCasoDeUso } from "./AtualizarCategoriaProdutoCasoDeUso";
 
 class AtualizarCategoriaProdutoController {
-    async handle(req: Request, res: Response) {
+    async handle(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
         const { nomeCategoria, descricaoCategoria } = req.body;
 

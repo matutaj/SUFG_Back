@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CriarLocalizacaoCasoDeUso } from "./CriarLocalizacaoCasoDeUso";
-import { criarLocalizacaoSchema } from "../../../schema/localizacao";
+import { criarLocalizacaoSchema } from "../../../../schema/localizacao";
 class CriarLocalizacaoController {
   async handle(req: Request, res: Response): Promise<any> {
     const criarLocalizacaoCasoDeUso = new CriarLocalizacaoCasoDeUso();

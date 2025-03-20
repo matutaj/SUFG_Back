@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AtualizarCaixaCasoDeUso } from "./AtualizarCaixaCasoDeUso";
 
 class AtualizarCaixaController {
-    async handle(req: Request, res: Response) {
+    async handle(req: Request, res: Response): Promise<any> {
         const { id } = req.params;
         const { nomeCaixa, descricaoCaixa } = req.body;
 

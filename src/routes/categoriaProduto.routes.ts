@@ -3,18 +3,21 @@ import { Router } from "express";
 import { CriarCategoriaProdutoController } from "../model/categoriaProdutos/casoDeUso/criarCategoriaProduto/CriarCategoriaProdutoController";
 import { ListarCategoriaProdutoPeloNomeController } from "../model/categoriaProdutos/casoDeUso/listarCategoriaProdutoPeloNome/ListarCategoriaProdutoPeloNomeController";
 import { ListarTodasCategoriasProdutosController } from "../model/categoriaProdutos/casoDeUso/listarTodasCategoriasProdutos/ListarTodasCategoriasProdutosController";
+import { AtualizarCategoriaProdutoController } from "../model/categoriaProdutos/casoDeUso/atualizarCategoriaProduto/AtualizarCategoriaProdutoController";
+import { DeleteCategoriaProdutoController } from "../model/categoriaProdutos/casoDeUso/deleteCategoriaProduto/DeleteCategoriaProdutoController";
+
 const categoriaProdutoRouter = Router();
 
 const listarTodasCategoriasProdutos = new ListarTodasCategoriasProdutosController();
+const criarCategoriaProduto = new CriarCategoriaProdutoController();
+const listarCategoriaProduto = new ListarCategoriaProdutoPeloNomeController();
+const atualizarCategoriaProduto = new AtualizarCategoriaProdutoController();
+const deleteCategoriaProduto = new DeleteCategoriaProdutoController();
 
 categoriaProdutoRouter.get("/", listarTodasCategoriasProdutos.handle);
-
-const listarCategoriaProduto = new ListarCategoriaProdutoPeloNomeController();
-
+categoriaProdutoRouter.put("/", atualizarCategoriaProduto.handle);
+categoriaProdutoRouter.delete("/:id", deleteCategoriaProduto.handle);
 categoriaProdutoRouter.get("/:nomeCategoria", listarCategoriaProduto.handle);
-
-const criarCategoriaProduto = new CriarCategoriaProdutoController();
-
 categoriaProdutoRouter.post("/", criarCategoriaProduto.handle);
 
 export { categoriaProdutoRouter };
