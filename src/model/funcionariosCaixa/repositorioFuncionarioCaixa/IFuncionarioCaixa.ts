@@ -22,4 +22,6 @@ export interface IFuncionarioCaixa {
   listarUmFuncionarioCaixaPeloId(
     id: string
   ): Promise<funcionariosCaixa | undefined>;
+  eliminarFuncionarioCaixa(id: string): Promise<void>;
+  atualizarFuncionarioCaixa(dadosFuncionarioCaixa: DadosFuncionarioCaixa): Promise<funcionariosCaixa>;
 }

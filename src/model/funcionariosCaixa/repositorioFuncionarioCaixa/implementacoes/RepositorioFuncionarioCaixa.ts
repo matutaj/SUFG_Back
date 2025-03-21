@@ -53,5 +53,22 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
 
     return listarHoraDeAbertura;
   }
+  async atualizarFuncionarioCaixa(dadosFuncionarioCaixa: DadosFuncionarioCaixa): Promise<funcionariosCaixa> {
+    return await prisma.funcionariosCaixa.update({
+      where: { id: dadosFuncionarioCaixa.id },
+      data: {
+        estadoCaixa: dadosFuncionarioCaixa.estadoCaixa,
+        horarioFechamento: dadosFuncionarioCaixa.horarioFechamento,
+        quantidadaFaturada: dadosFuncionarioCaixa.quantidadaFaturada,
+      },
+    });
+  }
+  async eliminarFuncionarioCaixa(id: string): Promise<void> {
+    
+      await prisma.funcionariosCaixa.delete({ where: { id } });
+  
+  }
 }
+
+
 export { FuncionarioCaixaRepositorio };
