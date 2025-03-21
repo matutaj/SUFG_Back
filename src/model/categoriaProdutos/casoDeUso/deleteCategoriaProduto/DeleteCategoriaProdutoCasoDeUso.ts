@@ -1,17 +1,18 @@
-import { categoriasProdutos } from "@prisma/client";
 import { CategoriaProdutoRepositorio } from "../../repositorioCategoriaProduto/implementacoes/RepositorioCategoriaProduto";
+import { AppError } from "../../../../errors/AppError";
 
 class DeleteCategoriaProdutoCasoDeUso {
   async execute(id: string): Promise<void> {
     const repositorioCategoriaProduto = new CategoriaProdutoRepositorio();
 
     if (!id) {
-      throw new Error("O ID da categoria é obrigatório para exclusão");
+      throw new AppError("O ID da categoria é obrigatório para exclusão");
     }
 
-    const existeCategoria = await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloId(id);
+    const existeCategoria =
+      await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloId(id);
     if (!existeCategoria) {
-      throw new Error("Não existe uma categoria com esse id");
+      throw new AppError("Não existe uma categoria com esse id");
     }
 
     await repositorioCategoriaProduto.eliminarCategoriaProduto(id);

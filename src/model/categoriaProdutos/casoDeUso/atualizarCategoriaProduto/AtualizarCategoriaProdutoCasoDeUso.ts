@@ -1,6 +1,7 @@
 import { categoriasProdutos } from "@prisma/client";
 import { DadosCategoriaProduto } from "../../repositorioCategoriaProduto/ICategoriaProduto";
 import { CategoriaProdutoRepositorio } from "../../repositorioCategoriaProduto/implementacoes/RepositorioCategoriaProduto";
+import { AppError } from "../../../../errors/AppError";
 
 class AtualizarCategoriaProdutoCasoDeUso {
   async execute({
@@ -11,17 +12,21 @@ class AtualizarCategoriaProdutoCasoDeUso {
     const repositorioCategoriaProduto = new CategoriaProdutoRepositorio();
 
     if (!id) {
-      throw new Error("O ID da categoria é obrigatório para atualização");
+      throw new AppError("O ID da categoria é obrigatório para atualização");
     }
 
-    const existeCategoria = await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloId(id);
+    const existeCategoria =
+      await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloId(id);
     if (!existeCategoria) {
-      throw new Error("Não existe uma categoria com esse id");
+      throw new AppError("Não existe uma categoria com esse id");
     }
 
-    const categoriaComMesmoNome = await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloNome(nomeCategoria);
+    const categoriaComMesmoNome =
+      await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloNome(
+        nomeCategoria
+      );
     if (categoriaComMesmoNome && categoriaComMesmoNome.id !== id) {
-      throw new Error("Já existe uma categoria com esse nome");
+      throw new AppError("Já existe uma categoria com esse nome");
     }
 
     const result = await repositorioCategoriaProduto.atualizarCategoriaProduto({

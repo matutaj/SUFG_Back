@@ -1,6 +1,7 @@
 import { categoriasProdutos } from "@prisma/client";
 import { DadosCategoriaProduto } from "../../repositorioCategoriaProduto/ICategoriaProduto";
 import { CategoriaProdutoRepositorio } from "../../repositorioCategoriaProduto/implementacoes/RepositorioCategoriaProduto";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarCategoriaProdutoCasoDeUso {
   async execute({
@@ -13,7 +14,7 @@ class CriarCategoriaProdutoCasoDeUso {
         nomeCategoria
       );
     if (existeNome) {
-      throw new Error("Já existe uma categoria com esse nome");
+      throw new AppError("Já existe uma categoria com esse nome");
     }
     const result = await repositorioCategoriaProduto.criarCategoriaProduto({
       nomeCategoria,

@@ -1,13 +1,12 @@
-import { caixas } from "@prisma/client";
-import { ICaixa } from "../../repositorioCaixa/ICaixa";
 import { CaixaRepositorio } from "../../repositorioCaixa/implementacoes/RepositorioCaixa";
+import { AppError } from "../../../../errors/AppError";
 
 class DeleteCaixaCasoDeUso {
   async execute(id: string): Promise<void> {
     const repositorioCaixa = new CaixaRepositorio();
 
     if (!id) {
-      throw new Error("O ID do caixa é obrigatório para eliminação");
+      throw new AppError("O ID do caixa é obrigatório para eliminação");
     }
 
     const existeCaixa = await repositorioCaixa.listarUmCaixaPeloId(id);
@@ -19,4 +18,4 @@ class DeleteCaixaCasoDeUso {
   }
 }
 
-export {DeleteCaixaCasoDeUso };
+export { DeleteCaixaCasoDeUso };

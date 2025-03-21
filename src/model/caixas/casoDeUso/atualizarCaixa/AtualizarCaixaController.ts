@@ -2,18 +2,18 @@ import { Request, Response } from "express";
 import { AtualizarCaixaCasoDeUso } from "./AtualizarCaixaCasoDeUso";
 
 class AtualizarCaixaController {
-    async handle(req: Request, res: Response): Promise<any> {
-        const { id } = req.params;
-        const { nomeCaixa, descricaoCaixa } = req.body;
+  async handle(req: Request, res: Response): Promise<any> {
+    const { id } = req.params;
+    const { nomeCaixa, descricaoCaixa } = req.body;
 
-        const atualizarCaixaCasoDeUso = new AtualizarCaixaCasoDeUso();
-        const caixa = await atualizarCaixaCasoDeUso.execute({
-            id,
-            nomeCaixa,
-            descricaoCaixa,
-        });
+    const atualizarCaixaCasoDeUso = new AtualizarCaixaCasoDeUso();
+    const caixa = await atualizarCaixaCasoDeUso.execute({
+      id,
+      nomeCaixa,
+      descricaoCaixa,
+    });
 
-        return res.json(caixa);
-    }
+    return res.json(caixa);
+  }
 }
-export { AtualizarCaixaController}
+export { AtualizarCaixaController };

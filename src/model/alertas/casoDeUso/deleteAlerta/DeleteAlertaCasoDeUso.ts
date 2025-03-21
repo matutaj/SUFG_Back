@@ -1,3 +1,4 @@
+import { AppError } from "../../../../errors/AppError";
 import { AlertaRepositorio } from "../../repositorioAlerta/implementacoes/RepositorioAlerta";
 
 class DeleteAlertaCasoDeUso {
@@ -5,12 +6,12 @@ class DeleteAlertaCasoDeUso {
     const repositorioAlerta = new AlertaRepositorio();
 
     if (!id) {
-      throw new Error("O ID do alerta é obrigatório para eliminação");
+      throw new AppError("O ID do alerta é obrigatório para eliminação");
     }
 
     const existeAlerta = await repositorioAlerta.listarUmAlertaPeloId(id);
     if (!existeAlerta) {
-      throw new Error("Não existe um alerta com esse id");
+      throw new AppError("Não existe um alerta com esse id");
     }
 
     await repositorioAlerta.eliminarAlerta(id);
