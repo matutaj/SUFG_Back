@@ -19,6 +19,11 @@ class TransferenciaRepositorio implements ITransferencia {
         return listarUmaTransferenciaPorId;
     }
 
+    async atualizarTransferencia({ id_funcionario, id_localizacao, id_produto, dataTransferencia, quantidadeTransferida, id}: DadosTransferencia): Promise<transferencias> {
+        const atualizarTransferencia = await prisma.transferencias.update({ where: { id }, data: { id_funcionario, id_localizacao, id_produto, dataTransferencia, quantidadeTransferida } });
+        return atualizarTransferencia;
+    }
+
     async eliminarTransferencia(id: string): Promise<void> {
         await prisma.transferencias.delete({ where: { id } });
     }

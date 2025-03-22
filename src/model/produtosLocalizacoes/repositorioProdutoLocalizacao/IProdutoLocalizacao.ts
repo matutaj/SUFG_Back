@@ -16,5 +16,4 @@ export interface IProdutoLocalizacao {
     listarUmProdutoLocalizacaoPorId(ID_produtoLocalizacao: string): Promise<produtosLocalizacoes | undefined>
     atualizarProdutoLocalizacao({}: DadosProdutoLocalizacao): Promise<produtosLocalizacoes>
     eliminarProdutoLocalizacao(ID_produtoLocalizacao: string): Promise<void>
-
 }

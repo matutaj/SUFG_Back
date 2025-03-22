@@ -12,5 +12,6 @@ export interface ITransferencia {
     criarTransferencia({ }: DadosTransferencia): Promise<transferencias>
     listarTodasTransferencias(): Promise<transferencias[]>
     listarUmaTransferenciaPorId(id_transferencia: string): Promise<transferencias | undefined>
+    atualizarTransferencia({ }: DadosTransferencia): Promise<transferencias>
     eliminarTransferencia(id_transferencia: string): Promise<void>
 }

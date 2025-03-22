@@ -8,4 +8,7 @@ export interface DadosVendaProduto {
 export interface IVendaProduto{
     criarVendaProduto({}: DadosVendaProduto): Promise<vendasProdutos>;
     listarTodasVendasProdutos(): Promise<vendasProdutos[]>;
+    listarVendaProdutoPorId(id: string): Promise<vendasProdutos | undefined>;
+    atualizarVendaProduto({}: DadosVendaProduto): Promise<vendasProdutos>;
+    eliminarVendaProduto(id: string): Promise<vendasProdutos>;
 }
