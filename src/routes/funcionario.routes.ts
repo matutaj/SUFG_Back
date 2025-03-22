@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { criarFuncionarioController } from "../model/funcionarios/CasoDeUso/criarFuncionario/CriarFuncionarioController";
-import { ListarTodosFuncionariosController } from "../model/funcionarios/CasoDeUso/listarTodosFuncionarios/ListarTodosFuncionariosController";
-import { ListarFuncionarioPeloNomeController } from "../model/funcionarios/CasoDeUso/listarFuncionarioPeloNome/ListarFuncionarioPeloNomeController";
-import { AtualizarFuncionarioController } from "../model/funcionarios/CasoDeUso/atualizarFuncionario/AtualizarFuncionarioController";
-import { DeleteFuncionarioController } from "../model/funcionarios/CasoDeUso/deleteFuncionario/DeleteFuncionarioController";
+import { criarFuncionarioController } from "../model/funcionarios/casoDeUso/criarFuncionario/CriarFuncionarioController";
+import { ListarTodosFuncionariosController } from "../model/funcionarios/casoDeUso/listarTodosFuncionarios/ListarTodosFuncionariosController";
+import { ListarFuncionarioPeloNomeController } from "../model/funcionarios/casoDeUso/listarFuncionarioPeloNome/ListarFuncionarioPeloNomeController";
+import { AtualizarFuncionarioController } from "../model/funcionarios/casoDeUso/atualizarFuncionario/AtualizarFuncionarioController";
+import { DeleteFuncionarioController } from "../model/funcionarios/casoDeUso/deleteFuncionario/DeleteFuncionarioController";
 
 const funcionarioRouter = Router();
 
