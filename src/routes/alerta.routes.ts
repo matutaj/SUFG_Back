@@ -4,7 +4,7 @@ import { ListarTodosAlertasController } from "../model/alertas/casoDeUso/listarT
 import { ListarAlertaPeloNomeController } from "../model/alertas/casoDeUso/listarAlertaPeloNome/ListarAlertaPeloNomeController";
 import { AtualizarAlertaController } from "../model/alertas/casoDeUso/atualizarAlerta/AtualizarAlertaController";
 import { DeleteAlertaController } from "../model/alertas/casoDeUso/deleteAlerta/DeleteAlertaControoller";
-
+import { ListarUmAlertaPeloIdController } from "../model/alertas/casoDeUso/listarAlertaPeloId/ListarAlertaPeloIdController";
 const alertaRoutes = Router();
 
 const criarAlerta = new CriarAlertaController();
@@ -12,8 +12,10 @@ const listarTodosAlertas = new ListarTodosAlertasController();
 const listarAlertaPeloNome = new ListarAlertaPeloNomeController();
 const atualizarAlerta = new AtualizarAlertaController();
 const deleteAlerta = new DeleteAlertaController();
+const listarAlertaPeloId = new ListarUmAlertaPeloIdController();
 
 alertaRoutes.put("/", atualizarAlerta.handle);
+alertaRoutes.get("/:id", listarAlertaPeloId.handle);
 alertaRoutes.delete("/:id", deleteAlerta.handle);
 alertaRoutes.post("/", criarAlerta.handle);
 alertaRoutes.get("/", listarTodosAlertas.handle);
