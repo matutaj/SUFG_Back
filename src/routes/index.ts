@@ -22,7 +22,11 @@ import { funcionarioFuncaoRoutes } from "./funcionarioFuncao.routes";
 import { funcionarioPermissaoRoutes } from "./funcionarioPermissao.routes";
 
 const routes = Router();
-<<<<<<< HEAD
+
+routes.use("/entradaEstoque", entradaEstoqueRoutes);
+routes.use("/funcaoPermissao", funcaoPermissaoRoutes);
+routes.use("/funcionarioFuncao", funcionarioFuncaoRoutes);
+routes.use("/funcionarioPermissao", funcionarioPermissaoRoutes);
 routes.use("/produto", produtoRouter);
 routes.use("/funcao", funcaoRouter);
 routes.use("/transferencia", transferenciaRouter);
@@ -35,25 +39,6 @@ routes.use("/prateleira", prateleiraRouter);
 routes.use("/seccao", seccaoRouter);
 routes.use("/caixa", caixaRouter);
 routes.use("/funcionario", funcionarioRouter);
-=======
-
-routes.use("/FuncionarioPermissao", funcionarioPermissaoRoutes);
-routes.use("/FuncionarioFuncao", funcionarioFuncaoRoutes);
-routes.use("/FuncaoPermissao", funcaoPermissaoRoutes);
-routes.use("/EntradaEstoque", entradaEstoqueRoutes);
-routes.use("/Produto", produtoRouter);
-routes.use("/Funcao", funcaoRouter);
-routes.use("/Transferencia", transferenciaRouter);
-routes.use("/Venda", vendaRouter);
-routes.use("/Clientes", clientesRouter);
-routes.use("/Corredores", corredorRouter);
-routes.use("/CategoriaProduto", categoriaProdutoRouter);
-routes.use("/Fornecedores", fornecedorRouter);
-routes.use("/Prateleira", prateleiraRouter);
-routes.use("/Seccao", seccaoRouter);
-routes.use("/Caixa", caixaRouter);
-routes.use("/Funcionario", funcionarioRouter);
->>>>>>> 840c3ffbcce6697452ec7d5e6d2c9f824b71f57f
 routes.use("/funcionarioCaixa", funcionariorCaixaRouter);
 routes.use("/localizacao", localizacaoRouter);
 routes.use("/permissao", permissaoRouter);
