@@ -5,16 +5,27 @@ import { ListarClientePeloNomeController } from "../model/clientes/casoDeUso/lis
 import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosClientes/ListarTodosClienteController";
 import { AtualizarClienteController } from "../model/clientes/casoDeUso/atualizarCliente/AtualizarClienteController";
 import { DeleteClienteController } from "../model/clientes/casoDeUso/deleteCliente/DeleteClienteController";
-
+import { ListarUmClientePeloIdController } from "../model/clientes/casoDeUso/listarClientePeloId/ListarClientePeloIdController";
+import { ListarEmailClienteController } from "../model/clientes/casoDeUso/listarClientePeloEmail/ListarClientePeloEmailController";
+import { ListarTelefoneClienteController } from "../model/clientes/casoDeUso/listarClientePeloTelefone/ListarClientePeloTelefoneController";
+import { ListarNumeroDeContribuinteController } from "../model/clientes/casoDeUso/listarClientePeloNumeroContribuinte/ListarClientePeloNumeroContribuinteController";   
 const clientesRouter = Router();
 
 const criarClienteController = new CriarClienteController();
+const listarUmClientePeloIdController = new ListarUmClientePeloIdController();
+const listarEmailClienteController = new ListarEmailClienteController();
+const listarTelefoneClienteController = new ListarTelefoneClienteController();
+const listarNumeroContribuinteController = new ListarNumeroDeContribuinteController();
 const atualizarClienteController = new AtualizarClienteController();
 const deleteClienteController = new DeleteClienteController();
 const listarClientePeloNome = new ListarClientePeloNomeController();
 const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.post("/", criarClienteController.handle);
+clientesRouter.get("/:id", listarUmClientePeloIdController.handle);
+clientesRouter.get("/email/:email", listarEmailClienteController.handle);
+clientesRouter.get("/telefone/:telefone", listarTelefoneClienteController.handle);
+clientesRouter.get("/contribuinte/:contribuinte", listarNumeroContribuinteController.handle);
 clientesRouter.put("/", atualizarClienteController.handle);
 clientesRouter.delete("/", deleteClienteController.handle);
 clientesRouter.get("/:nomeCliente", listarClientePeloNome.handle);

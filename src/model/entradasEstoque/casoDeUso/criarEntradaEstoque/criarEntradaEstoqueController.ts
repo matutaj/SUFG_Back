@@ -11,3 +11,4 @@ class CriarEntradaEstoqueController {
         return res.status(201).json(result)
     }
 }
+export { CriarEntradaEstoqueController }
