@@ -16,6 +16,7 @@ import { localizacaoRouter } from "./localizacao.routes";
 import { permissaoRouter } from "./permissao.routes";
 import { produtoLocalizacaoRouter } from "./produtoLocalizacao.routes";
 import { vendaProdutoRouter } from "./vendaProdutos.routes";
+import { relatorioRouter } from "./relatorio.routes";
 
 const routes = Router();
 routes.use("/produto", produtoRouter);
@@ -35,5 +36,6 @@ routes.use("/localizacao", localizacaoRouter);
 routes.use("/permissao", permissaoRouter);
 routes.use("/produtoLocalizacao", produtoLocalizacaoRouter);
 routes.use("/vendaProduto", vendaProdutoRouter);
+routes.use("/relatorio", relatorioRouter);
 
 export { routes };
