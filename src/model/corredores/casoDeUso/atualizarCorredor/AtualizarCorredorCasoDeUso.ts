@@ -1,6 +1,7 @@
 import { corredores } from "@prisma/client";
 import { DadosCorredor } from "../../repositorioCorredores/ICorredor";
 import { CorredorRepositorio } from "../../repositorioCorredores/implementacoes/RepositorioCorredor";
+import { AppError } from "../../../../errors/AppError";
 class AtualizarCorredorCasoDeUso {
   async execute({
     id,
@@ -10,17 +11,18 @@ class AtualizarCorredorCasoDeUso {
     const repositorioCorredor = new CorredorRepositorio();
 
     if (!id) {
-      throw new Error("O ID do corredor é obrigatório para atualização");
+      throw new AppError("O ID do corredor é obrigatório para atualização");
     }
 
     const existeCorredor = await repositorioCorredor.listarUmCorredorPeloId(id);
     if (!existeCorredor) {
-      throw new Error("Não existe um corredor com esse id");
+      throw new AppError("Não existe um corredor com esse id");
     }
 
-    const corredorComMesmoNome = await repositorioCorredor.listarUmCorredorPeloNome(nomeCorredor);
+    const corredorComMesmoNome =
+      await repositorioCorredor.listarUmCorredorPeloNome(nomeCorredor);
     if (corredorComMesmoNome && corredorComMesmoNome.id !== id) {
-      throw new Error("Já existe um corredor com esse nome");
+      throw new AppError("Já existe um corredor com esse nome");
     }
 
     const result = await repositorioCorredor.atualizarCorredor({

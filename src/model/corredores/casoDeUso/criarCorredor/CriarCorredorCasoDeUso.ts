@@ -1,6 +1,7 @@
 import { corredores } from "@prisma/client";
 import { DadosCorredor } from "../../repositorioCorredores/ICorredor";
 import { CorredorRepositorio } from "../../repositorioCorredores/implementacoes/RepositorioCorredor";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarCorredorCasoDeUso {
   async execute({
@@ -12,7 +13,7 @@ class CriarCorredorCasoDeUso {
       nomeCorredor
     );
     if (existeNome) {
-      throw new Error("Já existe um corredor com esse nome");
+      throw new AppError("Já existe um corredor com esse nome");
     }
     const result = await repositorioCorredor.criarCorredor({
       nomeCorredor,

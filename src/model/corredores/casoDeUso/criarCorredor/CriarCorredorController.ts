@@ -1,3 +1,4 @@
+import { AppError } from "../../../../errors/AppError";
 import { criarCorredorSchema } from "../../../../schema/corredores";
 import { CriarCorredorCasoDeUso } from "./CriarCorredorCasoDeUso";
 import { Request, Response } from "express";
@@ -6,7 +7,7 @@ class CriarCorredorController {
     const corredorCasoDeUso = new CriarCorredorCasoDeUso();
     const { descricaoCorredor, nomeCorredor } = req.body;
     if (!criarCorredorSchema.isValid(req.body)) {
-      throw new Error("Erro na validação dos campos");
+      throw new AppError("Erro na validação dos campos");
     }
     const result = await corredorCasoDeUso.execute({
       descricaoCorredor,
