@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { CriarLocalizacaoCasoDeUso } from "./CriarLocalizacaoCasoDeUso";
 import { criarLocalizacaoSchema } from "../../../../schema/localizacao";
+import { AppError } from "../../../../errors/AppError";
 class CriarLocalizacaoController {
   async handle(req: Request, res: Response): Promise<any> {
     const criarLocalizacaoCasoDeUso = new CriarLocalizacaoCasoDeUso();
-    const { descricaoLocalizacao, localProduto, nomeLocalizacao } = req.body;
+    const { descricaoLocalizacao, nomeLocalizacao } = req.body;
 
     if (!criarLocalizacaoSchema.isValid(req.body))
-      throw new Error("Erro ao validar os campos");
+      throw new AppError("Erro ao validar os campos");
 
     const result = await criarLocalizacaoCasoDeUso.execute(req.body);
 

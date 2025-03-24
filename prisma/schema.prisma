@@ -21,10 +21,6 @@ enum tipoDocumento {
 }
 
 
-enum localProduto {
-  ARMAZÉM 
-  LOJA
-}
 
 model clientes {
   id String @id @default(uuid())
@@ -60,7 +56,7 @@ model funcionarios {
 model categoriasProdutos{
   id String @id @default(uuid())
   nomeCategoria String
-  descricaoCategoria String
+  descricao String?
   
   produtos produtos[]
   
@@ -132,7 +128,7 @@ model entradasEstoque {
 model caixas {
 	id String @id @default(uuid())
   nomeCaixa String
-  descricaoCaixa String
+  descricao String?
 
   funcionariosCaixa funcionariosCaixa []
   alertas alertas[]
@@ -168,7 +164,7 @@ model vendasProdutos {
 model seccoes {
 	id String @id @default(uuid())
   nomeSeccao String
-  descricaoSeccao String
+  descricao String?
   
   produtosLocalizacoes produtosLocalizacoes[]
 
@@ -180,7 +176,7 @@ model seccoes {
 model corredores {
 	id String @id @default(uuid())
   nomeCorredor String
-  descricaoCorredor String
+  descricao String?
 
   produtosLocalizacoes produtosLocalizacoes[]
 
@@ -192,7 +188,7 @@ model corredores {
 model prateleiras {
 	id String @id @default(uuid())
   nomePrateleira String
-  descricaoPrateleira String
+  descricao String?
 
   produtosLocalizacoes produtosLocalizacoes[]
 
@@ -203,10 +199,8 @@ model prateleiras {
 model localizacoes {
 	id String @id @default(uuid())
   nomeLocalizacao String
-  descricaoLocalizacao String
-  
-  localProduto  localProduto
-  
+  descricao String?
+ 
   
   produtosLocalizacoes produtosLocalizacoes[]
   transferencias transferencias[]
@@ -271,7 +265,7 @@ model alertas {
   id_caixa String
   id_produto String
   nomeAlerta String
-  descricaoAlerta String
+  descricao String?
   caixas caixas @relation(fields: [id_caixa], references: [id],onDelete: Cascade, onUpdate: Cascade)
   produtos produtos @relation(fields: [id_produto], references: [id],onDelete: Cascade, onUpdate: Cascade)
   createdAt    DateTime      @default(now())
@@ -281,7 +275,7 @@ model alertas {
 model funcoes {
 	id String @id @default(uuid())
   nome String
-  descricao String
+  descricao String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   funcionariosFuncoes funcionariosFuncoes[]
@@ -291,7 +285,7 @@ model funcoes {
 model permissoes {
 	id String @id @default(uuid())
   nome String
-  descricao String
+  descricao String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   funcionariosPermissoes funcionariosPermissoes[]
