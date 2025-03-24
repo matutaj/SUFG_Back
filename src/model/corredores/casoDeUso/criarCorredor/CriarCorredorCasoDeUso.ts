@@ -6,7 +6,7 @@ import { AppError } from "../../../../errors/AppError";
 class CriarCorredorCasoDeUso {
   async execute({
     nomeCorredor,
-    descricaoCorredor,
+    descricao,
   }: DadosCorredor): Promise<corredores> {
     const repositorioCorredor = new CorredorRepositorio();
     const existeNome = await repositorioCorredor.listarUmCorredorPeloNome(
@@ -17,7 +17,7 @@ class CriarCorredorCasoDeUso {
     }
     const result = await repositorioCorredor.criarCorredor({
       nomeCorredor,
-      descricaoCorredor,
+      descricao,
     });
     return result;
   }

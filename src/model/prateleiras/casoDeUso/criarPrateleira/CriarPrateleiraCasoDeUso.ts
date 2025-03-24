@@ -3,7 +3,7 @@ import { PrateleiraRepositorio } from "../../repositorioPrateleira/implementacoe
 import { prateleiras } from "@prisma/client";
 class CriarPrateleiraCasoDeUso {
   async execute({
-    descricaoPrateleira,
+    descricao,
     nomePrateleira,
   }: DadosPrateleira): Promise<prateleiras> {
     const prateleiraRepositorio = new PrateleiraRepositorio();
@@ -14,7 +14,7 @@ class CriarPrateleiraCasoDeUso {
       throw new Error("Já existe uma prateleira com esse nome");
     }
     const result = await prateleiraRepositorio.criarPrateleira({
-      descricaoPrateleira,
+      descricao,
       nomePrateleira,
     });
     return result;
