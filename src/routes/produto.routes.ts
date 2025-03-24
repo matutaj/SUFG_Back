@@ -4,16 +4,19 @@ import { ListarTodosProdutosController } from "../model/produtos/casoDeUso/lista
 import { ListarProdutoPeloNomeController } from "../model/produtos/casoDeUso/listarProdutoPeloNome/ListarProdutoPeloNomeController";
 import { AtualizarProdutoController } from "../model/produtos/casoDeUso/atualizarProduto/AtualizarProdutoController";
 import { DeleteProdutoController } from "../model/produtos/casoDeUso/deleteProduto/DeleteProdutoController";
+import { ListarUmProdutoPorIdController } from "../model/produtos/casoDeUso/listarProdutoPeloId/ListarProdutoPeloIdController";
 
 const produtoRouter = Router();
 
 const criarProduto = new CriarProdutoController();
+const listarProdutoPeloId = new ListarUmProdutoPorIdController();
 const atualizarProduto = new AtualizarProdutoController();
 const deleteProduto = new DeleteProdutoController();
 const listarTodosProdutos = new ListarTodosProdutosController();
 const listarProdutoPeloNome = new ListarProdutoPeloNomeController();
 
 produtoRouter.get("/", listarTodosProdutos.handle);
+produtoRouter.get("/:id", listarProdutoPeloId.handle);
 produtoRouter.put("/", atualizarProduto.handle);
 produtoRouter.delete("/", deleteProduto.handle);
 produtoRouter.get("/:nomeProduto", listarProdutoPeloNome.handle);

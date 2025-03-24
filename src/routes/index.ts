@@ -17,8 +17,17 @@ import { permissaoRouter } from "./permissao.routes";
 import { produtoLocalizacaoRouter } from "./produtoLocalizacao.routes";
 import { vendaProdutoRouter } from "./vendaProdutos.routes";
 import { relatorioRouter } from "./relatorio.routes";
+import { funcaoPermissaoRoutes } from "./funcaoPermissao.routes";
+import { entradaEstoqueRoutes } from "./entradaEstoque.routes";
+import { funcionarioFuncaoRoutes } from "./funcionarioFuncao.routes";
+import { funcionarioPermissaoRoutes } from "./funcionarioPermissao.routes";
 
 const routes = Router();
+
+routes.use("/entradaEstoque", entradaEstoqueRoutes);
+routes.use("/funcaoPermissao", funcaoPermissaoRoutes);
+routes.use("/funcionarioFuncao", funcionarioFuncaoRoutes);
+routes.use("/funcionarioPermissao", funcionarioPermissaoRoutes);
 routes.use("/produto", produtoRouter);
 routes.use("/funcao", funcaoRouter);
 routes.use("/transferencia", transferenciaRouter);
