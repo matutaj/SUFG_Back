@@ -1,4 +1,3 @@
-// src/controllers/ListarQuantidadeFaturadaPorCaixaController.ts
 import { Request, Response } from "express";
 import { ListarQuantidadeFaturadaPorCaixaCasoDeUso } from "./ListarQuantidadeFaturadaPorCaixaCasoDeUso";
 

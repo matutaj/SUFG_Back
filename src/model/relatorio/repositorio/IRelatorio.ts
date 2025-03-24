@@ -9,16 +9,19 @@ import {
 export interface IRelatorioRepository {
   listarVendasPorPeriodo(
     dataInicio: Date,
-    dataFim: Date
+    dataFim: Date,
+    limite?: number
   ): Promise<(vendas & { funcionarioNome: string })[]>;
   listarVendasPorCliente(
     idCliente: string,
     dataInicio: Date,
-    dataFim: Date
+    dataFim: Date,
+    limite?: number
   ): Promise<(vendas & { funcionarioNome: string })[]>;
   listarProdutosMaisVendidos(
     dataInicio: Date,
-    dataFim: Date
+    dataFim: Date,
+    limite?: number
   ): Promise<
     {
       id_produto: string;
@@ -27,7 +30,6 @@ export interface IRelatorioRepository {
       valorTotal: number;
     }[]
   >;
-
   listarFaturamentoPorPeriodo(
     dataInicio: Date,
     dataFim: Date
@@ -42,17 +44,16 @@ export interface IRelatorioRepository {
     {
       idCaixa: string;
       nomeCaixa: string;
-      quantidadaFaturada: number;
-      funcionarioNome: string;
+      quantidadeFaturada: number;
+      funcionarios: string[];
     }[]
   >;
-
   listarEstoqueAtual(): Promise<
     {
       id_produto: string;
       nomeProduto: string;
       quantidadeEstoque: number;
-      localProduto: string;
+      localizacoes: { id: string; nome: string }[];
     }[]
   >;
   listarEntradasEstoquePorPeriodo(
@@ -69,11 +70,20 @@ export interface IRelatorioRepository {
       nomeProduto: string;
       quantidadeAtual: number;
       quantidadeMinima: number;
+      localizacao: string;
     }[]
   >;
-
   listarAtividadeFuncionariosCaixa(
     dataInicio: Date,
     dataFim: Date
   ): Promise<(funcionariosCaixa & { funcionarioNome: string })[]>;
+
+  // Novo método
+  listarPeriodoMaisVendidoPorProduto(idProduto: string): Promise<{
+    id_produto: string;
+    nomeProduto: string;
+    periodo: string; // Exemplo: "Março 2025"
+    quantidadeVendida: number;
+    valorTotal: number;
+  }>;
 }
