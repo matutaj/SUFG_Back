@@ -16,12 +16,7 @@ const listarCorredorPeloNome = new ListarCorredorPeloNomeController();
 const listarTodosCorredores = new ListarTodosCorredorController();
 
 corredorRouter.post("/", criarCorredor.handle);
-<<<<<<< HEAD
 corredorRouter.put("/:id", atualizarCorredor.handle);
-=======
-corredorRouter.get("/:id", listarCorredorPeloId.handle);
-corredorRouter.put("/", atualizarCorredor.handle);
->>>>>>> 840c3ffbcce6697452ec7d5e6d2c9f824b71f57f
 corredorRouter.delete("/:id", deleteCorredor.handle);
 corredorRouter.get("/:nomeCorredor", listarCorredorPeloNome.handle);
 corredorRouter.get("/", listarTodosCorredores.handle);
