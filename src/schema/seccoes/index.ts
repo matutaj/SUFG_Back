@@ -7,4 +7,14 @@ const criarSeccaoSchema = Yup.object().shape({
 const listarSeccaoPeloNome = Yup.object().shape({
     nomeSeccao: Yup.string().required(),
 });
-export { criarSeccaoSchema, listarSeccaoPeloNome };
+const atualizarSeccaoSchema = Yup.object().shape({
+    descricaoSeccao: Yup.string(),
+    nomeSeccao: Yup.string().required(),
+})
+const deletarSeccaoSchema = Yup.object().shape({
+    id: Yup.string().required(),
+})
+const listarSeccaoPeloIdSchema = Yup.object().shape({
+    id: Yup.string().required(),
+})
+export { criarSeccaoSchema, listarSeccaoPeloNome, atualizarSeccaoSchema, deletarSeccaoSchema, listarSeccaoPeloIdSchema };

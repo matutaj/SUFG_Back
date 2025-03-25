@@ -6,7 +6,20 @@ const criarAlertaSchema = Yup.object().shape({
     id_caixa: Yup.string(),
     id_produto: Yup.string()
 });
-const listarAlertaPeloNome = Yup.object().shape({
+const listarAlertaPeloNomeSchema = Yup.object().shape({
     nomeAlerta: Yup.string().required(),
 });
-export { criarAlertaSchema, listarAlertaPeloNome };
+const atualizarAlertaSchema = Yup.object().shape({
+    descricaoAlerta: Yup.string(),
+    nomeAlerta: Yup.string().required(),
+    id_caixa: Yup.string(),
+    id_produto: Yup.string()
+});
+const deletarAlertaSchema = Yup.object().shape({
+    id_alerta: Yup.string().required(),
+});
+const listarAlertaPeloIdSchema = Yup.object().shape({
+    id_alerta: Yup.string().required(),
+});
+
+export { criarAlertaSchema, listarAlertaPeloNomeSchema, atualizarAlertaSchema, deletarAlertaSchema, listarAlertaPeloIdSchema };

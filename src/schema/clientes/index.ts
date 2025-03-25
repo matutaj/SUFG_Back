@@ -10,4 +10,17 @@ const criarClienteSchema = Yup.object().shape({
 const listarClientePeloNome = Yup.object().shape({
   nomeCliente: Yup.string().required(),
 });
-export { criarClienteSchema, listarClientePeloNome };
+const atualizarClienteSchema = Yup.object().shape({
+  nomeCliente: Yup.string(),
+  numeroContribuinte: Yup.string(),
+  moradaCliente: Yup.string(),
+  telefoneCliente: Yup.string(),
+  emailCliente: Yup.string(),
+})
+const deletarClienteSchema = Yup.object().shape({
+  id_cliente: Yup.string().required(),
+})
+const listarClientePeloIdSchema = Yup.object().shape({
+  id_cliente: Yup.string().required(),
+})
+export { criarClienteSchema, listarClientePeloNome, atualizarClienteSchema, deletarClienteSchema, listarClientePeloIdSchema };

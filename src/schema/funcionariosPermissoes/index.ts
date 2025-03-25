@@ -4,4 +4,15 @@ const criarFuncionarioPermissaoSchema = Yup.object().shape({
     id_permissao: Yup.string().required(),
     id_funcionario: Yup.string().required(),
 });
-export { criarFuncionarioPermissaoSchema };
+const listarFuncionarioPermissaoPeloIdSchema = Yup.object().shape({
+    id: Yup.string().required(),
+})
+const atualizarFuncionarioPermissaoSchema = Yup.object().shape({
+    id: Yup.string().required(),
+    id_permissao: Yup.string().required(),
+    id_funcionario: Yup.string().required(),
+})
+const deletarFuncionarioPermissaoSchema = Yup.object().shape({
+    id: Yup.string().required(),
+})
+export { criarFuncionarioPermissaoSchema, listarFuncionarioPermissaoPeloIdSchema, atualizarFuncionarioPermissaoSchema, deletarFuncionarioPermissaoSchema };

@@ -7,4 +7,14 @@ const criarPrateleiraSchema = Yup.object().shape({
 const listarPrateleiraPeloNome = Yup.object().shape({
     nomePrateleira: Yup.string().required(),
 });
-export { criarPrateleiraSchema, listarPrateleiraPeloNome };
+const atualizarPrateleiraSchema = Yup.object().shape({
+    descricaoPrateleira: Yup.string(),
+    nomePrateleira: Yup.string().required(),
+})
+const deletarPrateleiraSchema = Yup.object().shape({
+    id: Yup.string().required(),
+})
+const listarPrateleiraPeloIdSchema = Yup.object().shape({
+    id: Yup.string().required(),
+})
+export { criarPrateleiraSchema, listarPrateleiraPeloNome, atualizarPrateleiraSchema, deletarPrateleiraSchema, listarPrateleiraPeloIdSchema };

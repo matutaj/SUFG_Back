@@ -13,7 +13,6 @@ import { ListarPeriodoMaisVendidoPorProdutoController } from "../model/relatorio
 
 const relatorioRouter = Router();
 
-// Instanciando os controladores fora das rotas
 const listarVendasPorPeriodo = new ListarVendasPorPeriodoController();
 const listarVendasPorCliente = new ListarVendasPorClienteController();
 const listarProdutosMaisVendidos = new ListarProdutosMaisVendidosController();
@@ -31,7 +30,7 @@ const listarAtividadeFuncionariosCaixa =
 const listarPeriodoMaisVendidoPorProduto =
   new ListarPeriodoMaisVendidoPorProdutoController();
 
-// Definindo as rotas
+
 relatorioRouter.get("/vendas-periodo", listarVendasPorPeriodo.handle);
 relatorioRouter.get(
   "/vendas-cliente/:idCliente",
