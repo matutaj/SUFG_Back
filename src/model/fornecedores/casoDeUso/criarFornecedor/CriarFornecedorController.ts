@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CriarFornecedorCasoDeUso } from "./CriarFornecedorCasoDeUso";
 import { criarFornecedorSchema } from "../../../../schema/fornecedores";
+import { AppError } from "../../../../errors/AppError";
 class CriarFornecedorController {
   async handle(req: Request, res: Response): Promise<any> {
     const fornecedorCasoDeUso = new CriarFornecedorCasoDeUso();
@@ -12,7 +13,7 @@ class CriarFornecedorController {
       telefoneFornecedor,
     } = req.body;
     if (!criarFornecedorSchema.isValid(req.body)) {
-      throw new Error("Erro na validação dos campos");
+      throw new AppError("Erro na validação dos campos");
     }
     const result = await fornecedorCasoDeUso.execute({
       emailFornecedor,

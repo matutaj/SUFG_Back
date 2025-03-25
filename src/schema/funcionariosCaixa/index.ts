@@ -27,6 +27,9 @@ const listarFuncionarioCaixaPeloIdCaixaSchema = Yup.object().shape({
 const listarEstadoCaixaSchema = Yup.object().shape({
   estadoCaixa: Yup.boolean().required(),
 })
-export { criarFuncionarioCaixaSchema, listarFuncionarioCaixaPeloIdSchema, atualizarFuncionarioCaixaSchema, deletarFuncionarioCaixaSchema, listarFuncionarioCaixaPeloIdCaixaSchema, listarEstadoCaixaSchema };
+const listarFuncionarioCaixaPelaAberturaSchema = Yup.object().shape({
+  horarioAbertura: Yup.date().required(),
+})
+export { criarFuncionarioCaixaSchema, listarFuncionarioCaixaPeloIdSchema, atualizarFuncionarioCaixaSchema, deletarFuncionarioCaixaSchema, listarFuncionarioCaixaPeloIdCaixaSchema, listarEstadoCaixaSchema, listarFuncionarioCaixaPelaAberturaSchema };
 
 

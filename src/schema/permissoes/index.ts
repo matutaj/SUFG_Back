@@ -18,4 +18,4 @@ const deletarPermissaoSchema = Yup.object().shape({
 const listarPermissaoPeloIdSchema = Yup.object().shape({
     id_permissao: Yup.string().required(),
 })
-export { criarPermissaoSchema, listarPermissaoPeloNome };
+export { criarPermissaoSchema, listarPermissaoPeloNome, atualizarPermissaoSchema, deletarPermissaoSchema, listarPermissaoPeloIdSchema };

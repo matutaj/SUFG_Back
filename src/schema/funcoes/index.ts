@@ -17,4 +17,4 @@ const deletarFuncaoSchema = Yup.object().shape({
 const listarFuncaoPeloIdSchema = Yup.object().shape({
     id: Yup.string().required(),
 })
-export { criarFuncaoSchema, listarFuncaoPeloNome };
+export { criarFuncaoSchema, listarFuncaoPeloNome, atualizarFuncaoSchema, deletarFuncaoSchema, listarFuncaoPeloIdSchema };

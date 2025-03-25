@@ -7,7 +7,7 @@ const criarProdutoLocalizacaoSchema = Yup.object().shape({
 const listarProdutoLocalizacaoPeloIdSchema = Yup.object().shape({
     id: Yup.string().required(),
 })
-const atulizarProdutoLocalizacaoSchema = Yup.object().shape({
+const atualizarProdutoLocalizacaoSchema = Yup.object().shape({
     id: Yup.string().required(),
     id_localizacao: Yup.string().required(),
     id_produto: Yup.string().required(),
@@ -15,4 +15,4 @@ const atulizarProdutoLocalizacaoSchema = Yup.object().shape({
 const deletarProdutoLocalizacaoSchema = Yup.object().shape({
     id: Yup.string().required(),
 })
-export { criarProdutoLocalizacaoSchema, listarProdutoLocalizacaoPeloIdSchema, atulizarProdutoLocalizacaoSchema, deletarProdutoLocalizacaoSchema };
+export { criarProdutoLocalizacaoSchema, listarProdutoLocalizacaoPeloIdSchema, atualizarProdutoLocalizacaoSchema, deletarProdutoLocalizacaoSchema };

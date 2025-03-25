@@ -24,4 +24,4 @@ const atualizarEntradaSchema = Yup.object().shape({
 const deletarEntradaSchema = Yup.object().shape({
     id_entrada: Yup.string().required(),
 })
-export { criarEntradaSchema };
+export { criarEntradaSchema, listarEntradaPeloIdSchema, atualizarEntradaSchema, deletarEntradaSchema };

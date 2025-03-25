@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
 import { AtualizarFuncionarioFuncaoCasoDeUso } from "./AtualizarFuncionarioFuncaoCasoDeUso";
-
+import { atualizarFuncionarioFuncaoSchema } from "../../../../schema/funcionariosFuncoes";
+import { AppError } from "../../../../errors/AppError";
 class AtualizarFuncionarioFuncaoController {
   async handle(req: Request, res: Response): Promise<any> {
     const atualizarFuncionarioFuncaoCasoDeUso = new AtualizarFuncionarioFuncaoCasoDeUso();
-    const { id, id_funcionario, id_funcao } = req.body;
+    const { id } = req.params;
+    const { id_funcionario, id_funcao } = req.body;
+    if (!atualizarFuncionarioFuncaoSchema.isValid(req.params))
+      throw new AppError("Erro na Validação dos dados");
+    if (!atualizarFuncionarioFuncaoSchema.isValid(req.body))
+      throw new AppError("Erro na Validação dos dados");
     const result = await atualizarFuncionarioFuncaoCasoDeUso.execute({
       id,
       id_funcionario,

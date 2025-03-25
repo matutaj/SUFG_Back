@@ -5,7 +5,7 @@ import { AppError } from "../../../../errors/AppError";
 class CriarLocalizacaoController {
   async handle(req: Request, res: Response): Promise<any> {
     const criarLocalizacaoCasoDeUso = new CriarLocalizacaoCasoDeUso();
-    const { descricaoLocalizacao, nomeLocalizacao } = req.body;
+    const { descricaoLocalizacao, nomeLocalizacao, localProduto } = req.body;
 
     if (!criarLocalizacaoSchema.isValid(req.body))
       throw new AppError("Erro ao validar os campos");

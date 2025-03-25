@@ -1,6 +1,7 @@
 import { CriarProdutoLocalizacaoCasoDeUso } from "./criarProdutoLocalizacaoCasoDeUso";
 import { Request, Response } from "express";
 import { criarProdutoLocalizacaoSchema } from "../../../../schema/produtosLocalizacoes";
+import { AppError } from "../../../../errors/AppError";
 class CriarProdutoLocalizacaoController {
   async handle(req: Request, res: Response): Promise<any> {
     const produtoLocalizacaoCasoDeUso = new CriarProdutoLocalizacaoCasoDeUso();
@@ -13,8 +14,7 @@ class CriarProdutoLocalizacaoController {
       quantidadeMinimaProduto,
       quantidadeProduto,
     } = req.body;
-    if (!criarProdutoLocalizacaoSchema.validate(req.body))
-      return res.status(400).json({ message: "Dados inválidos" });
+    if (!criarProdutoLocalizacaoSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
     const result = await produtoLocalizacaoCasoDeUso.execute({
       id_corredor,
       id_localizacao,

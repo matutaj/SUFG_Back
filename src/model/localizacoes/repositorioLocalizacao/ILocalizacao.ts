@@ -1,9 +1,10 @@
-import { localizacoes } from "@prisma/client";
+import { localizacoes, localProduto } from "@prisma/client";
 
 export interface DadosLocalizacao {
   id?: string;
   nomeLocalizacao: string;
   descricao?: string;
+  localProduto: localProduto;
 }
 export interface ILocalizacao {
   criarLocalizacao({}: DadosLocalizacao): Promise<localizacoes>;

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CriarVendaCasoDeUso } from "./CriarVendaCasoDeUso";
 import { criarVendaSchema } from "../../../../schema/vendas";
+import { AppError } from "../../../../errors/AppError";
 class CriarVendaController {
   async handle(req: Request, res: Response): Promise<any> {
     const criarVendaCasoDeUso = new CriarVendaCasoDeUso();
@@ -14,7 +15,7 @@ class CriarVendaController {
       valorTotal,
       vendasProdutos,
     } = req.body;
-    if (!criarVendaSchema.validate(req.body)) return res.status(400).json({});
+    if (!criarVendaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
     const result = await criarVendaCasoDeUso.execute({
       id_cliente,
       dataEmissao,

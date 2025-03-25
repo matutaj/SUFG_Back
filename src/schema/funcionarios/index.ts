@@ -33,4 +33,4 @@ const listarFuncionarioNumeroContribuinteSchema = Yup.object().shape({
     numeroContribuinte: Yup.string().required(),
 })
 
-export { criarFuncionarioSchema, listarFuncionarioPeloNome };
+export { criarFuncionarioSchema, listarFuncionarioPeloNome, atualizarFuncionarioSchema, deletarFuncionarioSchema, listarFuncionarioPeloIdSchema, listarFuncionarioEmailSchema, listarFuncionarioTelefoneSchema, listarFuncionarioNumeroContribuinteSchema };

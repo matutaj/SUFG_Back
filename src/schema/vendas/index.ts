@@ -24,4 +24,4 @@ const atualizarVendaSchema = Yup.object().shape({
 const deletarVendaSchema = Yup.object().shape({
     id: Yup.string().required(),
 })
-export { criarVendaSchema };
+export { criarVendaSchema, listarVendaPeloIdSchema, atualizarVendaSchema, deletarVendaSchema };
