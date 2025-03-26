@@ -1,4 +1,3 @@
-import { seccoes } from "@prisma/client";
 import { SeccaoRepositorio } from "../../repositorioSeccoes/Implementacoes/RepositorioSeccao";
 class DeleteSeccaoCasoDeUso {
   async execute(id: string): Promise<void> {

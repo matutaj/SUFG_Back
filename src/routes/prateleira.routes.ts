@@ -18,8 +18,8 @@ const listarTodasPrateleiras = new ListarTodasPrateleirasController();
 
 prateleiraRouter.get("/", listarTodasPrateleiras.handle);
 prateleiraRouter.get("/:id", listarPrateleiraPeloId.handle);
-prateleiraRouter.put("/", atualizarPrateleira.handle);
-prateleiraRouter.delete("/", deletePrateleira.handle);
+prateleiraRouter.put("/:id", atualizarPrateleira.handle);
+prateleiraRouter.delete("/:id", deletePrateleira.handle);
 prateleiraRouter.post("/", criarPrateleira.handle);
 prateleiraRouter.get("/:nomePrateleira", listarPrateleiraPeloNome.handle);
 export { prateleiraRouter };

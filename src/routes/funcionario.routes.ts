@@ -14,7 +14,8 @@ const criarFuncionario = new criarFuncionarioController();
 const listarFuncionarioPeloId = new ListarUmFuncionarioPeloIdController();
 const listarFuncionarioEmail = new ListarEmailFuncionarioController();
 const listarFuncionarioTelefone = new ListarTelefoneFuncionarioController();
-const listarFuncionarioNumeroContribuinte = new ListarNumeroContribuinteFuncionarioController();
+const listarFuncionarioNumeroContribuinte =
+  new ListarNumeroContribuinteFuncionarioController();
 const atualizarFuncionario = new AtualizarFuncionarioController();
 const deleteFuncionario = new DeleteFuncionarioController();
 const listarFuncionarioPeloNome = new ListarFuncionarioPeloNomeController();
@@ -24,8 +25,11 @@ funcionarioRouter.post("/", criarFuncionario.handle);
 funcionarioRouter.get("/:id", listarFuncionarioPeloId.handle);
 funcionarioRouter.get("/email/:email", listarFuncionarioEmail.handle);
 funcionarioRouter.get("/telefone/:telefone", listarFuncionarioTelefone.handle);
-funcionarioRouter.get("/contribuinte/:contribuinte", listarFuncionarioNumeroContribuinte.handle);
-funcionarioRouter.put("/", atualizarFuncionario.handle);
+funcionarioRouter.get(
+  "/contribuinte/:contribuinte",
+  listarFuncionarioNumeroContribuinte.handle
+);
+funcionarioRouter.put("/:id", atualizarFuncionario.handle);
 funcionarioRouter.delete("/:id", deleteFuncionario.handle);
 funcionarioRouter.get("/", listarTodosFuncionarios.handle);
 funcionarioRouter.get("/:nomeFuncionario", listarFuncionarioPeloNome.handle);

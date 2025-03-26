@@ -17,8 +17,8 @@ const listarProdutoPeloNome = new ListarProdutoPeloNomeController();
 
 produtoRouter.get("/", listarTodosProdutos.handle);
 produtoRouter.get("/:id", listarProdutoPeloId.handle);
-produtoRouter.put("/", atualizarProduto.handle);
-produtoRouter.delete("/", deleteProduto.handle);
+produtoRouter.put("/:id", atualizarProduto.handle);
+produtoRouter.delete("/:id", deleteProduto.handle);
 produtoRouter.get("/:nomeProduto", listarProdutoPeloNome.handle);
 produtoRouter.post("/", criarProduto.handle);
 

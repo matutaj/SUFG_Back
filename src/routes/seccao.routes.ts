@@ -17,8 +17,8 @@ const listarSeccaoPeloNome = new ListarSeccaoPeloNomeController();
 
 seccaoRouter.get("/", listarTodasSeccoes.handle);
 seccaoRouter.get("/:id", listarSeccaoPeloId.handle);
-seccaoRouter.put("/", atualizarSeccao.handle);
-seccaoRouter.delete("/", deleteSeccao.handle);
+seccaoRouter.put("/:id", atualizarSeccao.handle);
+seccaoRouter.delete("/:id", deleteSeccao.handle);
 seccaoRouter.get("/:nomeSeccao", listarSeccaoPeloNome.handle);
 seccaoRouter.post("/", criarSeccao.handle);
 
