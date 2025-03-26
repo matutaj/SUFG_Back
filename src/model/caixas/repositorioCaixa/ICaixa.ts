@@ -3,7 +3,7 @@ import { caixas } from "@prisma/client"
 export interface DadosCaixa{
     id?: string
     nomeCaixa: string
-    descricaoCaixa: string
+    descricao: string
 }
 export interface ICaixa{
     criarCaixa({}: DadosCaixa): Promise<caixas>

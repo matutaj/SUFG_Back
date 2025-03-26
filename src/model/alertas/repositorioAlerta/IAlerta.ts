@@ -3,7 +3,7 @@ export interface DadosAlerta{
     id?: string
     id_caixa: string
     id_produto: string
-    descricaoAlerta: string
+    descricao: string
     nomeAlerta: string
 }
 

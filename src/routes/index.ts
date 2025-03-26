@@ -21,9 +21,11 @@ import { funcaoPermissaoRoutes } from "./funcaoPermissao.routes";
 import { entradaEstoqueRoutes } from "./entradaEstoque.routes";
 import { funcionarioFuncaoRoutes } from "./funcionarioFuncao.routes";
 import { funcionarioPermissaoRoutes } from "./funcionarioPermissao.routes";
+import { alertaRoutes } from "./alerta.routes";
 
 const routes = Router();
 
+routes.use("/alerta", alertaRoutes);
 routes.use("/entradaEstoque", entradaEstoqueRoutes);
 routes.use("/funcaoPermissao", funcaoPermissaoRoutes);
 routes.use("/funcionarioFuncao", funcionarioFuncaoRoutes);
@@ -32,10 +34,10 @@ routes.use("/produto", produtoRouter);
 routes.use("/funcao", funcaoRouter);
 routes.use("/transferencia", transferenciaRouter);
 routes.use("/venda", vendaRouter);
-routes.use("/clientes", clientesRouter);
-routes.use("/corredores", corredorRouter);
+routes.use("/cliente", clientesRouter);
+routes.use("/corredor", corredorRouter);
 routes.use("/categoriaProduto", categoriaProdutoRouter);
-routes.use("/fornecedores", fornecedorRouter);
+routes.use("/fornecedor", fornecedorRouter);
 routes.use("/prateleira", prateleiraRouter);
 routes.use("/seccao", seccaoRouter);
 routes.use("/caixa", caixaRouter);

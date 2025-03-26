@@ -3,7 +3,7 @@ import { categoriasProdutos } from "@prisma/client";
 export interface DadosCategoriaProduto {
     id?: string;
     nomeCategoria: string;
-    descricaoCategoria: string;
+    descricao: string;
 }
 export interface ICategoriaProduto {
     criarCategoriaProduto({}: DadosCategoriaProduto): Promise<categoriasProdutos>;
