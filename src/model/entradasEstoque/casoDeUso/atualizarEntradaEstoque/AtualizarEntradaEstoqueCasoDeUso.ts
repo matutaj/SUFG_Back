@@ -4,7 +4,7 @@ import { EntradaEstoqueRepositorio } from "../../repositorioEntradaEstoque/imple
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { AppError } from "../../../../errors/AppError";
-import { FornecedorRepositorio } from "../../../fornecedores/RepositorioFornecedor/implementacoes/RepositorioFornecedor";
+import { FornecedorRepositorio } from "../../../fornecedores/repositorioFornecedor/implementacoes/RepositorioFornecedor";
 class AtualizarEntradaEstoqueCasoDeUso {
   async execute({
     id,

@@ -1,6 +1,6 @@
 import { fornecedores } from "@prisma/client";
 import { AppError } from "../../../../errors/AppError";
-import { FornecedorRepositorio } from "../../RepositorioFornecedor/implementacoes/RepositorioFornecedor";
+import { FornecedorRepositorio } from "../../repositorioFornecedor/implementacoes/RepositorioFornecedor";
 class ListarUmFornecedorPeloIdCasoDeUso {
   async execute(id: string): Promise<fornecedores | undefined> {
     const repositorioFornecedor = new FornecedorRepositorio();

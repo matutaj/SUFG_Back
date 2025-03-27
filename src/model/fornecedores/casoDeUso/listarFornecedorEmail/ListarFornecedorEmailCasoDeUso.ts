@@ -1,5 +1,5 @@
 import { fornecedores } from "@prisma/client";
-import { FornecedorRepositorio } from "../../RepositorioFornecedor/implementacoes/RepositorioFornecedor";
+import { FornecedorRepositorio } from "../../repositorioFornecedor/implementacoes/RepositorioFornecedor";
 import { AppError } from "../../../../errors/AppError";
 class ListarEmailFornecedorCasoDeUso {
   async execute(emailFornecedor: string): Promise<fornecedores | undefined> {
@@ -9,7 +9,9 @@ class ListarEmailFornecedorCasoDeUso {
       throw new AppError("O email é obrigatório para a busca");
     }
 
-    const result = await repositorioFornecedor.listarEmailFornecedor(emailFornecedor);
+    const result = await repositorioFornecedor.listarEmailFornecedor(
+      emailFornecedor
+    );
     return result;
   }
 }
