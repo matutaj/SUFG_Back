@@ -4,6 +4,7 @@ import { TransferenciaRepositorio } from "../../repositorioTransferencia/impleme
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { LocalizacaoRepositorio } from "../../../localizacoes/repositorioLocalizacao/implementacoes/RepositorioLocalizacao";
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
+import { AppError } from "../../../../errors/AppError";
 class CriarTransferenciaCasoDeUso {
   async execute({
     id_funcionario,
@@ -21,17 +22,17 @@ class CriarTransferenciaCasoDeUso {
       id_produto
     );
     if (!existeProdutoId) {
-      throw new Error("Não existe um produto com esse id");
+      throw new AppError("Não existe um produto com esse id");
     }
     const existeFuncionario =
       await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new Error("Não existe um funcionario com esse id");
+      throw new AppError("Não existe um funcionario com esse id");
     }
     const existeLocalizacao =
       await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
     if (!existeLocalizacao) {
-      throw new Error("Não existe uma localização com esse id");
+      throw new AppError("Não existe uma localização com esse id");
     }
 
     const result = await repositorioTransferencia.criarTransferencia({

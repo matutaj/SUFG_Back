@@ -5,7 +5,7 @@ import { AppError } from "../../../../errors/AppError";
 
 export class CriarAlertaCasoDeUso {
   async execute({
-    descricaoAlerta,
+    descricao,
     nomeAlerta,
     id_caixa,
     id_produto,
@@ -18,7 +18,7 @@ export class CriarAlertaCasoDeUso {
       throw new AppError("Já existe um alerta com esse nome");
     }
     const result = await repositorioAlerta.criarAlerta({
-      descricaoAlerta,
+      descricao,
       nomeAlerta,
       id_caixa,
       id_produto,

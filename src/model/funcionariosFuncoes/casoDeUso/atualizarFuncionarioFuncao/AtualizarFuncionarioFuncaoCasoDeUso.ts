@@ -3,6 +3,7 @@ import { DadosFuncionarioFuncao } from "../../repositorioFuncionarioFuncao/IFunc
 import { FuncionarioFuncaoRepositorio } from "../../repositorioFuncionarioFuncao/implementacoes/RepositorioFuncionarioFuncao";
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { FuncaoRepositorio } from "../../../funcoes/repositorioFuncao/implementacoes/RepositorioFuncao";
+import { AppError } from "../../../../errors/AppError";
 class AtualizarFuncionarioFuncaoCasoDeUso {
   async execute({
     id,
@@ -14,22 +15,22 @@ class AtualizarFuncionarioFuncaoCasoDeUso {
     const repositorioFuncao = new FuncaoRepositorio();
 
     if (!id) {
-      throw new Error("O ID do funcionário-função é obrigatório para atualização");
+      throw new AppError("O ID do funcionário-função é obrigatório para atualização");
     }
 
     const existeFuncionarioFuncao = await repositorioFuncionarioFuncao.listarUmFuncionarioFuncaoPeloId(id);
     if (!existeFuncionarioFuncao) {
-      throw new Error("Não existe um registro de funcionário-função com esse id");
+      throw new AppError("Não existe um registro de funcionário-função com esse id");
     }
 
     const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new Error("Não existe um funcionário com esse id");
+      throw new AppError("Não existe um funcionário com esse id");
     }
 
     const existeFuncao = await repositorioFuncao.listarFuncaoPeloId(id_funcao);
     if (!existeFuncao) {
-      throw new Error("Não existe uma função com esse id");
+      throw new AppError("Não existe uma função com esse id");
     }
 
     const result = await repositorioFuncionarioFuncao.atualizarFuncionarioFuncao({

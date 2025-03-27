@@ -6,6 +6,7 @@ import { LocalizacaoRepositorio } from "../../../localizacoes/repositorioLocaliz
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 import { SeccaoRepositorio } from "../../../seccoes/repositorioSeccoes/Implementacoes/RepositorioSeccao";
 import { PrateleiraRepositorio } from "../../../prateleiras/repositorioPrateleira/implementacoes/RepositorioPrateleira";
+import { AppError } from "../../../../errors/AppError";
 class CriarProdutoLocalizacaoCasoDeUso {
   async execute({
     id_corredor,
@@ -27,30 +28,30 @@ class CriarProdutoLocalizacaoCasoDeUso {
       id_produto
     );
     if (!existeProdutoId) {
-      throw new Error("Não existe um produto com esse id");
+      throw new AppError("Não existe um produto com esse id");
     }
     const existeCorrdor = await repositorioCorredor.listarUmCorredorPeloId(
       id_corredor
     );
     if (!existeCorrdor) {
-      throw new Error("Não existe um corredor com esse id");
+      throw new AppError("Não existe um corredor com esse id");
     }
     const existeLocalizacao =
       await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
     if (!existeLocalizacao) {
-      throw new Error("Não existe uma localização com esse id");
+      throw new AppError("Não existe uma localização com esse id");
     }
     const existeSeccao = await repositorioSeccao.listarUmaSeccaoPeloId(
       id_seccao
     );
     if (!existeSeccao) {
-      throw new Error("Não existe um secção com esse id");
+      throw new AppError("Não existe um secção com esse id");
     }
 
     const existePrateleira =
       await repositorioPrateleira.listarUmaPrateleiraPeloId(id_prateleira);
     if (!existePrateleira) {
-      throw new Error("Não existe uma prateleira com esse id");
+      throw new AppError("Não existe uma prateleira com esse id");
     }
     const result = await repositorioProdutoLocalizacao.criarProdutoLocalizacao({
       id_corredor,

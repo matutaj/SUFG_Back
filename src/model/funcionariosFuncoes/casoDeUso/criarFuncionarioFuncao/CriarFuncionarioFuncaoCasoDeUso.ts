@@ -3,6 +3,7 @@ import { DadosFuncionarioFuncao } from "../../repositorioFuncionarioFuncao/IFunc
 import { FuncionarioFuncaoRepositorio } from "../../repositorioFuncionarioFuncao/implementacoes/RepositorioFuncionarioFuncao"; 
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario"; 
 import { FuncaoRepositorio } from "../../../funcoes/repositorioFuncao/implementacoes/RepositorioFuncao"; 
+import { AppError } from "../../../../errors/AppError";
 
 class CriarFuncionarioFuncaoCasoDeUso {
   async execute({
@@ -15,20 +16,12 @@ class CriarFuncionarioFuncaoCasoDeUso {
 
     const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new Error("Não existe um funcionário com esse id");
+      throw new AppError("Não existe um funcionário com esse id");
     }
 
     const existeFuncao = await repositorioFuncao.listarFuncaoPeloId(id_funcao);
     if (!existeFuncao) {
-      throw new Error("Não existe uma função com esse id");
-    }
-
-    const associacaoExistente = await repositorioFuncionarioFuncao.listarUmFuncionarioFuncaoPeloId(
-      id_funcionario,
-      id_funcao
-    );
-    if (associacaoExistente) {
-      throw new Error("Esse funcionário já está associado a essa função");
+      throw new AppError("Não existe uma função com esse id");
     }
 
     const result = await repositorioFuncionarioFuncao.criarFuncionarioFuncao({

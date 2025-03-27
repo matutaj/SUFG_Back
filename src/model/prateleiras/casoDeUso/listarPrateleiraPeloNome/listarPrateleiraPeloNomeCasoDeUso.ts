@@ -1,5 +1,6 @@
 import { prateleiras } from "@prisma/client";
 import { PrateleiraRepositorio } from "../../repositorioPrateleira/implementacoes/RepositorioPrateleira";
+import { AppError } from "../../../../errors/AppError";
 
 class ListarPrateleiraPeloNomeCasoDeUso {
   async execute(nomePrateleira: string): Promise<prateleiras> {
@@ -9,7 +10,7 @@ class ListarPrateleiraPeloNomeCasoDeUso {
       await prateleiraRepositorio.listarUmaPrateleiraPeloNome(nomePrateleira);
 
     if (!existeNomePrateleira) {
-      throw new Error("Não existe uma prateleira com esse nome");
+      throw new AppError("Não existe uma prateleira com esse nome");
     }
     return existeNomePrateleira;
   }

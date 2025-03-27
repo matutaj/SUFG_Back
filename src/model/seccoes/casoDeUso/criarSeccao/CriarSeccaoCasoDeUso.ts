@@ -1,6 +1,7 @@
 import { seccoes } from "@prisma/client";
 import { DadosSeccao } from "../../repositorioSeccoes/ISeccao";
 import { SeccaoRepositorio } from "../../repositorioSeccoes/Implementacoes/RepositorioSeccao";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarSeccaoCasoDeUso {
   async execute({ nomeSeccao, descricao }: DadosSeccao): Promise<seccoes> {
@@ -9,7 +10,7 @@ class CriarSeccaoCasoDeUso {
       nomeSeccao
     );
     if (existeNome) {
-      throw new Error("Já existe uma seccao com esse nome");
+      throw new AppError("Já existe uma seccao com esse nome");
     }
     const result = await repositorioSeccoes.criarSeccao({
       nomeSeccao,

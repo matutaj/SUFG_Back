@@ -6,7 +6,7 @@ class AtualizarCorredorCasoDeUso {
   async execute({
     id,
     nomeCorredor,
-    descricaoCorredor,
+    descricao,
   }: DadosCorredor): Promise<corredores> {
     const repositorioCorredor = new CorredorRepositorio();
 
@@ -28,7 +28,7 @@ class AtualizarCorredorCasoDeUso {
     const result = await repositorioCorredor.atualizarCorredor({
       id,
       nomeCorredor,
-      descricaoCorredor,
+      descricao,
     });
 
     return result;

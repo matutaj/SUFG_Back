@@ -10,7 +10,7 @@ class AtualizarAlertaCasoDeUso {
     id,
     id_caixa,
     id_produto,
-    descricaoAlerta,
+    descricao,
     nomeAlerta,
   }: DadosAlerta): Promise<alertas> {
     const repositorioAlerta = new AlertaRepositorio();
@@ -49,7 +49,7 @@ class AtualizarAlertaCasoDeUso {
       id,
       id_caixa,
       id_produto,
-      descricaoAlerta,
+      descricao,
       nomeAlerta,
     });
 

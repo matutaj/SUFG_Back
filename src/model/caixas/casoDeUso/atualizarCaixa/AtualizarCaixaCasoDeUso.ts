@@ -7,7 +7,7 @@ class AtualizarCaixaCasoDeUso {
   async execute({
     id,
     nomeCaixa,
-    descricaoCaixa,
+    descricao,
   }: DadosCaixa): Promise<caixas> {
     const repositorioCaixa = new CaixaRepositorio();
 
@@ -30,7 +30,7 @@ class AtualizarCaixaCasoDeUso {
     const result = await repositorioCaixa.atualizarCaixa({
       id,
       nomeCaixa,
-      descricaoCaixa,
+      descricao,
     });
 
     return result;

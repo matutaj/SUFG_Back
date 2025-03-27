@@ -1,6 +1,7 @@
 import { vendasProdutos } from "@prisma/client";
 import { DadosVendaProduto } from "../../repositorioVendaProduto/IVendaProduto";
 import { VendaProdutoRepositorio } from "../../repositorioVendaProduto/implementacoes/RepositorioVendaProduto";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarVendaProdutoCasoDeUso {
   async execute({
@@ -12,7 +13,7 @@ class CriarVendaProdutoCasoDeUso {
     const existeNome =
       await repositorioVendaProduto.listarTodasVendasProdutos();
     if (existeNome) {
-      throw new Error("Já existe uma venda com esse nome");
+      throw new AppError("Já existe uma venda com esse nome");
     }
     const result = await repositorioVendaProduto.criarVendaProduto({
       id_produto,
