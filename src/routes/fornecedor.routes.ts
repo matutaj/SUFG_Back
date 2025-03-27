@@ -23,10 +23,10 @@ const listarTodosFornecedores = new ListarTodosFornecedoresController();
 
 fornecedorRouter.get("/", listarTodosFornecedores.handle);
 fornecedorRouter.get("/:id", listarFornecedorPeloId.handle);
-fornecedorRouter.get("/email/:email", listarEmailFornecedor.handle);
-fornecedorRouter.get("/telefone/:telefone", listarTelefoneFornecedor.handle);
-fornecedorRouter.get("/contribuinte/:contribuinte", listarFornecedorNumeroContribuinte.handle);
-fornecedorRouter.put("/", atualizarFornecedor.handle);
+fornecedorRouter.get("/:email", listarEmailFornecedor.handle);
+fornecedorRouter.get("/:telefone", listarTelefoneFornecedor.handle);
+fornecedorRouter.get("/:contribuinte", listarFornecedorNumeroContribuinte.handle);
+fornecedorRouter.put("/:id", atualizarFornecedor.handle);
 fornecedorRouter.delete("/:id", deleteFornecedor.handle);
 fornecedorRouter.get("/:nomeFornecedor", listarFornecedorPeloNome.handle);
 fornecedorRouter.post("/", criarFornecedor.handle);

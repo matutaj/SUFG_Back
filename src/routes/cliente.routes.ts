@@ -23,11 +23,11 @@ const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.post("/", criarClienteController.handle);
 clientesRouter.get("/:id", listarUmClientePeloIdController.handle);
-clientesRouter.get("/email/:email", listarEmailClienteController.handle);
-clientesRouter.get("/telefone/:telefone", listarTelefoneClienteController.handle);
-clientesRouter.get("/contribuinte/:contribuinte", listarNumeroContribuinteController.handle);
-clientesRouter.put("/", atualizarClienteController.handle);
-clientesRouter.delete("/", deleteClienteController.handle);
+clientesRouter.get("/:email", listarEmailClienteController.handle);
+clientesRouter.get("/:telefone", listarTelefoneClienteController.handle);
+clientesRouter.get("/:contribuinte", listarNumeroContribuinteController.handle);
+clientesRouter.put("/:id", atualizarClienteController.handle);
+clientesRouter.delete("/:id", deleteClienteController.handle);
 clientesRouter.get("/:nomeCliente", listarClientePeloNome.handle);
 clientesRouter.get("/", listartodosClientes.handle);
 export { clientesRouter };

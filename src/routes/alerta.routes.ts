@@ -14,7 +14,7 @@ const atualizarAlerta = new AtualizarAlertaController();
 const deleteAlerta = new DeleteAlertaController();
 const listarAlertaPeloId = new ListarUmAlertaPeloIdController();
 
-alertaRoutes.put("/", atualizarAlerta.handle);
+alertaRoutes.put("/:id", atualizarAlerta.handle);
 alertaRoutes.get("/:id", listarAlertaPeloId.handle);
 alertaRoutes.delete("/:id", deleteAlerta.handle);
 alertaRoutes.post("/", criarAlerta.handle);

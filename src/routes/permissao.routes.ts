@@ -18,7 +18,7 @@ const listarPermissaoPeloNome = new ListarPermissaoPeloNomeController();
 permissaoRouter.post("/", criarPermissao.handle);
 permissaoRouter.get("/", listarTodasPermissoes.handle);
 permissaoRouter.get("/:id", listarPermissaoPeloId.handle);
-permissaoRouter.put("/", atualizarPermissao.handle);
+permissaoRouter.put("/:id", atualizarPermissao.handle);
 permissaoRouter.delete("/:id", deletePermissao.handle);
 permissaoRouter.get("/:nomePermissao", listarPermissaoPeloNome.handle);
 

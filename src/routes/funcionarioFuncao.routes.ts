@@ -15,7 +15,7 @@ const listarTodosFuncionariosFuncoes = new ListarTodosFuncionariosFuncoesControl
 const deleteFuncionarioFuncao = new DeleteFuncionarioFuncaoController();
 
 funcionarioFuncaoRoutes.post("/", criarFuncionarioFuncao.handle);
-funcionarioFuncaoRoutes.put("/", atualizarFuncionarioFuncao.handle);
+funcionarioFuncaoRoutes.put("/:id", atualizarFuncionarioFuncao.handle);
 funcionarioFuncaoRoutes.get("/:id", listarUmFuncionarioPeloId.handle);
 funcionarioFuncaoRoutes.get("/", listarTodosFuncionariosFuncoes.handle);
 funcionarioFuncaoRoutes.delete("/:id", deleteFuncionarioFuncao.handle);

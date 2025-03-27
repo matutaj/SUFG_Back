@@ -17,7 +17,7 @@ const listarTodasFuncoes = new ListarTodasFuncoesController();
 
 funcaoRouter.get("/", listarTodasFuncoes.handle);
 funcaoRouter.get("/:id", listarFuncaoPeloId.handle);
-funcaoRouter.put("/", atualizarFuncao.handle);
+funcaoRouter.put("/:id", atualizarFuncao.handle);
 funcaoRouter.delete("/:id", deleteFuncao.handle);
 funcaoRouter.get("/:nomeFuncao", listarFuncaoPeloNome.handle);
 funcaoRouter.post("/", criarFuncao.handle);

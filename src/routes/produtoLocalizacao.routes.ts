@@ -15,7 +15,7 @@ const listarTodosProdutosLocalizacoes = new ListarTodosProdutosLocalizacoesContr
 const deleteProdutoLocalizacao = new DeleteProdutoLocalizacaoController();
 
 produtoLocalizacaoRouter.post("/", criarProdutoLocalizacao.handle);
-produtoLocalizacaoRouter.put("/", atualizarProdutoLocalizacao.handle);
+produtoLocalizacaoRouter.put("/:id", atualizarProdutoLocalizacao.handle);
 produtoLocalizacaoRouter.get("/:id", listarUmProdutoLocalizacaoPorId.handle);
 produtoLocalizacaoRouter.get("/", listarTodosProdutosLocalizacoes.handle);
 produtoLocalizacaoRouter.delete("/:id", deleteProdutoLocalizacao.handle);

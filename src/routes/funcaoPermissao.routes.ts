@@ -13,8 +13,8 @@ const atualizarFuncaoPermissao = new AtualizarFuncaoPermissaoController();
 const deleteFuncaoPermissao = new DeleteFuncaoPermissaoController();
 
 funcaoPermissaoRoutes.post("/", criarFuncaoPermissao.handle);
-funcaoPermissaoRoutes.get("/:id_funcao/:id_permissao", listarUmaFuncaoPermissaoPeloId.handle);
-funcaoPermissaoRoutes.put("/", atualizarFuncaoPermissao.handle);
+funcaoPermissaoRoutes.get("/:id", listarUmaFuncaoPermissaoPeloId.handle);
+funcaoPermissaoRoutes.put("/id", atualizarFuncaoPermissao.handle);
 funcaoPermissaoRoutes.delete("/:id", deleteFuncaoPermissao.handle);
 
 export { funcaoPermissaoRoutes };

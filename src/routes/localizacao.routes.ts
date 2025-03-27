@@ -16,7 +16,7 @@ const listarUmLocalizacaoPeloNome = new ListarUmLocalizacaoPeloNomeController();
 const atualizarLocalizacao = new AtualizarLocalizacaoController();
 const deleteLocalizacao = new DeleteLocalizacaoController();
 
-localizacaoRouter.put("/", atualizarLocalizacao.handle);
+localizacaoRouter.put("/:id", atualizarLocalizacao.handle);
 localizacaoRouter.get("/", listarTodasLocalizacoes.handle);
 localizacaoRouter.get("/:id", listarUmLocalizacaoPeloId.handle);
 localizacaoRouter.get("/:nomeLocalizacao", listarUmLocalizacaoPeloNome.handle);

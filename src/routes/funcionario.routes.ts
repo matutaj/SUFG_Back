@@ -23,12 +23,9 @@ const listarTodosFuncionarios = new ListarTodosFuncionariosController();
 
 funcionarioRouter.post("/", criarFuncionario.handle);
 funcionarioRouter.get("/:id", listarFuncionarioPeloId.handle);
-funcionarioRouter.get("/email/:email", listarFuncionarioEmail.handle);
-funcionarioRouter.get("/telefone/:telefone", listarFuncionarioTelefone.handle);
-funcionarioRouter.get(
-  "/contribuinte/:contribuinte",
-  listarFuncionarioNumeroContribuinte.handle
-);
+funcionarioRouter.get("/:email", listarFuncionarioEmail.handle);
+funcionarioRouter.get("/:telefone", listarFuncionarioTelefone.handle);
+funcionarioRouter.get("/:contribuinte", listarFuncionarioNumeroContribuinte.handle);
 funcionarioRouter.put("/:id", atualizarFuncionario.handle);
 funcionarioRouter.delete("/:id", deleteFuncionario.handle);
 funcionarioRouter.get("/", listarTodosFuncionarios.handle);

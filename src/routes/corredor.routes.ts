@@ -16,6 +16,7 @@ const listarCorredorPeloNome = new ListarCorredorPeloNomeController();
 const listarTodosCorredores = new ListarTodosCorredorController();
 
 corredorRouter.post("/", criarCorredor.handle);
+corredorRouter.get("/:id", listarCorredorPeloId.handle);
 corredorRouter.put("/:id", atualizarCorredor.handle);
 corredorRouter.delete("/:id", deleteCorredor.handle);
 corredorRouter.get("/:nomeCorredor", listarCorredorPeloNome.handle);

@@ -14,7 +14,7 @@ const deleteEntradaEstoque = new DeleteEntradaEstoqueController();
 
 entradaEstoqueRoutes.post("/", criarEntradaEstoque.handle);
 entradaEstoqueRoutes.get("/", listarTodasEntradasEstoque.handle);
-entradaEstoqueRoutes.put("/", atualizarEntradaEstoque.handle);
+entradaEstoqueRoutes.put("/:id", atualizarEntradaEstoque.handle);
 entradaEstoqueRoutes.delete("/:id", deleteEntradaEstoque.handle);
 
 export { entradaEstoqueRoutes };

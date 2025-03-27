@@ -19,9 +19,9 @@ const listarUmFuncionarioCaixaPelaAbertura = new ListarUmFuncionarioCaixaPelaAbe
 funcionariorCaixaRouter.post("/", criarFuncionarioCaixa.handle);
 funcionariorCaixaRouter.get("/", listarTodosFuncionariosCaixa.handle);
 funcionariorCaixaRouter.get("/:id", listarUmFuncionarioCaixaPeloId.handle);
-funcionariorCaixaRouter.get("/abertura/:abertura", listarUmFuncionarioCaixaPelaAbertura.handle);
-funcionariorCaixaRouter.get("/estado/:estado", listarEstadoCaixa.handle);
-funcionariorCaixaRouter.put("/", atualizarFuncionarioCaixa.handle);
+funcionariorCaixaRouter.get("/:abertura", listarUmFuncionarioCaixaPelaAbertura.handle);
+funcionariorCaixaRouter.get("/:estado", listarEstadoCaixa.handle);
+funcionariorCaixaRouter.put("/:id", atualizarFuncionarioCaixa.handle);
 funcionariorCaixaRouter.delete("/:id", deleteFuncionarioCaixa.handle);
 
 export { funcionariorCaixaRouter };

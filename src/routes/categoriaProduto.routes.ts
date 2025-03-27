@@ -18,7 +18,7 @@ const deleteCategoriaProduto = new DeleteCategoriaProdutoController();
 
 categoriaProdutoRouter.get("/", listarTodasCategoriasProdutos.handle);
 categoriaProdutoRouter.get("/:id", listarCategoriaProdutoPeloId.handle);
-categoriaProdutoRouter.put("/", atualizarCategoriaProduto.handle);
+categoriaProdutoRouter.put("/:id", atualizarCategoriaProduto.handle);
 categoriaProdutoRouter.delete("/:id", deleteCategoriaProduto.handle);
 categoriaProdutoRouter.get("/:nomeCategoria", listarCategoriaProduto.handle);
 categoriaProdutoRouter.post("/", criarCategoriaProduto.handle);

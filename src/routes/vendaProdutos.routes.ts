@@ -16,7 +16,7 @@ const eliminarVendaProduto = new DeleteVendaProdutoController();
 vendaProdutoRouter.post("/", criarVendaProduto.handle);
 vendaProdutoRouter.get("/", listarTodasVendasProdutos.handle);
 vendaProdutoRouter.get("/:id", listarVendaProdutoPorId.handle);
-vendaProdutoRouter.put("/", atualizarVendaProduto.handle);
+vendaProdutoRouter.put("/:id", atualizarVendaProduto.handle);
 vendaProdutoRouter.delete("/:id", eliminarVendaProduto.handle);
 
 export { vendaProdutoRouter };

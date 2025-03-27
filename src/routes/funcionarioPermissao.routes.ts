@@ -17,7 +17,7 @@ const deleteFuncionarioPermissao = new DeleteFuncionarioPermissaoController();
 funcionarioPermissaoRoutes.post("/", criarFuncionarioPermissao.handle);
 funcionarioPermissaoRoutes.get("/", listarTodosFuncionariosPermissoes.handle);
 funcionarioPermissaoRoutes.get("/:id", listarUmFuncionarioPermissaoPeloId.handle);
-funcionarioPermissaoRoutes.put("/", atualizarFuncionarioPermissao.handle);
+funcionarioPermissaoRoutes.put("/:id", atualizarFuncionarioPermissao.handle);
 funcionarioPermissaoRoutes.delete("/:id", deleteFuncionarioPermissao.handle);
 
 export { funcionarioPermissaoRoutes };

@@ -16,7 +16,7 @@ const listarCaixaPeloNome = new ListarCaixaPeloNomeController();
 const listarTodosCaixas = new ListarTodosCaixasController();
 const listarUmCaixaPeloId = new ListarUmCaixaPeloIdController();
 
-caixaRouter.put("/", atualizarCaixa.handle);
+caixaRouter.put("/:id", atualizarCaixa.handle);
 caixaRouter.get("/:id", listarUmCaixaPeloId.handle);
 caixaRouter.delete("/:id", deleteCaixa.handle);
 caixaRouter.post("/", criarCaixa.handle);
