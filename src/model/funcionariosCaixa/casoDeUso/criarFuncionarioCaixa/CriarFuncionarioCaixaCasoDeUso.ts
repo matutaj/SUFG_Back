@@ -3,6 +3,7 @@ import { DadosFuncionarioCaixa } from "../../repositorioFuncionarioCaixa/IFuncio
 import { FuncionarioCaixaRepositorio } from "../../repositorioFuncionarioCaixa/implementacoes/RepositorioFuncionarioCaixa";
 import { CaixaRepositorio } from "../../../caixas/repositorioCaixa/implementacoes/RepositorioCaixa";
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarFuncionarioCaixaCasodeUso {
   async execute({
@@ -18,19 +19,19 @@ class CriarFuncionarioCaixaCasodeUso {
 
     const existeCaixa = await caixaRepositorio.listarUmCaixaPeloId(id_caixa);
     if (!existeCaixa) {
-      throw new Error("Não existe um caixa com este Id");
+      throw new AppError("Não existe um caixa com este Id");
     }
 
     const existeFuncionario =
       await funcionarioRepositorio.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new Error(`Não existe um funcionário com o ID ${id_funcionario}`);
+      throw new AppError(`Não existe um funcionário com o ID ${id_funcionario}`);
     }
 
     const listarEstadoCaixa =
       await funcionarioCaixaRepositorio.listarEstadoCaixa(id_caixa);
     if (listarEstadoCaixa?.estadoCaixa === true) {
-      throw new Error("O caixa já está aberto");
+      throw new AppError("O caixa já está aberto");
     }
 
     const result = await funcionarioCaixaRepositorio.criarFuncionarioCaixa({

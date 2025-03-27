@@ -4,6 +4,7 @@ import { TransferenciaRepositorio } from "../../repositorioTransferencia/impleme
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { LocalizacaoRepositorio } from "../../../localizacoes/repositorioLocalizacao/implementacoes/RepositorioLocalizacao";
+import { AppError } from "../../../../errors/AppError";
 class AtualizarTransferenciaCasoDeUso {
   async execute({
     id,
@@ -19,31 +20,31 @@ class AtualizarTransferenciaCasoDeUso {
     const repositorioLocalizacao = new LocalizacaoRepositorio();
 
     if (!id) {
-      throw new Error("O ID da transferência é obrigatório para atualização");
+      throw new AppError("O ID da transferência é obrigatório para atualização");
     }
 
     const existeTransferencia = await repositorioTransferencia.listarUmaTransferenciaPorId(id);
     if (!existeTransferencia) {
-      throw new Error("Não existe uma transferência com esse id");
+      throw new AppError("Não existe uma transferência com esse id");
     }
 
     const existeProduto = await repositorioProduto.listarUmProdutoPorId(id_produto);
     if (!existeProduto) {
-      throw new Error("Não existe um produto com esse id");
+      throw new AppError("Não existe um produto com esse id");
     }
 
     const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new Error("Não existe um funcionário com esse id");
+      throw new AppError("Não existe um funcionário com esse id");
     }
 
     const existeLocalizacao = await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
     if (!existeLocalizacao) {
-      throw new Error("Não existe uma localização com esse id");
+      throw new AppError("Não existe uma localização com esse id");
     }
 
     if (quantidadeTransferida < 0) {
-      throw new Error("A quantidade transferida não pode ser negativa");
+      throw new AppError("A quantidade transferida não pode ser negativa");
     }
 
     const result = await repositorioTransferencia.atualizarTransferencia({

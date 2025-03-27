@@ -2,6 +2,7 @@ import { vendas } from "@prisma/client";
 import { VendaRepositorio } from "../../repositorioVenda/implementacoes/RepositorioVenda";
 import { DadosVenda } from "../../repositorioVenda/IVenda";
 import { VendaProdutoRepositorio } from "../../../vendasProdutos/repositorioVendaProduto/implementacoes/RepositorioVendaProduto";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarVendaCasoDeUso {
   async execute({
@@ -17,7 +18,7 @@ class CriarVendaCasoDeUso {
     const vendaRepositorio = new VendaRepositorio();
     const vendaProdutoRepositorio = new VendaProdutoRepositorio();
     if (!numeroDocumento) {
-      throw new Error("Nenhuma transacao encontrada!");
+      throw new AppError("Nenhuma transacao encontrada!");
     }
     const result = await vendaRepositorio.criarVenda({
       id_cliente,

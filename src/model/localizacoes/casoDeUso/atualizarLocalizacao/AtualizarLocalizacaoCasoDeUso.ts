@@ -1,35 +1,34 @@
 import { localizacoes } from "@prisma/client";
 import { DadosLocalizacao } from "../../repositorioLocalizacao/ILocalizacao";
 import { LocalizacaoRepositorio } from "../../repositorioLocalizacao/implementacoes/RepositorioLocalizacao";
+import { AppError } from "../../../../errors/AppError";
 
 class AtualizarLocalizacaoCasoDeUso {
   async execute({
     id,
     nomeLocalizacao,
-    descricaoLocalizacao,
-    localProduto,
+    descricao,
   }: DadosLocalizacao): Promise<localizacoes> {
     const repositorioLocalizacao = new LocalizacaoRepositorio();
 
     if (!id) {
-      throw new Error("O ID da localização é obrigatório para atualização");
+      throw new AppError("O ID da localização é obrigatório para atualização");
     }
 
     const existeLocalizacao = await repositorioLocalizacao.listarUmLocalizacaoPeloId(id);
     if (!existeLocalizacao) {
-      throw new Error("Não existe uma localização com esse id");
+      throw new AppError("Não existe uma localização com esse id");
     }
 
     const localizacaoComMesmoNome = await repositorioLocalizacao.listarUmLocalizacaoPeloNome(nomeLocalizacao);
     if (localizacaoComMesmoNome && localizacaoComMesmoNome.id !== id) {
-      throw new Error("Já existe uma localização com esse nome");
+      throw new AppError("Já existe uma localização com esse nome");
     }
 
     const result = await repositorioLocalizacao.atualizarLocalizacao({
       id,
       nomeLocalizacao,
-      descricaoLocalizacao,
-      localProduto,
+      descricao
     });
 
     return result;

@@ -6,6 +6,7 @@ import { PrateleiraRepositorio } from "../../../prateleiras/repositorioPrateleir
 import { CorredorRepositorio } from "../../../corredores/repositorioCorredores/implementacoes/RepositorioCorredor";
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 import { LocalizacaoRepositorio } from "../../../localizacoes/repositorioLocalizacao/implementacoes/RepositorioLocalizacao";
+import { AppError } from "../../../../errors/AppError";
 class AtualizarProdutoLocalizacaoCasoDeUso {
   async execute({
     id,
@@ -25,41 +26,41 @@ class AtualizarProdutoLocalizacaoCasoDeUso {
     const repositorioLocalizacao = new LocalizacaoRepositorio();
 
     if (!id) {
-      throw new Error("O ID do produto-localização é obrigatório para atualização");
+      throw new AppError("O ID do produto-localização é obrigatório para atualização");
     }
 
     const existeProdutoLocalizacao = await repositorioProdutoLocalizacao.listarUmProdutoLocalizacaoPorId(id);
     if (!existeProdutoLocalizacao) {
-      throw new Error("Não existe um registro de produto-localização com esse id");
+      throw new AppError("Não existe um registro de produto-localização com esse id");
     }
 
     const existeSeccao = await repositorioSeccao.listarUmaSeccaoPeloId(id_seccao);
     if (!existeSeccao) {
-      throw new Error("Não existe uma seção com esse id");
+      throw new AppError("Não existe uma seção com esse id");
     }
 
     const existePrateleira = await repositorioPrateleira.listarUmaPrateleiraPeloId(id_prateleira);
     if (!existePrateleira) {
-      throw new Error("Não existe uma prateleira com esse id");
+      throw new AppError("Não existe uma prateleira com esse id");
     }
 
     const existeCorredor = await repositorioCorredor.listarUmCorredorPeloId(id_corredor);
     if (!existeCorredor) {
-      throw new Error("Não existe um corredor com esse id");
+      throw new AppError("Não existe um corredor com esse id");
     }
 
     const existeProduto = await repositorioProduto.listarUmProdutoPorId(id_produto);
     if (!existeProduto) {
-      throw new Error("Não existe um produto com esse id");
+      throw new AppError("Não existe um produto com esse id");
     }
 
     const existeLocalizacao = await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
     if (!existeLocalizacao) {
-      throw new Error("Não existe uma localização com esse id");
+      throw new AppError("Não existe uma localização com esse id");
     }
 
     if (quantidadeProduto < 0 || quantidadeMinimaProduto < 0) {
-      throw new Error("Quantidades não podem ser negativas");
+      throw new AppError("Quantidades não podem ser negativas");
     }
 
     const result = await repositorioProdutoLocalizacao.atualizarProdutoLocalizacao({

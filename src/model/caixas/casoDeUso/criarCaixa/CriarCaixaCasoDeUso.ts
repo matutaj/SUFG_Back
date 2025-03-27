@@ -4,14 +4,14 @@ import { CaixaRepositorio } from "../../repositorioCaixa/implementacoes/Reposito
 import { AppError } from "../../../../errors/AppError";
 
 class CriarCaixaCasoDeUso {
-  async execute({ descricaoCaixa, nomeCaixa }: DadosCaixa): Promise<caixas> {
+  async execute({ descricao, nomeCaixa }: DadosCaixa): Promise<caixas> {
     const repositorioCaixa = new CaixaRepositorio();
     const existeNome = await repositorioCaixa.listarUmCaixaPeloNome(nomeCaixa);
     if (existeNome) {
       throw new AppError("Já existe um caixa com esse nome");
     }
     const result = await repositorioCaixa.criarCaixa({
-      descricaoCaixa,
+      descricao,
       nomeCaixa,
     });
     return result;

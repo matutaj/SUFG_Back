@@ -11,7 +11,7 @@ class DeleteCaixaCasoDeUso {
 
     const existeCaixa = await repositorioCaixa.listarUmCaixaPeloId(id);
     if (!existeCaixa) {
-      throw new Error("Não existe um caixa com esse id");
+      throw new AppError("Não existe um caixa com esse id");
     }
 
     await repositorioCaixa.eliminarCaixa(id);

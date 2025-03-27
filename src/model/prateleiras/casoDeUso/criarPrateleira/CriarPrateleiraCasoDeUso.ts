@@ -1,3 +1,4 @@
+import { AppError } from "../../../../errors/AppError";
 import { DadosPrateleira } from "../../repositorioPrateleira/IPrateleira";
 import { PrateleiraRepositorio } from "../../repositorioPrateleira/implementacoes/RepositorioPrateleira";
 import { prateleiras } from "@prisma/client";
@@ -11,7 +12,7 @@ class CriarPrateleiraCasoDeUso {
       nomePrateleira
     );
     if (existeNome) {
-      throw new Error("Já existe uma prateleira com esse nome");
+      throw new AppError("Já existe uma prateleira com esse nome");
     }
     const result = await prateleiraRepositorio.criarPrateleira({
       descricao,

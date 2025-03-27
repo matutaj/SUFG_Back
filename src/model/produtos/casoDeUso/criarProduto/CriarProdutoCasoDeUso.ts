@@ -1,6 +1,7 @@
 import { produtos } from "@prisma/client";
 import { ProdutoRepositorio } from "../../repositorioProduto/implementacoes/RepositorioProduto";
 import { DadosProduto } from "../../repositorioProduto/IProduto";
+import { AppError } from "../../../../errors/AppError";
 
 class CriarProdutoCasoDeUso {
   async execute({
@@ -20,7 +21,7 @@ class CriarProdutoCasoDeUso {
       nomeProduto
     );
     if (existeNome) {
-      throw new Error("Já existe um produto com esse nome");
+      throw new AppError("Já existe um produto com esse nome");
     }
     const result = await repositorioProduto.criarProduto({
       descricaoProduto,

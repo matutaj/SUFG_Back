@@ -3,6 +3,7 @@ import { DadosFuncionarioPermissao } from "../../repositorioFuncionarioPermissao
 import { FuncionarioPermissaoRepositorio } from "../../repositorioFuncionarioPermissao/implementacoes/RepositorioFuncionarioPermissao"; 
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario"; 
 import { PermissaoRepositorio } from "../../../permissoes/repositorioPermissao/implementacoes/RepositorioPermissao"; 
+import { AppError } from "../../../../errors/AppError";
 
 class CriarFuncionarioPermissaoCasoDeUso {
   async execute({
@@ -16,20 +17,12 @@ class CriarFuncionarioPermissaoCasoDeUso {
 
     const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new Error("Não existe um funcionário com esse id");
+      throw new AppError("Não existe um funcionário com esse id");
     }
 
     const existePermissao = await repositorioPermissao.listarUmaPermissaoPorID(id_permissao);
     if (!existePermissao) {
-      throw new Error("Não existe uma permissão com esse id");
-    }
-
-    const associacaoExistente = await repositorioFuncionarioPermissao.listarUmFuncionarioPermissaoPeloId(
-      id_funcionario,
-      id_permissao
-    );
-    if (associacaoExistente) {
-      throw new Error("Esse funcionário já possui essa permissão");
+      throw new AppError("Não existe uma permissão com esse id");
     }
 
     const result = await repositorioFuncionarioPermissao.criarFuncionarioPermissao({

@@ -6,7 +6,7 @@ import { AppError } from "../../../../errors/AppError";
 class CriarCategoriaProdutoCasoDeUso {
   async execute({
     nomeCategoria,
-    descricaoCategoria,
+    descricao,
   }: DadosCategoriaProduto): Promise<categoriasProdutos> {
     const repositorioCategoriaProduto = new CategoriaProdutoRepositorio();
     const existeNome =
@@ -18,7 +18,7 @@ class CriarCategoriaProdutoCasoDeUso {
     }
     const result = await repositorioCategoriaProduto.criarCategoriaProduto({
       nomeCategoria,
-      descricaoCategoria,
+      descricao,
     });
     return result;
   }

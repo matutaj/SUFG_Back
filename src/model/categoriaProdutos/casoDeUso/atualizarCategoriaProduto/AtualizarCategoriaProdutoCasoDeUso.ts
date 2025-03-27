@@ -7,7 +7,7 @@ class AtualizarCategoriaProdutoCasoDeUso {
   async execute({
     id,
     nomeCategoria,
-    descricaoCategoria,
+    descricao,
   }: DadosCategoriaProduto): Promise<categoriasProdutos> {
     const repositorioCategoriaProduto = new CategoriaProdutoRepositorio();
 
@@ -32,7 +32,7 @@ class AtualizarCategoriaProdutoCasoDeUso {
     const result = await repositorioCategoriaProduto.atualizarCategoriaProduto({
       id,
       nomeCategoria,
-      descricaoCategoria,
+      descricao,
     });
 
     return result;
