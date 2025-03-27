@@ -1,7 +1,7 @@
 import { fornecedores } from "@prisma/client";
-import { DadosFornecedor } from "../../repositorioFornecedor/IFornecedor";
-import { FornecedorRepositorio } from "../../repositorioFornecedor/implementacoes/RepositorioFornecedor";
 import { AppError } from "../../../../errors/AppError";
+import { FornecedorRepositorio } from "../../RepositorioFornecedor/implementacoes/RepositorioFornecedor";
+import { DadosFornecedor } from "../../RepositorioFornecedor/IFornecedor";
 
 class CriarFornecedorCasoDeUso {
   async execute({

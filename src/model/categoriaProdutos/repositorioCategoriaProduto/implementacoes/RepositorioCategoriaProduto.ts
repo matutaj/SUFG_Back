@@ -3,10 +3,10 @@ import { DadosCategoriaProduto, ICategoriaProduto } from "../ICategoriaProduto";
 import { prisma } from "../../../../prisma/client";
 
 class CategoriaProdutoRepositorio implements ICategoriaProduto {
-    async criarCategoriaProduto({descricaoCategoria, nomeCategoria }: DadosCategoriaProduto): Promise<categoriasProdutos> {
+    async criarCategoriaProduto({descricao, nomeCategoria }: DadosCategoriaProduto): Promise<categoriasProdutos> {
         const criarCategoriaProduto = await prisma.categoriasProdutos.create({
             data: {
-                descricaoCategoria,
+                descricao,
                 nomeCategoria
             }
         })
@@ -29,13 +29,13 @@ class CategoriaProdutoRepositorio implements ICategoriaProduto {
         const listarUmaCategoriaProdutoPeloNome = (await prisma.categoriasProdutos.findFirst({where: { nomeCategoria}})) || undefined
         return listarUmaCategoriaProdutoPeloNome
     }
-    async atualizarCategoriaProduto({descricaoCategoria, nomeCategoria, id }: DadosCategoriaProduto): Promise<categoriasProdutos> {
+    async atualizarCategoriaProduto({descricao, nomeCategoria, id }: DadosCategoriaProduto): Promise<categoriasProdutos> {
         const atualizarCategoriaProduto = await prisma.categoriasProdutos.update({
             where: {
                 id
             },
             data: {
-                descricaoCategoria, 
+                descricao, 
                 nomeCategoria,  
             }
         })

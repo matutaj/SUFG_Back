@@ -5,7 +5,7 @@ import { AppError } from "../../../../errors/AppError";
 class AtualizarCaixaController {
   async handle(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
-    const { nomeCaixa, descricaoCaixa } = req.body;
+    const { nomeCaixa, descricao } = req.body;
     if (!atualizarCaixaSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
     if (!atualizarCaixaSchema.isValid(req.body))
@@ -14,7 +14,7 @@ class AtualizarCaixaController {
     const caixa = await atualizarCaixaCasoDeUso.execute({
       id,
       nomeCaixa,
-      descricaoCaixa,
+      descricao,
     });
 
     return res.json(caixa);

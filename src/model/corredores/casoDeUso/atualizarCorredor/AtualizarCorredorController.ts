@@ -6,12 +6,14 @@ class AtualizarCorredorController {
   async handle(req: Request, res: Response): Promise<any> {
     const atualizarCorredorCasoDeUso = new AtualizarCorredorCasoDeUso();
     const { id } = req.params;
-    const { descricaoCorredor, nomeCorredor } = req.body;
-    if (!atualizarCorredorSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
-    if (!atualizarCorredorSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    const { descricao, nomeCorredor } = req.body;
+    if (!atualizarCorredorSchema.isValid(req.params))
+      throw new AppError("Erro na Validação dos dados");
+    if (!atualizarCorredorSchema.isValid(req.body))
+      throw new AppError("Erro na Validação dos dados");
     const result = await atualizarCorredorCasoDeUso.execute({
       id,
-      descricaoCorredor,
+      descricao,
       nomeCorredor,
     });
     return res.status(201).json(result);

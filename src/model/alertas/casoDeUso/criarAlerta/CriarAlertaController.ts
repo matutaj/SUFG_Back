@@ -6,11 +6,11 @@ import { AppError } from "../../../../errors/AppError";
 class CriarAlertaController {
   async handle(req: Request, res: Response): Promise<any> {
     const AlertaCasoDeUso = new CriarAlertaCasoDeUso();
-    const { descricaoAlerta, nomeAlerta, id_caixa, id_produto } = req.body;
+    const { descricao, nomeAlerta, id_caixa, id_produto } = req.body;
     if (!criarAlertaSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const result = await AlertaCasoDeUso.execute({
-      descricaoAlerta,
+      descricao,
       nomeAlerta,
       id_caixa,
       id_produto,

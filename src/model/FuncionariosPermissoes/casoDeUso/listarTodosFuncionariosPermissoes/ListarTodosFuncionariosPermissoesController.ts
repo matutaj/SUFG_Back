@@ -3,10 +3,12 @@ import { ListarTodosFuncionariosPermissoesCasoDeUso } from "./ListarTodosFuncion
 
 class ListarTodosFuncionariosPermissoesController {
   async handle(req: Request, res: Response): Promise<any> {
-    const listarTodosFuncionariosPermissoesCasoDeUso = new ListarTodosFuncionariosPermissoesCasoDeUso();
+    const listarTodosFuncionariosPermissoesCasoDeUso =
+      new ListarTodosFuncionariosPermissoesCasoDeUso();
     const result = await listarTodosFuncionariosPermissoesCasoDeUso.execute();
     return res.status(200).json(result);
   }
 }
+
 
 export { ListarTodosFuncionariosPermissoesController };
