@@ -10,16 +10,22 @@ const funcionariorCaixaRouter = Router();
 
 const criarFuncionarioCaixa = new CriarFuncionarioCaixaController();
 const deleteFuncionarioCaixa = new DeleteFuncionarioCaixaController();
-const listarTodosFuncionariosCaixa = new ListarTodosFuncionariosCaixaController();
+const listarTodosFuncionariosCaixa =
+  new ListarTodosFuncionariosCaixaController();
 const atualizarFuncionarioCaixa = new AtualizarFuncionarioCaixaController();
-const listarUmFuncionarioCaixaPeloId = new ListarUmFuncionarioCaixaPeloIdController();
+const listarUmFuncionarioCaixaPeloId =
+  new ListarUmFuncionarioCaixaPeloIdController();
 const listarEstadoCaixa = new ListarEstadoCaixaController();
-const listarUmFuncionarioCaixaPelaAbertura = new ListarUmFuncionarioCaixaPelaAberturaController();
+const listarUmFuncionarioCaixaPelaAbertura =
+  new ListarUmFuncionarioCaixaPelaAberturaController();
 
 funcionariorCaixaRouter.post("/", criarFuncionarioCaixa.handle);
 funcionariorCaixaRouter.get("/", listarTodosFuncionariosCaixa.handle);
 funcionariorCaixaRouter.get("/:id", listarUmFuncionarioCaixaPeloId.handle);
-funcionariorCaixaRouter.get("/:abertura", listarUmFuncionarioCaixaPelaAbertura.handle);
+funcionariorCaixaRouter.get(
+  "/:abertura",
+  listarUmFuncionarioCaixaPelaAbertura.handle
+);
 funcionariorCaixaRouter.get("/:estado", listarEstadoCaixa.handle);
 funcionariorCaixaRouter.put("/:id", atualizarFuncionarioCaixa.handle);
 funcionariorCaixaRouter.delete("/:id", deleteFuncionarioCaixa.handle);
