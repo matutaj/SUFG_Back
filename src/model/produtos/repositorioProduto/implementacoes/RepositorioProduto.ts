@@ -40,7 +40,14 @@ class ProdutoRepositorio implements IProduto {
       (await prisma.produtos.findUnique({ where: { id } })) || undefined;
     return listarUmProdutoPorId;
   }
-
+  async listarUmProdutoPeloCodigoBarras(
+    codigoBarras: string
+  ): Promise<produtos | undefined> {
+    const listarUmProdutoPeloCodigoBarras =
+      (await prisma.produtos.findFirst({ where: { codigoBarras } })) ||
+      undefined;
+    return listarUmProdutoPeloCodigoBarras;
+  }
   async listarUmProdutoPeloNome(
     nomeProduto: string
   ): Promise<produtos | undefined> {

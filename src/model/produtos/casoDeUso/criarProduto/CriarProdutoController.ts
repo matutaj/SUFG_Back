@@ -6,7 +6,6 @@ class CriarProdutoController {
   async handle(req: Request, res: Response): Promise<any> {
     const produtoCasoDeUso = new CriarProdutoCasoDeUso();
     const {
-      descricaoProduto,
       nomeProduto,
       custoAquisicao,
       precoVenda,
@@ -17,9 +16,9 @@ class CriarProdutoController {
       referenciaProduto,
       id_categoriaProduto,
     } = req.body;
-    if (!criarProdutoSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    if (!criarProdutoSchema.isValid(req.body))
+      throw new AppError("Erro na Validação dos dados");
     const result = await produtoCasoDeUso.execute({
-      descricaoProduto,
       nomeProduto,
       custoAquisicao,
       precoVenda,
