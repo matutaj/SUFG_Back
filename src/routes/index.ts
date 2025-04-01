@@ -22,6 +22,7 @@ import { entradaEstoqueRoutes } from "./entradaEstoque.routes";
 import { funcionarioFuncaoRoutes } from "./funcionarioFuncao.routes";
 import { funcionarioPermissaoRoutes } from "./funcionarioPermissao.routes";
 import { alertaRoutes } from "./alerta.routes";
+import { loginRouter } from "./login.routes";
 
 const routes = Router();
 
@@ -32,6 +33,7 @@ routes.use("/funcionarioFuncao", funcionarioFuncaoRoutes);
 routes.use("/funcionarioPermissao", funcionarioPermissaoRoutes);
 routes.use("/produto", produtoRouter);
 routes.use("/funcao", funcaoRouter);
+routes.use("/login", loginRouter);
 routes.use("/transferencia", transferenciaRouter);
 routes.use("/venda", vendaRouter);
 routes.use("/cliente", clientesRouter);

@@ -80,28 +80,44 @@ class FuncionarioRepositorio implements IFuncionario {
       },
     });
   }
-  async listarEmailFuncionario(emailFuncionario: string): Promise<funcionarios | undefined> {
-    const listarEmailFuncionario = await prisma.funcionarios.findFirst({
-      where: {
-        emailFuncionario: emailFuncionario,
-      },
-    }) || undefined
+  async listarEmailFuncionario(
+    emailFuncionario: string
+  ): Promise<funcionarios | undefined> {
+    const listarEmailFuncionario =
+      (await prisma.funcionarios.findFirst({
+        where: {
+          emailFuncionario: emailFuncionario,
+        },
+        include: {
+          FuncionariosFuncoes: true,
+          EntradasEstoque: true,
+          funcionariosCaixa: true,
+          FuncionariosPermissoes: true,
+          transferencias: true,
+        },
+      })) || undefined;
     return listarEmailFuncionario;
   }
-  async listarNumeroContribuinteFuncionario(numeroBI: string): Promise<funcionarios | undefined> {
-    const listarNumeroContribuinteFuncionario = await prisma.funcionarios.findFirst({
-      where: {
-        numeroBI: numeroBI,
-      },
-    }) || undefined
+  async listarNumeroContribuinteFuncionario(
+    numeroBI: string
+  ): Promise<funcionarios | undefined> {
+    const listarNumeroContribuinteFuncionario =
+      (await prisma.funcionarios.findFirst({
+        where: {
+          numeroBI: numeroBI,
+        },
+      })) || undefined;
     return listarNumeroContribuinteFuncionario;
   }
-  async listarTelefoneFuncionario(telefoneFuncionario: string): Promise<funcionarios | undefined> {
-    const listarTelefoneFuncionario = await prisma.funcionarios.findFirst({
-      where: {
-        telefoneFuncionario: telefoneFuncionario,
-      },
-    }) || undefined
+  async listarTelefoneFuncionario(
+    telefoneFuncionario: string
+  ): Promise<funcionarios | undefined> {
+    const listarTelefoneFuncionario =
+      (await prisma.funcionarios.findFirst({
+        where: {
+          telefoneFuncionario: telefoneFuncionario,
+        },
+      })) || undefined;
     return listarTelefoneFuncionario;
   }
 }
