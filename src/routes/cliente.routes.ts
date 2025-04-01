@@ -16,24 +16,19 @@ const criarClienteController = new CriarClienteController();
 const listarUmClientePeloIdController = new ListarUmClientePeloIdController();
 const listarEmailClienteController = new ListarEmailClienteController();
 const listarTelefoneClienteController = new ListarTelefoneClienteController();
-const listarNumeroContribuinteController =
-  new ListarNumeroDeContribuinteController();
+const listarNumeroContribuinteController = new ListarNumeroDeContribuinteController();
 const atualizarClienteController = new AtualizarClienteController();
 const deleteClienteController = new DeleteClienteController();
 const listarClientePeloNome = new ListarClientePeloNomeController();
 const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.post("/", criarClienteController.handle);
-clientesRouter.get(
-  "/:id",
-  verificarRole("Admin"),
-  listarUmClientePeloIdController.handle
-);
+clientesRouter.get("/:id", listarUmClientePeloIdController.handle);
 clientesRouter.get("/:email", listarEmailClienteController.handle);
 clientesRouter.get("/:telefone", listarTelefoneClienteController.handle);
 clientesRouter.get("/:contribuinte", listarNumeroContribuinteController.handle);
 clientesRouter.put("/:id", atualizarClienteController.handle);
-clientesRouter.delete("/:id", deleteClienteController.handle);
+clientesRouter.delete("/:id", verificarRole("Admin"), deleteClienteController.handle);
 clientesRouter.get("/:nomeCliente", listarClientePeloNome.handle);
 clientesRouter.get("/", listartodosClientes.handle);
 export { clientesRouter };
