@@ -7,7 +7,7 @@ class DeleteAlertaController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
     const deleteAlertaCasoDeUso = new DeleteAlertaCasoDeUso();
-    if (!deletarAlertaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+    if (!await deletarAlertaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
     await deleteAlertaCasoDeUso.execute(id);
     res.sendStatus(200);
   }

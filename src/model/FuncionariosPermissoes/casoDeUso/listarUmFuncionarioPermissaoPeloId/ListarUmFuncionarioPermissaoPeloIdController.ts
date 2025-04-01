@@ -7,7 +7,7 @@ class ListarUmFuncionarioPermissaoPeloIdController {
     const listarUmFuncionarioPermissaoPeloIdCasoDeUso =
       new ListarUmFuncionarioPermissaoPeloIdCasoDeUso();
     const { id } = req.params;
-    if (!listarFuncionarioPermissaoPeloIdSchema.isValid(req.params))
+    if (!await listarFuncionarioPermissaoPeloIdSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
     const result = await listarUmFuncionarioPermissaoPeloIdCasoDeUso.execute(
       id

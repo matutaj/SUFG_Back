@@ -12,7 +12,7 @@ class CriarTransferenciaController {
       dataTransferencia,
       quantidadeTransferida,
     } = req.body;
-    if (!criarTransferenciaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    if (!await criarTransferenciaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
     const result = await criarTransferenciaCasoDeUso.execute({
       id_funcionario,
       id_localizacao,

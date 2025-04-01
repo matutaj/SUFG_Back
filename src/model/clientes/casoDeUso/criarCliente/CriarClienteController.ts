@@ -12,7 +12,7 @@ class CriarClienteController {
       numeroContribuinte,
       telefoneCliente,
     } = req.body;
-    if (!criarClienteSchema.isValid(req.body)) {
+    if (!await criarClienteSchema.isValid(req.body)) {
       throw new AppError("Erro na validação dos campos");
     }
     const result = await clienteCasoDeUso.execute({

@@ -15,9 +15,9 @@ class AtualizarProdutoLocalizacaoController {
       quantidadeProduto,
       quantidadeMinimaProduto,
     } = req.body;
-    if (!atualizarProdutoLocalizacaoSchema.validate(req.body))
+    if (!await atualizarProdutoLocalizacaoSchema.validate(req.body))
       throw new AppError("Erro na Validação dos dados");
-    if (!atualizarProdutoLocalizacaoSchema.validate(req.params))
+    if (!await atualizarProdutoLocalizacaoSchema.validate(req.params))
       throw new AppError("Erro na Validação dos dados");
     const result = await atualizarProdutoLocalizacaoCasoDeUso.execute({
       id,

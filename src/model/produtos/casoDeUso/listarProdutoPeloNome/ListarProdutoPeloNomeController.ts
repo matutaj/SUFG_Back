@@ -6,7 +6,7 @@ class ListarProdutoPeloNomeController {
     async handle(req: Request, res: Response): Promise<any> {
         const { nomeProduto } = req.body;
         const listarProdutoPeloNomeCasoDeUso = new ListarProdutoPeloNomeCasoDeUso();
-        if (!listarProdutoPeloNome.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+        if (!await listarProdutoPeloNome.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
         const produto = await listarProdutoPeloNomeCasoDeUso.execute(nomeProduto);
         return res.status(201).json(produto);
     }

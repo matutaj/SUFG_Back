@@ -6,7 +6,7 @@ class ListarFornecedorPeloNomeController {
     async handle(req: Request, res: Response): Promise<any> {
         const listarFornecedorPeloNomeCasoDeUso = new ListarFornecedorPeloNomeCasoDeUso();
         const { nomeFornecedor } = req.params;
-        if (!listarFornecedorPeloNome.isValid(req.params)) {
+        if (!await listarFornecedorPeloNome.isValid(req.params)) {
             throw new AppError("Erro na validação dos campos");
         }
         const result = await listarFornecedorPeloNomeCasoDeUso.execute( nomeFornecedor );

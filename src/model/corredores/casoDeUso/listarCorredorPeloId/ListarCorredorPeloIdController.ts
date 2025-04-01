@@ -7,7 +7,7 @@ class ListarUmCorredorPeloIdController {
     const listarUmCorredorPeloIdCasoDeUso =
       new ListarUmCorredorPeloIdCasoDeUso();
     const { id } = req.params;
-    if (!listarCorredorPeloIdSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+    if (!await listarCorredorPeloIdSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
     const result = await listarUmCorredorPeloIdCasoDeUso.execute(id);
     return res.status(200).json(result);
   }

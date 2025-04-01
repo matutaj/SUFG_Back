@@ -16,7 +16,7 @@ class CriarProdutoController {
       referenciaProduto,
       id_categoriaProduto,
     } = req.body;
-    if (!criarProdutoSchema.isValid(req.body))
+    if (!(await criarProdutoSchema.isValid(req.body)))
       throw new AppError("Erro na Validação dos dados");
     const result = await produtoCasoDeUso.execute({
       nomeProduto,

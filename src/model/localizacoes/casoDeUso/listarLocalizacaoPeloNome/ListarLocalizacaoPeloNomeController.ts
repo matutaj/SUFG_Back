@@ -7,7 +7,7 @@ class ListarUmLocalizacaoPeloNomeController {
     const listarUmLocalizacaoPeloNomeCasoDeUso =
       new ListarUmLocalizacaoPeloNomeCasoDeUso();
     const { nomeLocalizacao } = req.query;
-    if (!listarLocalizacaoPeloNome.isValid(req.query)) throw new AppError("Erro na Validação dos dados");
+    if (!await listarLocalizacaoPeloNome.isValid(req.query)) throw new AppError("Erro na Validação dos dados");
     const result = await listarUmLocalizacaoPeloNomeCasoDeUso.execute(
       nomeLocalizacao as string
     );

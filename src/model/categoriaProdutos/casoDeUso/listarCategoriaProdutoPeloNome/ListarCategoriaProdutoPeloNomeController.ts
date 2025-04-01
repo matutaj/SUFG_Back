@@ -7,7 +7,7 @@ class ListarCategoriaProdutoPeloNomeController {
     const listarCategoriaProdutoPeloNomeCasoDeUso =
       new ListarCategoriaProdutoPeloNomeCasoDeUso();
     const { nomeCategoria } = req.params;
-    if (!listarCategoriaProdutoPeloNome.isValid(req.params))
+    if (!await listarCategoriaProdutoPeloNome.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
     const result = await listarCategoriaProdutoPeloNomeCasoDeUso.execute(
       nomeCategoria

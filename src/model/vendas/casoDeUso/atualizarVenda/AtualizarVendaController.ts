@@ -16,8 +16,8 @@ class AtualizarVendaController {
       valorTotal,
       vendasProdutos,
     } = req.body;
-    if (!atualizarVendaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
-    if (!atualizarVendaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    if (!await atualizarVendaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+    if (!await atualizarVendaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
     const result = await atualizarVendaCasoDeUso.execute({
       id,
       id_cliente,

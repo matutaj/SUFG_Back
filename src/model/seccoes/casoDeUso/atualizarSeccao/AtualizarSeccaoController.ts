@@ -7,9 +7,9 @@ class AtualizarSeccaoController {
     const seccaoCasoDeUso = new AtualizarSeccaoCasoDeUso();
     const { id } = req.params;
     const { nomeSeccao, descricao } = req.body;
-    if (!atualizarSeccaoSchema.isValid(req.params))
+    if (!await atualizarSeccaoSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
-    if (!atualizarSeccaoSchema.isValid(req.body))
+    if (!await atualizarSeccaoSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const result = await seccaoCasoDeUso.execute({ id, nomeSeccao, descricao });
     return res.status(201).json(result);

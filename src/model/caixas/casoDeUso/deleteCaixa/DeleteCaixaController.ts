@@ -6,7 +6,7 @@ class DeleteCaixaController {
   async handle(req: Request, res: Response) {
     const { id } = req.params;
     const deleteCaixaCasoDeUso = new DeleteCaixaCasoDeUso();
-    if (!deletarCaixaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+    if (!await deletarCaixaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
     await deleteCaixaCasoDeUso.execute(id);
     res.status(200).send("Caixa eliminado com sucesso");
   }
