@@ -1,5 +1,5 @@
 // src/casosDeUso/login/LoginCasoDeUso.ts
-import { funcionarios } from "@prisma/client";
+import { prisma } from "../../prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { FuncionarioRepositorio } from "../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
@@ -10,12 +10,15 @@ export interface DadosLogin {
   email: string;
   senha: string;
 }
+
 export interface FuncionarioAutenticado {
   nome: string;
   email: string;
   telefone: string;
   numeroBI: string;
   token: string;
+  roles: string[]; // Adiciona array de roles
+  permissoes: string[]; // Adiciona array de permissões
 }
 
 class LoginCasoDeUso {
@@ -36,18 +39,43 @@ class LoginCasoDeUso {
       throw new AppError("Senha Errada");
     }
 
+    const funcoes = await prisma.funcionariosFuncoes.findMany({
+      where: { id_funcionario: existeEmail.id },
+      include: { funcoes: true },
+    });
 
-    const token = jwt.sign({ ...existeEmail }, authConfig.key, {
+    const permissoes = await prisma.funcionariosPermissoes.findMany({
+      where: { id_funcionario: existeEmail.id },
+      include: { Permissoes: true },
+    });
+
+    // Extrair nomes das funções e permissões
+    const roles = funcoes.map((funcao) => funcao.funcoes.nome);
+    const permissoesNomes = permissoes.map(
+      (permissao) => permissao.Permissoes.nome
+    );
+
+    // Gerar token JWT com informações do funcionário, roles e permissões
+    const tokenPayload = {
+      userId: existeEmail.id,
+      email: existeEmail.emailFuncionario,
+      roles,
+      permissoes: permissoesNomes,
+    };
+
+    const token = jwt.sign(tokenPayload, authConfig.key, {
       expiresIn: "8h",
     });
 
+    // Retornar dados do funcionário com roles e permissões
     const funcionarioAutenticado: FuncionarioAutenticado = {
-      ...existeEmail,
-      nome: existeEmail.nomeFuncionario, // Remover senha do retorno
+      nome: existeEmail.nomeFuncionario,
+      email: existeEmail.emailFuncionario,
       telefone: existeEmail.telefoneFuncionario,
       numeroBI: existeEmail.numeroBI,
-      token: token,
-      email: existeEmail.emailFuncionario,
+      token,
+      roles, // Inclui as funções
+      permissoes: permissoesNomes, // Inclui as permissões
     };
 
     return funcionarioAutenticado;
