@@ -14,7 +14,8 @@ class CriarProdutoLocalizacaoController {
       quantidadeMinimaProduto,
       quantidadeProduto,
     } = req.body;
-    if (!await criarProdutoLocalizacaoSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    if (!(await criarProdutoLocalizacaoSchema.isValid(req.body)))
+      throw new AppError("Erro na Validação dos dados");
     const result = await produtoLocalizacaoCasoDeUso.execute({
       id_corredor,
       id_localizacao,
