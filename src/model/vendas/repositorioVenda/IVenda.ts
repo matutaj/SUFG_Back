@@ -9,6 +9,13 @@ export interface DadosVenda {
   dataEmissao: Date;
   dataValidade: Date;
   valorTotal: number;
+  cliente?: {
+    emailCliente: string;
+    moradaCliente: string;
+    nomeCliente: string;
+    numeroContribuinte: string;
+    telefoneCliente: string;
+  }[];
   vendasProdutos: {
     id_venda: string;
     id_produto: string;
