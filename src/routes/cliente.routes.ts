@@ -9,6 +9,7 @@ import { ListarEmailClienteController } from "../model/clientes/casoDeUso/listar
 import { ListarTelefoneClienteController } from "../model/clientes/casoDeUso/listarClientePeloTelefone/ListarClientePeloTelefoneController";
 import { ListarNumeroDeContribuinteController } from "../model/clientes/casoDeUso/listarClientePeloNumeroContribuinte/ListarClientePeloNumeroContribuinteController";
 import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosclientes/listarTodosClienteController";
+import { verificarRole } from "../middlewares/permissoes";
 const clientesRouter = Router();
 
 const criarClienteController = new CriarClienteController();
@@ -23,7 +24,11 @@ const listarClientePeloNome = new ListarClientePeloNomeController();
 const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.post("/", criarClienteController.handle);
-clientesRouter.get("/:id", listarUmClientePeloIdController.handle);
+clientesRouter.get(
+  "/:id",
+  verificarRole("Admin"),
+  listarUmClientePeloIdController.handle
+);
 clientesRouter.get("/:email", listarEmailClienteController.handle);
 clientesRouter.get("/:telefone", listarTelefoneClienteController.handle);
 clientesRouter.get("/:contribuinte", listarNumeroContribuinteController.handle);
