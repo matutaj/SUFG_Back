@@ -6,7 +6,7 @@ class ListarSeccaoPeloNomeController{
     async handle(req: Request, res: Response): Promise<any> {
         const seccaoCasoDeUso = new ListarSeccaoPeloNomeCasoDeUso();
         const { nomeSeccao } = req.params;
-        if (!listarSeccaoPeloNome.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+        if (!await listarSeccaoPeloNome.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
         const result = await seccaoCasoDeUso.execute(nomeSeccao);
         return res.status(201).json(result);
     }

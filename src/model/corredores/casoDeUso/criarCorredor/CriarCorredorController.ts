@@ -6,7 +6,7 @@ class CriarCorredorController {
   async handle(req: Request, res: Response): Promise<any> {
     const corredorCasoDeUso = new CriarCorredorCasoDeUso();
     const { descricao, nomeCorredor } = req.body;
-    if (!criarCorredorSchema.isValid(req.body)) {
+    if (!await criarCorredorSchema.isValid(req.body)) {
       throw new AppError("Erro na validação dos campos");
     }
     const result = await corredorCasoDeUso.execute({

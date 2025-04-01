@@ -6,7 +6,7 @@ class CriarEntradaEstoqueController {
     async handle(req: Request, res: Response): Promise<any> {
         const criarEntradaEstoqueCasoDeUso = new CriarEntradaEstoqueCasoDeUso();
         const { id_fornecedor, id_produto, id_funcionario, produtoRecebido, quantidadeRecebida, dataEntrada, custoUnitario, lote, dataValidadeLote } = req.body;
-        if (!criarEntradaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+        if (!await criarEntradaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
         const result = await criarEntradaEstoqueCasoDeUso.execute({id_fornecedor, id_produto, id_funcionario, produtoRecebido, quantidadeRecebida, dataEntrada, custoUnitario, lote, dataValidadeLote })
         return res.status(201).json(result)
     }

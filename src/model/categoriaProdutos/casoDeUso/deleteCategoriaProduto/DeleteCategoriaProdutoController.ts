@@ -7,7 +7,7 @@ class DeleteCategoriaProdutoController {
     const deleteCategoriaProdutoCasoDeUso =
       new DeleteCategoriaProdutoCasoDeUso();
     const { id } = req.params;
-    if (!deletarCategoriaProdutoSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+    if (!await deletarCategoriaProdutoSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
     await deleteCategoriaProdutoCasoDeUso.execute(id);
     return res.status(204).json();
   }

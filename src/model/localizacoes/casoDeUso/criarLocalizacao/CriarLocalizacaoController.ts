@@ -7,7 +7,7 @@ class CriarLocalizacaoController {
     const criarLocalizacaoCasoDeUso = new CriarLocalizacaoCasoDeUso();
     const { descricaoLocalizacao, nomeLocalizacao, localProduto } = req.body;
 
-    if (!criarLocalizacaoSchema.isValid(req.body))
+    if (!await criarLocalizacaoSchema.isValid(req.body))
       throw new AppError("Erro ao validar os campos");
 
     const result = await criarLocalizacaoCasoDeUso.execute(req.body);

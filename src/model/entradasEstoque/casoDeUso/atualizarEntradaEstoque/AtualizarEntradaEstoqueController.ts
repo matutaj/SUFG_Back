@@ -17,8 +17,8 @@ class AtualizarEntradaEstoqueController {
       lote,
       dataValidadeLote,
     } = req.body;
-    if (!atualizarEntradaSchema.isValid(req.body)) throw new AppError("Dados inválidos");
-    if (!atualizarEntradaSchema.isValid(req.params)) throw new AppError("Dados inválidos");
+    if (!await atualizarEntradaSchema.isValid(req.body)) throw new AppError("Dados inválidos");
+    if (!await atualizarEntradaSchema.isValid(req.params)) throw new AppError("Dados inválidos");
     const result = await atualizarEntradaEstoqueCasoDeUso.execute({
       id,
       id_fornecedor,

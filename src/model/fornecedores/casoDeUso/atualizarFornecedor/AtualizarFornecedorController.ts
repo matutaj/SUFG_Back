@@ -8,8 +8,8 @@ class AtualizarFornecedorController {
         const atualizarFornecedorCasoDeUso = new AtualizarFornecedorCasoDeUso();
         const { nif, nomeFornecedor, moradaFornecedor, telefoneFornecedor, emailFornecedor } = req.body;
         const { id } = req.params;
-        if (!atualizarFornecedorSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
-        if (!atualizarFornecedorSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+        if (!await atualizarFornecedorSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+        if (!await atualizarFornecedorSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
         const result = await atualizarFornecedorCasoDeUso.execute({
             id,
             nif,

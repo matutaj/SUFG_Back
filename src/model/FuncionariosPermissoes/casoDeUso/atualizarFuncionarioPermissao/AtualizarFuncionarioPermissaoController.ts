@@ -7,9 +7,9 @@ class AtualizarFuncionarioPermissaoController {
     const atualizarFuncionarioPermissaoCasoDeUso = new AtualizarFuncionarioPermissaoCasoDeUso();
     const { id } = req.params;
     const { id_funcionario, id_permissao } = req.body;
-    if (!atualizarFuncionarioPermissaoSchema.isValid(req.params))
+    if (!await atualizarFuncionarioPermissaoSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
-    if (!atualizarFuncionarioPermissaoSchema.isValid(req.body))
+    if (!await atualizarFuncionarioPermissaoSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const result = await atualizarFuncionarioPermissaoCasoDeUso.execute({
       id,

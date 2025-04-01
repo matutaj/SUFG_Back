@@ -7,8 +7,8 @@ class AtualizarClienteController {
         const { id } = req.params;
         const { emailCliente, moradaCliente, nomeCliente, numeroContribuinte, telefoneCliente } = req.body;
         const atualizarClienteCasoDeUso = new AtualizarClienteCasoDeUso();
-        if (!atualizarClienteSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
-        if (!atualizarClienteSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+        if (!await atualizarClienteSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+        if (!await atualizarClienteSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
         const result = await atualizarClienteCasoDeUso.execute({ id, emailCliente, moradaCliente, nomeCliente, numeroContribuinte, telefoneCliente });
         return res.status(201).json(result);
     }

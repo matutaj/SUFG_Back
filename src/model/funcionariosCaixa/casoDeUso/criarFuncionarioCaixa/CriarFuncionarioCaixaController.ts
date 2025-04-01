@@ -14,7 +14,7 @@ class CriarFuncionarioCaixaController {
       horarioFechamento,
     } = req.body;
 
-    if (!criarFuncionarioCaixaSchema.isValid(req.body))
+    if (!await criarFuncionarioCaixaSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
 
     const result = await funcionarioCaixaCasoDeUso.execute(req.body);

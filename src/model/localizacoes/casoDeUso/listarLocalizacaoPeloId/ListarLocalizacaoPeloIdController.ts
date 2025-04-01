@@ -7,7 +7,7 @@ class ListarUmLocalizacaoPeloIdController {
     const listarUmLocalizacaoPeloIdCasoDeUso =
       new ListarUmLocalizacaoPeloIdCasoDeUso();
     const { id } = req.params;
-    if (!listarLocalizacaoPeloIdSchema.isValid(req.params))
+    if (!await listarLocalizacaoPeloIdSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
     const result = await listarUmLocalizacaoPeloIdCasoDeUso.execute(id);
     return res.status(200).json(result);

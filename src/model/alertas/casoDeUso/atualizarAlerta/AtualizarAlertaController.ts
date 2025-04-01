@@ -6,9 +6,9 @@ class AtualizarAlertaController {
   async handle(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
     const { id_caixa, id_produto, descricao, nomeAlerta } = req.body;
-    if (!atualizarAlertaSchema.isValid(req.params))
+    if (!await  atualizarAlertaSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
-    if (!atualizarAlertaSchema.isValid(req.body))
+    if (!await atualizarAlertaSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const atualizarAlertaCasoDeUso = new AtualizarAlertaCasoDeUso();
     const alerta = await atualizarAlertaCasoDeUso.execute({

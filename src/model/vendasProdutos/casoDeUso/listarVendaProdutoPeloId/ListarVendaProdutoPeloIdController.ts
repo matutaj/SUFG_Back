@@ -7,7 +7,7 @@ class ListarVendaProdutoPorIdController {
     const listarVendaProdutoPorIdCasoDeUso =
       new ListarVendaProdutoPorIdCasoDeUso();
     const { id } = req.params;
-    if (!listarVendaProdutoPeloIdSchema.isValid(req.params))
+    if (!await listarVendaProdutoPeloIdSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
     const result = await listarVendaProdutoPorIdCasoDeUso.execute(id);
     return res.status(200).json(result);

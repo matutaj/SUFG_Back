@@ -7,7 +7,7 @@ class CriarFuncionarioPermissaoController {
     const criarFuncionarioPermissaoCasoDeUso =
       new CriarFuncionarioPermissaoCasoDeUso();
     const { id_funcionario, id_permissao } = req.body;
-    if (!criarFuncionarioPermissaoSchema.isValid(req.body))
+    if (!await criarFuncionarioPermissaoSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const result = await criarFuncionarioPermissaoCasoDeUso.execute({
       id_funcionario,

@@ -13,7 +13,7 @@ class criarFuncionarioController {
       senha,
       numeroBI,
     } = req.body;
-    if (!criarFuncionarioSchema.isValid(req.body))
+    if (!await criarFuncionarioSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const result = await criarFuncionarioCasoDeUso.execute({
       nomeFuncionario,

@@ -6,7 +6,7 @@ class CriarSeccaoController {
   async handle(req: Request, res: Response): Promise<any> {
     const seccaoCasoDeUso = new CriarSeccaoCasoDeUso();
     const { nomeSeccao, descricao } = req.body;
-    if (!criarSeccaoSchema.validate(req.body)) return res.status(400).json({});
+    if (!await criarSeccaoSchema.validate(req.body)) throw new AppError("Erro na Validação dos dados");
     const result = await seccaoCasoDeUso.execute({
       nomeSeccao,
       descricao,

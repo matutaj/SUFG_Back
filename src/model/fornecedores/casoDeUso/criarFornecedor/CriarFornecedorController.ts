@@ -12,7 +12,7 @@ class CriarFornecedorController {
       nif,
       telefoneFornecedor,
     } = req.body;
-    if (!criarFornecedorSchema.isValid(req.body)) {
+    if (!await criarFornecedorSchema.isValid(req.body)) {
       throw new AppError("Erro na validação dos campos");
     }
     const result = await fornecedorCasoDeUso.execute({

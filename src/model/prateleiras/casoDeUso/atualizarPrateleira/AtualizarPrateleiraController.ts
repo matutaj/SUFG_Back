@@ -7,9 +7,9 @@ class AtualizarPrateleiraController {
   async handle(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
     const { nomePrateleira, descricao } = req.body;
-    if (!atualizarPrateleiraSchema.isValid(req.params))
+    if (!await atualizarPrateleiraSchema.isValid(req.params))
       throw new AppError("Erro na Validação dos dados");
-    if (!atualizarPrateleiraSchema.isValid(req.body))
+    if (!await atualizarPrateleiraSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
     const atualizarPrateleiraCasoDeUso = new AtualizarPrateleiraCasoDeUso();
     const result = await atualizarPrateleiraCasoDeUso.execute({

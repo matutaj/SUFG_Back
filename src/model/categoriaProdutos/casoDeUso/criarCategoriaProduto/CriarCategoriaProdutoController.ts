@@ -6,7 +6,7 @@ class CriarCategoriaProdutoController {
   async handle(req: Request, res: Response): Promise<any> {
     const categoriaProdutoCasoDeUso = new CriarCategoriaProdutoCasoDeUso();
     const { nomeCategoria, descricao } = req.body;
-    if (!criarCategoriaProdutoSchema.isValid(req.body)) {
+    if (!await criarCategoriaProdutoSchema.isValid(req.body)) {
       throw new AppError("Erro na validação dos campos");
     }
     const result = await categoriaProdutoCasoDeUso.execute({

@@ -13,8 +13,8 @@ class AtualizarTransferenciaController {
       dataTransferencia,
       quantidadeTransferida,
     } = req.body;
-    if (!atualizarTransferenciaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
-    if (!atualizarTransferenciaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
+    if (!await atualizarTransferenciaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    if (!await atualizarTransferenciaSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
     const result = await atualizarTransferenciaCasoDeUso.execute({
       id,
       id_produto,
