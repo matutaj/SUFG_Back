@@ -11,7 +11,6 @@ class VendaRepositorio implements IVenda {
     id_cliente,
     dataValidade,
     id_funcionarioCaixa,
-    vendasProdutos,
   }: DadosVenda): Promise<vendas> {
     const criarVenda = await prisma.vendas.create({
       data: {
@@ -22,14 +21,9 @@ class VendaRepositorio implements IVenda {
         dataValidade,
         id_cliente,
         id_funcionarioCaixa,
-        vendasProdutos: {
-          create: vendasProdutos.map((vendaProduto) => ({
-            id_produto: vendaProduto.id_produto,
-            quantidadeVendida: vendaProduto.quantidadeVendida,
-          })),
-        },
+       
       },
-      include: { vendasProdutos: true }, // Inclui os produtos criados na resposta
+    
     });
     return criarVenda;
   }
@@ -58,7 +52,6 @@ class VendaRepositorio implements IVenda {
     numeroDocumento,
     tipoDocumento,
     valorTotal,
-    vendasProdutos,
   }: DadosVenda): Promise<vendas> {
     const atualizarVenda = await prisma.vendas.update({
       where: { id },
@@ -70,15 +63,8 @@ class VendaRepositorio implements IVenda {
         numeroDocumento,
         tipoDocumento,
         valorTotal,
-        vendasProdutos: {
-          deleteMany: {}, 
-          create: vendasProdutos.map((vendaProduto) => ({
-            id_produto: vendaProduto.id_produto,
-            quantidadeVendida: vendaProduto.quantidadeVendida,
-          })),
-        },
+       
       },
-      include: { vendasProdutos: true }, 
     });
     return atualizarVenda;
   }
