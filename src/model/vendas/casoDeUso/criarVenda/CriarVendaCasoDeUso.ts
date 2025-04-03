@@ -1,100 +1,143 @@
-import { vendas } from "@prisma/client";
+import { vendas, tipoDocumento } from "@prisma/client";
 import { VendaRepositorio } from "../../repositorioVenda/implementacoes/RepositorioVenda";
-import { DadosVenda } from "../../repositorioVenda/IVenda";
 import { VendaProdutoRepositorio } from "../../../vendasProdutos/repositorioVendaProduto/implementacoes/RepositorioVendaProduto";
 import { AppError } from "../../../../errors/AppError";
 import { ClienteRepositorio } from "../../../clientes/repositorioCliente/implementacoes/RepositorioCliente";
 
+export interface DadosVenda {
+  id_cliente?: string; // Tornar opcional se for criar novo cliente
+  dataEmissao: Date;
+  dataValidade: Date;
+  id_funcionarioCaixa: string;
+  numeroDocumento: string;
+  tipoDocumento: tipoDocumento;
+  valorTotal: number;
+  vendasProdutos: {
+    id_produto: string;
+    quantidade: number;
+    valorTotal?: number; // Opcional
+  }[];
+}
+
+export interface Cliente {
+  emailCliente: string;
+  moradaCliente: string;
+  nomeCliente: string;
+  telefoneCliente: string;
+  numeroContribuinte: string;
+}
+
+export interface DadosWrapper {
+  Dados?: { // Tornar opcional para evitar erros se ausente
+    cliente?: Cliente[];
+    dadosVenda: DadosVenda;
+  };
+}
+
 class CriarVendaCasoDeUso {
-  async execute({
-    id_cliente,
-    dataEmissao,
-    dataValidade,
-    id_funcionarioCaixa,
-    numeroDocumento,
-    tipoDocumento,
-    cliente,
-    valorTotal,
-    vendasProdutos,
-  }: DadosVenda): Promise<vendas> {
+  async execute(data: DadosWrapper): Promise<vendas> {
+  
+    if (!data.Dados) {
+      throw new AppError("Dados da venda não fornecidos ou malformados!", 400);
+    }
+
+    const { cliente, dadosVenda } = data.Dados;
+
     const vendaRepositorio = new VendaRepositorio();
     const vendaProdutoRepositorio = new VendaProdutoRepositorio();
     const repositorioCliente = new ClienteRepositorio();
 
-    if (!numeroDocumento) {
-      throw new AppError("Nenhuma transação encontrada!");
+    // Validação inicial: verifica se dadosVenda existe
+    if (!dadosVenda) {
+      throw new AppError("Dados da venda não fornecidos!", 400);
     }
 
-    let finalIdCliente: number | string | null = id_cliente; // Inicializa com o id_cliente fornecido
 
-    // Verifica se há clientes para criar e lida com cliente possivelmente undefined
-    if (cliente && Array.isArray(cliente) && cliente.length > 0) {
-      const clientIds = await Promise.all(
-        cliente.map(
-          async ({
-            emailCliente,
-            moradaCliente,
-            nomeCliente,
-            numeroContribuinte,
-            telefoneCliente,
-          }) => {
-            const novoCliente = await repositorioCliente.criarCliente({
-              emailCliente,
-              moradaCliente,
-              nomeCliente,
-              numeroContribuinte,
-              telefoneCliente,
-            });
+    let finalIdCliente: string | null = null;
 
-            if (!novoCliente || !novoCliente.id) {
-              throw new AppError("Falha ao criar cliente. ID não retornado.");
-            }
+    if (cliente && cliente.length > 0) {
+      try {
+        const primeiroCliente = cliente[0];
 
-            return novoCliente.id;
-          }
-        )
-      );
-
-      // Usa o ID do último cliente criado
-      finalIdCliente = clientIds[clientIds.length - 1];
-    } else if (!finalIdCliente) {
-      // Se nenhum cliente foi fornecido e não há id_cliente, lança erro
-      throw new AppError(
-        "Nenhum cliente ou ID de cliente fornecido para a venda!"
-      );
-    }
-
-    // Verifica novamente se temos um ID de cliente válido
-    if (!finalIdCliente) {
-      throw new AppError(
-        "Nenhum cliente associado à venda após tentativa de criação!"
-      );
-    }
-
-    // Cria a venda usando o ID do cliente
-    const result = await vendaRepositorio.criarVenda({
-      id_cliente: finalIdCliente,
-      dataEmissao,
-      dataValidade,
-      id_funcionarioCaixa,
-      numeroDocumento,
-      tipoDocumento,
-      valorTotal,
-      vendasProdutos,
-    });
-
-    // Cria os produtos da venda
-    await Promise.all(
-      vendasProdutos.map(async ({ id_produto, quantidadeVendida }) => {
-        await vendaProdutoRepositorio.criarVendaProduto({
-          id_produto,
-          id_venda: result.id,
-          quantidadeVendida,
+        const novoCliente = await repositorioCliente.criarCliente({
+          emailCliente: primeiroCliente.emailCliente,
+          moradaCliente: primeiroCliente.moradaCliente,
+          nomeCliente: primeiroCliente.nomeCliente,
+          numeroContribuinte: primeiroCliente.numeroContribuinte,
+          telefoneCliente: primeiroCliente.telefoneCliente,
         });
-      })
-    );
 
-    return result;
+        if (!novoCliente || !novoCliente.id) {
+          throw new AppError("Falha ao criar cliente. ID não retornado.", 500);
+        }
+
+        finalIdCliente = novoCliente.id;
+      } catch (error) {
+        throw new AppError(`Erro ao criar cliente: ${(error as Error).message}`, 500);
+      }
+    } else if (dadosVenda.id_cliente) {
+      if (!dadosVenda.id_cliente) {
+        throw new AppError("ID do cliente inválido.", 400);
+      }
+      finalIdCliente = dadosVenda.id_cliente.toString();
+    } else {
+      throw new AppError(
+        "Nenhum cliente ou ID de cliente fornecido para a venda! Por favor, forneça os dados de um novo cliente ou o ID de um cliente existente.",
+        400
+      );
+    }
+
+    // Validação final: assegura que temos um ID de cliente válido
+    if (!finalIdCliente) {
+      throw new AppError("Nenhum cliente associado à venda após tentativa de criação!", 400);
+    }
+
+    // Validação dos produtos da venda
+    if (!Array.isArray(dadosVenda.vendasProdutos) || dadosVenda.vendasProdutos.length === 0) {
+      throw new AppError("Nenhum produto associado à venda.", 400);
+    }
+
+    // Converter strings de data para objetos Date
+    const dataEmissao = new Date(dadosVenda.dataEmissao);
+    const dataValidade = new Date(dadosVenda.dataValidade);
+
+    if (isNaN(dataEmissao.getTime()) || isNaN(dataValidade.getTime())) {
+      throw new AppError("Datas inválidas!", 400);
+    }
+
+    // Agora cria a venda usando o ID do cliente (seja recém-criado ou fornecido)
+    try {
+      // Cria a venda sem os produtos (ou com um formato que o repositório espera)
+      const result = await vendaRepositorio.criarVenda({
+        id_cliente: finalIdCliente,
+        dataEmissao: dataEmissao,
+        dataValidade: dataValidade,
+        id_funcionarioCaixa: dadosVenda.id_funcionarioCaixa.toString(), // Garante que é string
+        numeroDocumento: dadosVenda.numeroDocumento,
+        tipoDocumento: dadosVenda.tipoDocumento,
+        valorTotal: dadosVenda.valorTotal,
+      });
+
+      // Cria os produtos da venda de forma assíncrona, usando o id_venda recém-criado
+      await Promise.all(
+        dadosVenda.vendasProdutos.map(async (produto) => {
+          if (!produto.id_produto || !produto.quantidade) {
+            throw new AppError("Cada produto deve ter ID e quantidade.", 400);
+          }
+
+          await vendaProdutoRepositorio.criarVendaProduto({
+            id_venda: result.id, // Agora temos o ID da venda
+            id_produto: produto.id_produto,
+            quantidadeVendida: produto.quantidade,
+          });
+        })
+      );
+
+      return result;
+    } catch (error) {
+      console.error("Erro detalhado:", error);
+      throw new AppError(`Erro ao criar venda: ${(error as Error).message}`, 500);
+    }
   }
 }
 
