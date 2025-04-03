@@ -64,7 +64,7 @@ class CriarProdutoCasoDeUso {
       unidadeConteudo,
       unidadeMedida,
       quantidadeEstoque,
-      referenciaProduto,
+      referenciaProduto:generatedCodigoBarras,
       id_categoriaProduto,
     });
 
