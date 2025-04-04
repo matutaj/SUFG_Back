@@ -21,7 +21,6 @@ class CriarEntradaEstoqueController {
       id_fornecedor,
       id_produto,
       id_funcionario,
-      produtoRecebido,
       quantidadeRecebida,
       dataEntrada,
       custoUnitario,
