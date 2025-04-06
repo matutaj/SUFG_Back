@@ -80,12 +80,21 @@ model produtos {
   alertas alertas[]
   transferencias transferencias[]
   vendasProdutos vendasProdutos[]
-  
+  estoques estoques[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   
   categoriasProdutos categoriasProdutos @relation(fields: [id_categoriaProduto], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
+model estoques {
+  id String @id @default(uuid())
+  id_produto String
+  quantidadeAtual String
+  lote String
+  dataValidadeLote DateTime
+  produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
 
 
 
