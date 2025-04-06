@@ -4,27 +4,28 @@ import { atualizarEntradaSchema } from "../../../../schema/entradasEstoque";
 import { AppError } from "../../../../errors/AppError";
 class AtualizarEntradaEstoqueController {
   async handle(req: Request, res: Response): Promise<any> {
-    const atualizarEntradaEstoqueCasoDeUso = new AtualizarEntradaEstoqueCasoDeUso();
+    const atualizarEntradaEstoqueCasoDeUso =
+      new AtualizarEntradaEstoqueCasoDeUso();
     const { id } = req.params;
     const {
       id_fornecedor,
       id_produto,
       id_funcionario,
-      produtoRecebido,
       quantidadeRecebida,
       dataEntrada,
       custoUnitario,
       lote,
       dataValidadeLote,
     } = req.body;
-    if (!await atualizarEntradaSchema.isValid(req.body)) throw new AppError("Dados inválidos");
-    if (!await atualizarEntradaSchema.isValid(req.params)) throw new AppError("Dados inválidos");
+    if (!(await atualizarEntradaSchema.isValid(req.body)))
+      throw new AppError("Dados inválidos");
+    if (!(await atualizarEntradaSchema.isValid(req.params)))
+      throw new AppError("Dados inválidos");
     const result = await atualizarEntradaEstoqueCasoDeUso.execute({
       id,
       id_fornecedor,
       id_produto,
       id_funcionario,
-      produtoRecebido,
       quantidadeRecebida,
       dataEntrada,
       custoUnitario,

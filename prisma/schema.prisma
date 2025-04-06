@@ -249,7 +249,7 @@ model funcionariosCaixa {
   estadoCaixa Boolean
   quantidadaFaturada Decimal @db.Decimal(10, 2)
   horarioAbertura DateTime
-  horarioFechamento DateTime
+  horarioFechamento DateTime?
 
   caixas caixas @relation(fields: [id_caixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Funcionarios funcionarios @relation(fields: [id_funcionario], references: [id],onDelete: Cascade, onUpdate: Cascade)

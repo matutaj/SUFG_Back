@@ -6,15 +6,9 @@ class CriarFuncionarioCaixaController {
   async handle(req: Request, res: Response): Promise<any> {
     const funcionarioCaixaCasoDeUso = new CriarFuncionarioCaixaCasodeUso();
 
-    const {
-      id_caixa,
-      id_funcionario,
-      quantidadaFaturada,
-      horarioAbertura,
-      horarioFechamento,
-    } = req.body;
 
-    if (!await criarFuncionarioCaixaSchema.isValid(req.body))
+
+    if (!(await criarFuncionarioCaixaSchema.isValid(req.body)))
       throw new AppError("Erro na Validação dos dados");
 
     const result = await funcionarioCaixaCasoDeUso.execute(req.body);

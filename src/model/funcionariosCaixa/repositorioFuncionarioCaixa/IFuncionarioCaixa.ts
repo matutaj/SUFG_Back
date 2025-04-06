@@ -7,7 +7,7 @@ export interface DadosFuncionarioCaixa {
   estadoCaixa: boolean;
   quantidadaFaturada: number;
   horarioAbertura: Date;
-  horarioFechamento: Date;
+  horarioFechamento: Date | null;
 }
 
 export interface IFuncionarioCaixa {

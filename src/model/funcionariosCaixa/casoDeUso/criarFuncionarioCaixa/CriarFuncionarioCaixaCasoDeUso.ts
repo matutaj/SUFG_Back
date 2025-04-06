@@ -25,7 +25,9 @@ class CriarFuncionarioCaixaCasodeUso {
     const existeFuncionario =
       await funcionarioRepositorio.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
-      throw new AppError(`Não existe um funcionário com o ID ${id_funcionario}`);
+      throw new AppError(
+        `Não existe um funcionário com o ID ${id_funcionario}`
+      );
     }
 
     const listarEstadoCaixa =
