@@ -92,6 +92,8 @@ model estoques {
   quantidadeAtual String
   lote String
   dataValidadeLote DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 

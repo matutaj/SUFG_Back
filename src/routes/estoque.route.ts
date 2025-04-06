@@ -9,16 +9,17 @@ const estoqueRouter = Router();
 
 const listarTodosEstoquesController = new ListarTodosEstoquesController();
 const listarUmEstoquePeloIdController = new ListarUmEstoquePeloIdController();
-const listarUmEstoquePeloLoteController = new ListarUmEstoquePeloLoteController();
+const listarUmEstoquePeloLoteController =
+  new ListarUmEstoquePeloLoteController();
 const criarEstoqueController = new CriarEstoqueController();
 const atualizarEstoqueController = new AtualizarEstoqueController();
 const deleteEstoqueController = new DeleteEstoqueController();
 
-estoqueRouter.get("/estoques", listarTodosEstoquesController.handle);           
-estoqueRouter.get("/estoques/:id", listarUmEstoquePeloIdController.handle); 
-estoqueRouter.get("/estoques/:lote", listarUmEstoquePeloLoteController.handle); 
-estoqueRouter.post("/estoques", criarEstoqueController.handle);                
-estoqueRouter.put("/estoques/:id", atualizarEstoqueController.handle);             
-estoqueRouter.delete("/estoques/:id", deleteEstoqueController.handle);       
+estoqueRouter.get("/", listarTodosEstoquesController.handle);
+estoqueRouter.get("/:id", listarUmEstoquePeloIdController.handle);
+estoqueRouter.get("/", listarUmEstoquePeloLoteController.handle);
+estoqueRouter.post("/", criarEstoqueController.handle);
+estoqueRouter.put("/:id", atualizarEstoqueController.handle);
+estoqueRouter.delete("/:id", deleteEstoqueController.handle);
 
 export { estoqueRouter };

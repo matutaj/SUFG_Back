@@ -9,7 +9,7 @@ class AtualizarProdutoCasoDeUso {
     id_categoriaProduto,
     referenciaProduto,
     nomeProduto,
-    descricaoProduto,
+
     custoAquisicao,
     precoVenda,
     quantidadeEstoque,
@@ -29,12 +29,16 @@ class AtualizarProdutoCasoDeUso {
       throw new AppError("Não existe um produto com esse id");
     }
 
-    const existeCategoria = await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloId(id_categoriaProduto);
+    const existeCategoria =
+      await repositorioCategoriaProduto.listarUmaCategoriaProdutoPeloId(
+        id_categoriaProduto
+      );
     if (!existeCategoria) {
       throw new AppError("Não existe uma categoria de produto com esse id");
     }
 
-    const produtoComMesmoNome = await repositorioProduto.listarUmProdutoPeloNome(nomeProduto);
+    const produtoComMesmoNome =
+      await repositorioProduto.listarUmProdutoPeloNome(nomeProduto);
     if (produtoComMesmoNome && produtoComMesmoNome.id !== id) {
       throw new AppError("Já existe um produto com esse nome");
     }
@@ -44,7 +48,7 @@ class AtualizarProdutoCasoDeUso {
       id_categoriaProduto,
       referenciaProduto,
       nomeProduto,
-      descricaoProduto,
+
       custoAquisicao,
       precoVenda,
       quantidadeEstoque,
