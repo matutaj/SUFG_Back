@@ -7,12 +7,17 @@ class DeleteProdutoLocalizacaoCasoDeUso {
     const repositorioProdutoLocalizacao = new ProdutoLocalizacaoRepositorio();
 
     if (!id) {
-      throw new AppError("O ID do produto-localização é obrigatório para exclusão");
+      throw new AppError(
+        "O ID do produto-localização é obrigatório para exclusão"
+      );
     }
 
-    const existeProdutoLocalizacao = await repositorioProdutoLocalizacao.listarUmProdutoLocalizacaoPorId(id);
+    const existeProdutoLocalizacao =
+      await repositorioProdutoLocalizacao.listarUmProdutoLocalizacaoPorId(id);
     if (!existeProdutoLocalizacao) {
-      throw new AppError("Não existe um registro de produto-localização com esse id");
+      throw new AppError(
+        "Não existe um registro de produto-localização com esse id"
+      );
     }
 
     await repositorioProdutoLocalizacao.eliminarProdutoLocalizacao(id);

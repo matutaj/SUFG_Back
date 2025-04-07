@@ -21,12 +21,14 @@ class EstoqueRepositorio implements IEstoque {
   }
 
   async listarUmEstoquePeloId(id: string): Promise<estoques | undefined> {
-    const estoque = (await prisma.estoques.findUnique({ where: { id } })) || undefined;
+    const estoque =
+      (await prisma.estoques.findUnique({ where: { id } })) || undefined;
     return estoque;
   }
 
   async listarUmEstoquePeloLote(lote: string): Promise<estoques | undefined> {
-    const estoque = (await prisma.estoques.findFirst({ where: { lote } })) || undefined;
+    const estoque =
+      (await prisma.estoques.findFirst({ where: { lote } })) || undefined;
     return estoque;
   }
 
