@@ -31,6 +31,17 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque {
     const listarTodasEntradasEstoque = await prisma.entradasEstoque.findMany();
     return listarTodasEntradasEstoque;
   }
+  async listarEntraEstoquePeloIdDoProduto(
+    id_produto: string
+  ): Promise<entradasEstoque | undefined> {
+    const listarEntraEstoquePeloIdDoProduto =
+      (await prisma.entradasEstoque.findFirst({
+        where: {
+          id_produto,
+        },
+      })) || undefined;
+    return listarEntraEstoquePeloIdDoProduto;
+  }
   async atualizarEntradaEstoque({
     custoUnitario,
     dataEntrada,

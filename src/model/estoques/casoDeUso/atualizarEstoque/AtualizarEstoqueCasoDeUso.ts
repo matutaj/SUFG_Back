@@ -18,6 +18,7 @@ class AtualizarEstoqueCasoDeUso {
       lote,
       dataValidadeLote,
     });
+
     return result;
   }
 }

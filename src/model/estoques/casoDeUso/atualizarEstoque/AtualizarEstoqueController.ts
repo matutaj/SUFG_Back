@@ -8,8 +8,10 @@ class AtualizarEstoqueController {
     const atualizarEstoqueCasoDeUso = new AtualizarEstoqueCasoDeUso();
     const { id_produto, quantidadeAtual, lote, dataValidadeLote } = req.body;
     const { id } = req.params;
-    if (!await atualizarEstoqueSchema.isValid(req.params)) throw new AppError("Erro na Validação dos dados");
-    if (!await atualizarEstoqueSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
+    if (!(await atualizarEstoqueSchema.isValid(req.params)))
+      throw new AppError("Erro na Validação dos dados");
+    if (!(await atualizarEstoqueSchema.isValid(req.body)))
+      throw new AppError("Erro na Validação dos dados");
     const result = await atualizarEstoqueCasoDeUso.execute({
       id,
       id_produto,
@@ -17,6 +19,7 @@ class AtualizarEstoqueController {
       lote,
       dataValidadeLote,
     });
+
     return res.status(200).json(result);
   }
 }

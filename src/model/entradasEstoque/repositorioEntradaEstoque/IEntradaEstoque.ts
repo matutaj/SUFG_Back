@@ -13,6 +13,9 @@ export interface DadosEntradaEstoque {
 }
 export interface IEntradaEstoque {
   criarEntradaEstoque({}: DadosEntradaEstoque): Promise<entradasEstoque>;
+  listarEntraEstoquePeloIdDoProduto(
+    id_produto: string
+  ): Promise<entradasEstoque | undefined>;
   listarTodasEntradasEstoque(): Promise<entradasEstoque[]>;
   atualizarEntradaEstoque({}: DadosEntradaEstoque): Promise<entradasEstoque>;
   eliminarEntradaEstoque(id: string): Promise<void>;

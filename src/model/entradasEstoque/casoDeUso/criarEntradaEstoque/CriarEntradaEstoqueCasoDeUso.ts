@@ -4,6 +4,7 @@ import { EntradaEstoqueRepositorio } from "../../repositorioEntradaEstoque/imple
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 import { FornecedorRepositorio } from "../../../fornecedores/repositorioFornecedor/implementacoes/RepositorioFornecedor";
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
+import { EstoqueRepositorio } from "../../../estoques/repositorioEstoque/implementacoes/RepositorioEstoque";
 
 class CriarEntradaEstoqueCasoDeUso {
   async execute({
@@ -20,21 +21,26 @@ class CriarEntradaEstoqueCasoDeUso {
     const repositorioProduto = new ProdutoRepositorio();
     const repositorioFornecedor = new FornecedorRepositorio();
     const repositorioFuncionario = new FuncionarioRepositorio();
+    const repositorioEstoque = new EstoqueRepositorio();
 
     // Verificar se o produto existe
-    const existeProduto = await repositorioProduto.listarUmProdutoPorId(id_produto);
+    const existeProduto = await repositorioProduto.listarUmProdutoPorId(
+      id_produto
+    );
     if (!existeProduto) {
       throw new Error("Não existe um produto com esse id");
     }
 
     // Verificar se o fornecedor existe
-    const existeFornecedor = await repositorioFornecedor.listarUmFornecedorPeloId(id_fornecedor);
+    const existeFornecedor =
+      await repositorioFornecedor.listarUmFornecedorPeloId(id_fornecedor);
     if (!existeFornecedor) {
       throw new Error("Não existe um fornecedor com esse id");
     }
 
     // Verificar se o funcionário existe
-    const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
+    const existeFuncionario =
+      await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
       throw new Error("Não existe um funcionário com esse id");
     }
@@ -74,7 +80,9 @@ class CriarEntradaEstoqueCasoDeUso {
         throw new Error("Formato de data de entrada inválido");
       }
     } catch (error) {
-      throw new Error("Erro ao processar a data de entrada: " + (error as Error).message);
+      throw new Error(
+        "Erro ao processar a data de entrada: " + (error as Error).message
+      );
     }
 
     // Converter dataValidadeLote para ISO-8601 (se ainda não estiver)
@@ -85,11 +93,18 @@ class CriarEntradaEstoqueCasoDeUso {
       id_fornecedor,
       id_produto,
       id_funcionario,
-      quantidadeRecebida, 
+      quantidadeRecebida,
       dataEntrada: dataEntradaFormatada,
       custoUnitario,
       lote,
       dataValidadeLote: dataValidadeLoteFormatada,
+    });
+
+    await repositorioEstoque.criarEstoque({
+      id_produto: result.id_produto,
+      quantidadeAtual: result.quantidadeRecebida,
+      lote: result.lote,
+      dataValidadeLote: result.dataValidadeLote,
     });
 
     return result;
