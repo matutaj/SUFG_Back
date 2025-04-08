@@ -6,7 +6,7 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque {
   async criarEntradaEstoque({
     custoUnitario,
     dataEntrada,
-    adicionado.
+    adicionado,
     quantidadeRecebida,
     id_fornecedor,
     id_produto,
