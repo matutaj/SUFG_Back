@@ -13,6 +13,7 @@ class CriarEntradaEstoqueCasoDeUso {
     id_funcionario,
     quantidadeRecebida,
     dataEntrada,
+    adicionado,
     custoUnitario,
     lote,
     dataValidadeLote,
@@ -92,6 +93,7 @@ class CriarEntradaEstoqueCasoDeUso {
     const result = await repositorioEntradaEstoque.criarEntradaEstoque({
       id_fornecedor,
       id_produto,
+      adicionado,
       id_funcionario,
       quantidadeRecebida,
       dataEntrada: dataEntradaFormatada,

@@ -6,6 +6,7 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque {
   async criarEntradaEstoque({
     custoUnitario,
     dataEntrada,
+    adicionado.
     quantidadeRecebida,
     id_fornecedor,
     id_produto,
@@ -18,6 +19,7 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque {
         custoUnitario,
         dataEntrada,
         quantidadeRecebida,
+        adicionado,
         dataValidadeLote,
         lote,
         id_fornecedor,
@@ -45,6 +47,7 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque {
   async atualizarEntradaEstoque({
     custoUnitario,
     dataEntrada,
+    adicionado,
     quantidadeRecebida,
     dataValidadeLote,
     lote,
@@ -57,6 +60,7 @@ class EntradaEstoqueRepositorio implements IEntradaEstoque {
       data: {
         custoUnitario,
         dataEntrada,
+        adicionado,
         quantidadeRecebida,
         dataValidadeLote,
         lote,

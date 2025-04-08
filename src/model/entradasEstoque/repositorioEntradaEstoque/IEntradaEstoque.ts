@@ -7,6 +7,7 @@ export interface DadosEntradaEstoque {
   id_funcionario: string;
   quantidadeRecebida: string;
   dataEntrada: string | Date;
+  adicionado: boolean;
   custoUnitario: number;
   lote: string;
   dataValidadeLote: string | Date;

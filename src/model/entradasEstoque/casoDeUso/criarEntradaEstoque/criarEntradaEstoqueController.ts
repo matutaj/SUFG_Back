@@ -9,6 +9,7 @@ class CriarEntradaEstoqueController {
       id_fornecedor,
       id_produto,
       id_funcionario,
+      adicionado,
       quantidadeRecebida,
       dataEntrada,
       custoUnitario,
@@ -20,6 +21,7 @@ class CriarEntradaEstoqueController {
     const result = await criarEntradaEstoqueCasoDeUso.execute({
       id_fornecedor,
       id_produto,
+      adicionado,
       id_funcionario,
       quantidadeRecebida,
       dataEntrada,

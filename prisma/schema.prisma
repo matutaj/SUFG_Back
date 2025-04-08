@@ -121,6 +121,7 @@ model entradasEstoque {
   id_produto String
   id_funcionario String
   quantidadeRecebida String
+  adicionado Boolean
   dataEntrada DateTime
   custoUnitario Decimal  @db.Decimal(10 , 2)
   lote String
