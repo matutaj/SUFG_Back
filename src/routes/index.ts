@@ -24,10 +24,14 @@ import { funcionarioPermissaoRoutes } from "./funcionarioPermissao.routes";
 import { alertaRoutes } from "./alerta.routes";
 import { loginRouter } from "./login.routes";
 import { estoqueRouter } from "./estoque.route";
+import { tarefaRouter } from "./tarefa.routes";
+import { funcionarioTarefaRouter } from "./funcionarioTarefa.routes";
 
 const routes = Router();
 
 routes.use("/estoque", estoqueRouter);
+routes.use("/tarefa", tarefaRouter);
+routes.use("/funcionarioTarefa", funcionarioTarefaRouter);
 routes.use("/alerta", alertaRoutes);
 routes.use("/entradaEstoque", entradaEstoqueRoutes);
 routes.use("/funcaoPermissao", funcaoPermissaoRoutes);
