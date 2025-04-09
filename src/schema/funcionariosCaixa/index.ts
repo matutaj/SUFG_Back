@@ -4,7 +4,7 @@ const criarFuncionarioCaixaSchema = Yup.object().shape({
   id_caixa: Yup.string().required(),
   id_funcionario: Yup.string().required(),
   quantidadaFaturada: Yup.number(),
-  horarioAbertura: Yup.date().required(),
+  horarioAbertura: Yup.date(),
   horarioFechamento: Yup.date(),
 });
 const listarFuncionarioCaixaPeloIdSchema = Yup.object().shape({

@@ -11,7 +11,7 @@ export interface DadosEstoque {
 export interface IEstoque {
   listarTodosEstoques(): Promise<estoques[]>;
   listarUmEstoquePeloId(id: string): Promise<estoques | undefined>;
-  listarUmEstoquePeloLote(lote: string): Promise<estoques | undefined>;
+  listarUmEstoquePeloProduto(id_produto: string): Promise<estoques | undefined>;
   criarEstoque({}: DadosEstoque): Promise<estoques>;
   atualizarEstoque({}: DadosEstoque): Promise<estoques>;
   deleteEstoque(id: string): Promise<void>;
