@@ -28,7 +28,8 @@ export interface Cliente {
 }
 
 export interface DadosWrapper {
-  Dados?: { // Tornar opcional para evitar erros se ausente
+  Dados?: {
+    // Tornar opcional para evitar erros se ausente
     cliente?: Cliente[];
     dadosVenda: DadosVenda;
   };
@@ -36,7 +37,6 @@ export interface DadosWrapper {
 
 class CriarVendaCasoDeUso {
   async execute(data: DadosWrapper): Promise<vendas> {
-  
     if (!data.Dados) {
       throw new AppError("Dados da venda não fornecidos ou malformados!", 400);
     }
@@ -51,7 +51,6 @@ class CriarVendaCasoDeUso {
     if (!dadosVenda) {
       throw new AppError("Dados da venda não fornecidos!", 400);
     }
-
 
     let finalIdCliente: string | null = null;
 
@@ -73,7 +72,10 @@ class CriarVendaCasoDeUso {
 
         finalIdCliente = novoCliente.id;
       } catch (error) {
-        throw new AppError(`Erro ao criar cliente: ${(error as Error).message}`, 500);
+        throw new AppError(
+          `Erro ao criar cliente: ${(error as Error).message}`,
+          500
+        );
       }
     } else if (dadosVenda.id_cliente) {
       if (!dadosVenda.id_cliente) {
@@ -89,11 +91,17 @@ class CriarVendaCasoDeUso {
 
     // Validação final: assegura que temos um ID de cliente válido
     if (!finalIdCliente) {
-      throw new AppError("Nenhum cliente associado à venda após tentativa de criação!", 400);
+      throw new AppError(
+        "Nenhum cliente associado à venda após tentativa de criação!",
+        400
+      );
     }
 
     // Validação dos produtos da venda
-    if (!Array.isArray(dadosVenda.vendasProdutos) || dadosVenda.vendasProdutos.length === 0) {
+    if (
+      !Array.isArray(dadosVenda.vendasProdutos) ||
+      dadosVenda.vendasProdutos.length === 0
+    ) {
       throw new AppError("Nenhum produto associado à venda.", 400);
     }
 
@@ -136,7 +144,10 @@ class CriarVendaCasoDeUso {
       return result;
     } catch (error) {
       console.error("Erro detalhado:", error);
-      throw new AppError(`Erro ao criar venda: ${(error as Error).message}`, 500);
+      throw new AppError(
+        `Erro ao criar venda: ${(error as Error).message}`,
+        500
+      );
     }
   }
 }

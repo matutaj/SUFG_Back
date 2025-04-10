@@ -7,15 +7,7 @@ class AtualizarProdutoLocalizacaoController {
     const atualizarProdutoLocalizacaoCasoDeUso =
       new AtualizarProdutoLocalizacaoCasoDeUso();
     const { id } = req.params;
-    const {
-      id_seccao,
-      id_prateleira,
-      id_corredor,
-      id_produto,
-      id_localizacao,
-      quantidadeProduto,
-      quantidadeMinimaProduto,
-    } = req.body;
+
     req.body.id = id;
     if (!(await atualizarProdutoLocalizacaoSchema.validate(req.body)))
       throw new AppError("Erro na Validação dos dados");
