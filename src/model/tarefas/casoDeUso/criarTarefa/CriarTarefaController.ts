@@ -6,9 +6,9 @@ import { AppError } from "../../../../errors/AppError";
 class CriarTarefaController {
   async handle(req: Request, res: Response): Promise<any> {
     const criarTarefaCasoDeUso = new CriarTarefaCasoDeUso();
-    const { nome } = req.body;
+    const { nome, descricao } = req.body;
     if (!(await criarTarefaSchema.isValid(req.body))) throw new AppError("Erro na Validação dos dados");
-    const result = await criarTarefaCasoDeUso.execute({ nome });
+    const result = await criarTarefaCasoDeUso.execute({ nome, descricao});
     return res.status(201).json(result);
   }
 }
