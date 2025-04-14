@@ -43,7 +43,7 @@ class EstoqueRepositorio implements IEstoque {
   }: DadosEstoque): Promise<estoques> {
     const estoque = await prisma.estoques.update({
       where: { id },
-      data: { id_produto, quantidadeAtual, lote, dataValidadeLote },
+      data: { id_produto, quantidadeAtual, lote, dataValidadeLote: new Date() },
     });
     return estoque;
   }

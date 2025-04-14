@@ -3,7 +3,7 @@ import { estoques } from "@prisma/client";
 export interface DadosEstoque {
   id?: string;
   id_produto: string;
-  quantidadeAtual: string;
+  quantidadeAtual: number;
   lote: string;
   dataValidadeLote: Date;
 }

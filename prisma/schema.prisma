@@ -103,7 +103,7 @@ model produtos {
 model estoques {
   id String @id @default(uuid())
   id_produto String
-  quantidadeAtual String
+  quantidadeAtual Int
   lote String
   dataValidadeLote DateTime
   createdAt    DateTime      @default(now())
