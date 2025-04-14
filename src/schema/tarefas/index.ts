@@ -2,6 +2,7 @@ import * as Yup from "yup";
 
 const criarTarefaSchema = Yup.object().shape({
   nome: Yup.string().required(),
+  descricao: Yup.string()
 });
 
 const listarTarefaPeloIdSchema = Yup.object().shape({
@@ -15,6 +16,7 @@ const listarTarefaPeloNomeSchema = Yup.object().shape({
 const atualizarTarefaSchema = Yup.object().shape({
   id: Yup.string().required(),
   nome: Yup.string(),
+  descricao: Yup.string()
 });
 
 const deletarTarefaSchema = Yup.object().shape({

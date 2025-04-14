@@ -4,10 +4,11 @@ import { DadosTarefas, ITarefa } from "../ITarefa";
 
 
 class TarefaRepositorio implements ITarefa {
-    async criarTarefa({nome}: DadosTarefas): Promise<tarefas> {
+    async criarTarefa({nome, descricao}: DadosTarefas): Promise<tarefas> {
         const criarTarefa = await prisma.tarefas.create({
             data: {
-                nome
+                nome,
+                descricao
             }
         })
         return criarTarefa
@@ -32,13 +33,14 @@ class TarefaRepositorio implements ITarefa {
         }) || undefined
         return listarTarefaPeloNome
     }
-    async atualizarTarefa({id, nome}: DadosTarefas): Promise<tarefas> {
+    async atualizarTarefa({id, nome, descricao}: DadosTarefas): Promise<tarefas> {
         const atualizarTarefa = await prisma.tarefas.update({
             where: {
                 id
             },
             data: {
-                nome
+                nome,
+                descricao
             }
         })
         return atualizarTarefa
