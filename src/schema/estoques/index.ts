@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 const criarEstoqueSchema = Yup.object().shape({
   id_produto: Yup.string().required(),
-  quantidadeAtual: Yup.string().required(),
+  quantidadeAtual: Yup.number().required(),
   lote: Yup.string().required(),
   dataValidadeLote: Yup.date().required(),
 });
@@ -18,7 +18,7 @@ const listarEstoquePeloLoteSchema = Yup.object().shape({
 const atualizarEstoqueSchema = Yup.object().shape({
   id: Yup.string().required(),
   id_produto: Yup.string(),
-  quantidadeAtual: Yup.string(),
+  quantidadeAtual: Yup.number(),
   lote: Yup.string(),
   dataValidadeLote: Yup.date(),
 });
