@@ -13,14 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum tipoDocumento {
-  FATURA
-  RECIBO
-  FATURA_PROFORMA
-  FATURA_RECIBO
-}
-
-
 
 model clientes {
   id String @id @default(uuid())
@@ -84,12 +76,10 @@ model produtos {
   id_categoriaProduto String
   referenciaProduto String
   nomeProduto String
-  custoAquisicao String
   precoVenda Decimal @db.Decimal(10 , 2)
-  quantidadeEstoque Int
-  unidadeMedida String
-  unidadeConteudo String
-  codigoBarras String
+  quantidadePorUnidade Int
+  unidadeMedida String?
+  unidadeConteudo String?
   EntradasEstoque entradasEstoque[]
   produtosLocalizacoes produtosLocalizacoes[]
   alertas alertas[]
@@ -132,7 +122,8 @@ model entradasEstoque {
 	id_fornecedor String
   id_produto String
   id_funcionario String
-  quantidadeRecebida String
+  adicionado Boolean
+  quantidadeRecebida Int
   dataEntrada DateTime
   custoUnitario Decimal  @db.Decimal(10 , 2)
   lote String
@@ -164,7 +155,6 @@ model vendas {
   id_cliente String
   id_funcionarioCaixa String
   numeroDocumento String
-  tipoDocumento tipoDocumento
   dataEmissao DateTime
   dataValidade DateTime
   valorTotal Decimal @db.Decimal(10, 2)

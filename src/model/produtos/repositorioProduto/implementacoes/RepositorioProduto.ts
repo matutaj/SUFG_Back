@@ -4,23 +4,19 @@ import { prisma } from "../../../../prisma/client";
 
 class ProdutoRepositorio implements IProduto {
   async criarProduto({
-    custoAquisicao,
     nomeProduto,
     precoVenda,
-    quantidadeEstoque,
+    quantidadePorUnidade,
     referenciaProduto,
     id_categoriaProduto,
-    codigoBarras,
     unidadeConteudo,
     unidadeMedida,
   }: DadosProduto): Promise<produtos> {
     const criarProduto = await prisma.produtos.create({
       data: {
-        custoAquisicao,
-        codigoBarras,
         nomeProduto,
         precoVenda,
-        quantidadeEstoque,
+        quantidadePorUnidade,
         referenciaProduto,
         unidadeConteudo,
         unidadeMedida,
@@ -40,14 +36,7 @@ class ProdutoRepositorio implements IProduto {
       (await prisma.produtos.findUnique({ where: { id } })) || undefined;
     return listarUmProdutoPorId;
   }
-  async listarUmProdutoPeloCodigoBarras(
-    codigoBarras: string
-  ): Promise<produtos | undefined> {
-    const listarUmProdutoPeloCodigoBarras =
-      (await prisma.produtos.findFirst({ where: { codigoBarras } })) ||
-      undefined;
-    return listarUmProdutoPeloCodigoBarras;
-  }
+
   async listarUmProdutoPeloNome(
     nomeProduto: string
   ): Promise<produtos | undefined> {
@@ -59,12 +48,10 @@ class ProdutoRepositorio implements IProduto {
 
   async atualizarProduto({
     id,
-    custoAquisicao,
     nomeProduto,
     precoVenda,
-    quantidadeEstoque,
+    quantidadePorUnidade,
     referenciaProduto,
-    codigoBarras,
     id_categoriaProduto,
     unidadeConteudo,
     unidadeMedida,
@@ -72,13 +59,11 @@ class ProdutoRepositorio implements IProduto {
     const atualizarProduto = await prisma.produtos.update({
       where: { id },
       data: {
-        custoAquisicao,
-        codigoBarras,
         unidadeConteudo,
         unidadeMedida,
         nomeProduto,
         precoVenda,
-        quantidadeEstoque,
+        quantidadePorUnidade,
         referenciaProduto,
         id_categoriaProduto,
       },
