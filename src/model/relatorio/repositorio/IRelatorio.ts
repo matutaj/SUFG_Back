@@ -48,7 +48,10 @@ export interface IRelatorioRepository {
       funcionarios: string[];
     }[]
   >;
-  listarEstoqueAtual(): Promise<
+  listarEstoqueAtual(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
     {
       id_produto: string;
       nomeProduto: string;
@@ -64,7 +67,10 @@ export interface IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date
   ): Promise<(transferencias & { funcionarioNome: string })[]>;
-  listarProdutosAbaixoMinimo(): Promise<
+  listarProdutosAbaixoMinimo(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
     {
       id_produto: string;
       nomeProduto: string;
@@ -77,12 +83,14 @@ export interface IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date
   ): Promise<(funcionariosCaixa & { funcionarioNome: string })[]>;
-
-  // Novo método
-  listarPeriodoMaisVendidoPorProduto(idProduto: string): Promise<{
+  listarPeriodoMaisVendidoPorProduto(
+    idProduto: string,
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<{
     id_produto: string;
     nomeProduto: string;
-    periodo: string; // Exemplo: "Março 2025"
+    periodo: string;
     quantidadeVendida: number;
     valorTotal: number;
   }>;

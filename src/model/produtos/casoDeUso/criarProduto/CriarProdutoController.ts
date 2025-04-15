@@ -7,12 +7,10 @@ class CriarProdutoController {
     const produtoCasoDeUso = new CriarProdutoCasoDeUso();
     const {
       nomeProduto,
-      custoAquisicao,
       precoVenda,
-      codigoBarras,
       unidadeConteudo,
       unidadeMedida,
-      quantidadeEstoque,
+      quantidadePorUnidade,
       referenciaProduto,
       id_categoriaProduto,
     } = req.body;
@@ -20,12 +18,10 @@ class CriarProdutoController {
       throw new AppError("Erro na Validação dos dados");
     const result = await produtoCasoDeUso.execute({
       nomeProduto,
-      custoAquisicao,
       precoVenda,
-      codigoBarras,
       unidadeConteudo,
       unidadeMedida,
-      quantidadeEstoque,
+      quantidadePorUnidade,
       referenciaProduto,
       id_categoriaProduto,
     });

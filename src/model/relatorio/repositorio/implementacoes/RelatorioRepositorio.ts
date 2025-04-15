@@ -157,7 +157,10 @@ export class RelatorioRepository implements IRelatorioRepository {
     }));
   }
 
-  async listarEstoqueAtual(): Promise<
+  async listarEstoqueAtual(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
     {
       id_produto: string;
       nomeProduto: string;
@@ -166,10 +169,11 @@ export class RelatorioRepository implements IRelatorioRepository {
     }[]
   > {
     const produtos = await this.prisma.produtos.findMany({
+      where: { updatedAt: { gte: dataInicio, lte: dataFim } },
       select: {
         id: true,
         nomeProduto: true,
-        quantidadeEstoque: true,
+        quantidadePorUnidade: true,
         produtosLocalizacoes: {
           include: {
             Localizacoes: { select: { id: true, nomeLocalizacao: true } },
@@ -181,7 +185,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     return produtos.map((produto) => ({
       id_produto: produto.id,
       nomeProduto: produto.nomeProduto,
-      quantidadeEstoque: produto.quantidadeEstoque,
+      quantidadeEstoque: produto.quantidadePorUnidade,
       localizacoes: produto.produtosLocalizacoes.map((loc) => ({
         id: loc.Localizacoes.id,
         nome: loc.Localizacoes.nomeLocalizacao,
@@ -220,7 +224,10 @@ export class RelatorioRepository implements IRelatorioRepository {
     }));
   }
 
-  async listarProdutosAbaixoMinimo(): Promise<
+  async listarProdutosAbaixoMinimo(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
     {
       id_produto: string;
       nomeProduto: string;
@@ -230,6 +237,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     }[]
   > {
     const localizacoes = await this.prisma.produtosLocalizacoes.findMany({
+      where: { updatedAt: { gte: dataInicio, lte: dataFim } },
       include: {
         produtos: { select: { nomeProduto: true } },
         Localizacoes: { select: { nomeLocalizacao: true } },
@@ -298,7 +306,7 @@ export class RelatorioRepository implements IRelatorioRepository {
 
     const aggregated = vendasProdutos.reduce((acc, item) => {
       const date = new Date(item.vendas.dataEmissao);
-      const key = `${date.getFullYear()}-${date.getMonth() + 1}`; // Ex.: "2025-3"
+      const key = `${date.getFullYear()}-${date.getMonth() + 1}`;
       if (!acc[key]) {
         acc[key] = { quantidadeVendida: 0, valorTotal: 0 };
       }

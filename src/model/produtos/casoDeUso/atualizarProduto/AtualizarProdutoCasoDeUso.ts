@@ -9,12 +9,9 @@ class AtualizarProdutoCasoDeUso {
     id_categoriaProduto,
     referenciaProduto,
     nomeProduto,
-
-    custoAquisicao,
     precoVenda,
-    quantidadeEstoque,
+    quantidadePorUnidade,
     unidadeMedida,
-    codigoBarras,
     unidadeConteudo,
   }: DadosProduto): Promise<produtos> {
     const repositorioProduto = new ProdutoRepositorio();
@@ -48,12 +45,9 @@ class AtualizarProdutoCasoDeUso {
       id_categoriaProduto,
       referenciaProduto,
       nomeProduto,
-
-      custoAquisicao,
       precoVenda,
-      quantidadeEstoque,
+      quantidadePorUnidade,
       unidadeMedida,
-      codigoBarras,
       unidadeConteudo,
     });
 
