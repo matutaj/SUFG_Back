@@ -11,11 +11,9 @@ class AtualizarVendaCasoDeUso {
     id_cliente,
     id_funcionarioCaixa,
     numeroDocumento,
-    tipoDocumento,
     dataEmissao,
     dataValidade,
     valorTotal,
-    vendasProdutos,
   }: DadosVenda): Promise<vendas> {
     const repositorioVenda = new VendaRepositorio();
     const repositorioCliente = new ClienteRepositorio();
@@ -31,28 +29,25 @@ class AtualizarVendaCasoDeUso {
       throw new AppError("Não existe uma venda com esse id");
     }
 
-    const existeCliente = await repositorioCliente.listarUmClientePeloId(id_cliente);
+    const existeCliente = await repositorioCliente.listarUmClientePeloId(
+      id_cliente
+    );
     if (!existeCliente) {
       throw new AppError("Não existe um cliente com esse id");
     }
 
-    const existeFuncionarioCaixa = await repositorioFuncionarioCaixa.listarUmFuncionarioCaixaPeloId(id_funcionarioCaixa);
+    const existeFuncionarioCaixa =
+      await repositorioFuncionarioCaixa.listarUmFuncionarioCaixaPeloId(
+        id_funcionarioCaixa
+      );
     if (!existeFuncionarioCaixa) {
       throw new AppError("Não existe um funcionário-caixa com esse id");
     }
 
-    for (const vendaProduto of vendasProdutos) {
-      const existeProduto = await repositorioProduto.listarUmProdutoPorId(vendaProduto.id_produto);
-      if (!existeProduto) {
-        throw new AppError(`Não existe um produto com o id ${vendaProduto.id_produto}`);
-      }
-      if (vendaProduto.quantidadeVendida <= 0) {
-        throw new AppError("A quantidade vendida deve ser maior que zero");
-      }
-    }
-
     if (dataValidade <= dataEmissao) {
-      throw new AppError("A data de validade deve ser posterior à data de emissão");
+      throw new AppError(
+        "A data de validade deve ser posterior à data de emissão"
+      );
     }
 
     if (valorTotal < 0) {
@@ -64,11 +59,9 @@ class AtualizarVendaCasoDeUso {
       id_cliente,
       id_funcionarioCaixa,
       numeroDocumento,
-      tipoDocumento,
       dataEmissao,
       dataValidade,
       valorTotal,
-      vendasProdutos,
     });
 
     return result;

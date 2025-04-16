@@ -6,7 +6,6 @@ class VendaRepositorio implements IVenda {
   async criarVenda({
     dataEmissao,
     numeroDocumento,
-    tipoDocumento,
     valorTotal,
     id_cliente,
     dataValidade,
@@ -16,7 +15,6 @@ class VendaRepositorio implements IVenda {
       data: {
         dataEmissao,
         numeroDocumento,
-        tipoDocumento,
         valorTotal,
         dataValidade,
         id_cliente,
@@ -50,7 +48,6 @@ class VendaRepositorio implements IVenda {
     id_cliente,
     id_funcionarioCaixa,
     numeroDocumento,
-    tipoDocumento,
     valorTotal,
   }: DadosVenda): Promise<vendas> {
     const atualizarVenda = await prisma.vendas.update({
@@ -61,7 +58,6 @@ class VendaRepositorio implements IVenda {
         id_cliente,
         id_funcionarioCaixa,
         numeroDocumento,
-        tipoDocumento,
         valorTotal,
        
       },

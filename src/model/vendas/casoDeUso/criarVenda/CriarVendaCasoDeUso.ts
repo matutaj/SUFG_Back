@@ -1,4 +1,4 @@
-import { vendas, tipoDocumento } from "@prisma/client";
+import { vendas } from "@prisma/client";
 import { VendaRepositorio } from "../../repositorioVenda/implementacoes/RepositorioVenda";
 import { VendaProdutoRepositorio } from "../../../vendasProdutos/repositorioVendaProduto/implementacoes/RepositorioVendaProduto";
 import { AppError } from "../../../../errors/AppError";
@@ -10,7 +10,6 @@ export interface DadosVenda {
   dataValidade: Date;
   id_funcionarioCaixa: string;
   numeroDocumento: string;
-  tipoDocumento: tipoDocumento;
   valorTotal: number;
   vendasProdutos: {
     id_produto: string;
@@ -122,7 +121,6 @@ class CriarVendaCasoDeUso {
         dataValidade: dataValidade,
         id_funcionarioCaixa: dadosVenda.id_funcionarioCaixa.toString(), // Garante que é string
         numeroDocumento: dadosVenda.numeroDocumento,
-        tipoDocumento: dadosVenda.tipoDocumento,
         valorTotal: dadosVenda.valorTotal,
       });
 

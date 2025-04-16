@@ -5,6 +5,7 @@ import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/impleme
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { AppError } from "../../../../errors/AppError";
 import { FornecedorRepositorio } from "../../../fornecedores/repositorioFornecedor/implementacoes/RepositorioFornecedor";
+import { parseISO } from "date-fns";
 class AtualizarEntradaEstoqueCasoDeUso {
   async execute({
     id,
@@ -54,18 +55,19 @@ class AtualizarEntradaEstoqueCasoDeUso {
     if (!existeFuncionario) {
       throw new AppError("Não existe um funcionário com esse id");
     }
+    const formattedDataEntrada = parseISO(`${dataEntrada}`);
+    const formattedDataValidadeLote = parseISO(`${dataValidadeLote}`);
 
     const result = await repositorioEntradaEstoque.atualizarEntradaEstoque({
-      id,
       id_fornecedor,
       id_produto,
-      adicionado,
       id_funcionario,
       quantidadeRecebida,
-      dataEntrada,
+      adicionado: adicionado || false,
       custoUnitario,
       lote,
-      dataValidadeLote,
+      dataEntrada: formattedDataEntrada,
+      dataValidadeLote: formattedDataValidadeLote,
     });
 
     return result;
