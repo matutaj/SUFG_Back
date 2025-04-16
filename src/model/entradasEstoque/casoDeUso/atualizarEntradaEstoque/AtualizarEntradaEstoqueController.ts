@@ -7,33 +7,12 @@ class AtualizarEntradaEstoqueController {
     const atualizarEntradaEstoqueCasoDeUso =
       new AtualizarEntradaEstoqueCasoDeUso();
     const { id } = req.params;
-    const {
-      id_fornecedor,
-      id_produto,
-      id_funcionario,
-      adicionado,
-      quantidadeRecebida,
-      dataEntrada,
-      custoUnitario,
-      lote,
-      dataValidadeLote,
-    } = req.body;
+    req.body.id = id;
     if (!(await atualizarEntradaSchema.isValid(req.body)))
       throw new AppError("Dados inválidos");
     if (!(await atualizarEntradaSchema.isValid(req.params)))
       throw new AppError("Dados inválidos");
-    const result = await atualizarEntradaEstoqueCasoDeUso.execute({
-      id,
-      id_fornecedor,
-      id_produto,
-      id_funcionario,
-      adicionado,
-      quantidadeRecebida,
-      dataEntrada,
-      custoUnitario,
-      lote,
-      dataValidadeLote,
-    });
+    const result = await atualizarEntradaEstoqueCasoDeUso.execute(req.body);
     return res.status(200).json(result);
   }
 }

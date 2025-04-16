@@ -4,7 +4,7 @@ import { EntradaEstoqueRepositorio } from "../../repositorioEntradaEstoque/imple
 import { ProdutoRepositorio } from "../../../produtos/repositorioProduto/implementacoes/RepositorioProduto";
 import { FornecedorRepositorio } from "../../../fornecedores/repositorioFornecedor/implementacoes/RepositorioFornecedor";
 import { FuncionarioRepositorio } from "../../../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
-import { EstoqueRepositorio } from "../../../estoques/repositorioEstoque/implementacoes/RepositorioEstoque";
+import { parseISO } from "date-fns";
 
 class CriarEntradaEstoqueCasoDeUso {
   async execute({
@@ -22,7 +22,6 @@ class CriarEntradaEstoqueCasoDeUso {
     const repositorioProduto = new ProdutoRepositorio();
     const repositorioFornecedor = new FornecedorRepositorio();
     const repositorioFuncionario = new FuncionarioRepositorio();
-    const repositorioEstoque = new EstoqueRepositorio();
 
     // Verificar se o produto existe
     const existeProduto = await repositorioProduto.listarUmProdutoPorId(
@@ -46,67 +45,32 @@ class CriarEntradaEstoqueCasoDeUso {
       throw new Error("Não existe um funcionário com esse id");
     }
 
-    // Validar quantidade recebida
-    const quantidade = parseFloat(quantidadeRecebida);
-    if (isNaN(quantidade) || quantidade <= 0) {
-      throw new Error("A quantidade recebida deve ser um número positivo");
-    }
-
     // Validar custo unitário
     if (custoUnitario <= 0) {
       throw new Error("O custo unitário deve ser um valor positivo");
     }
 
-    // Validar data de validade do lote (garantir que seja futura)
-    const dataAtual = new Date();
-    const dataValidade = new Date(dataValidadeLote);
-    if (dataValidade <= dataAtual) {
-      throw new Error("A data de validade do lote deve ser futura");
-    }
-
-    // Converter dataEntrada para o formato ISO-8601
-    let dataEntradaFormatada: string;
-    try {
-      // Tenta parsear a dataEntrada como string ou Date
-      if (typeof dataEntrada === "string") {
-        // Se já for uma string, tenta convertê-la para Date e depois para ISO
-        const data = new Date(dataEntrada);
-        if (isNaN(data.getTime())) {
-          throw new Error("Data de entrada inválida");
-        }
-        dataEntradaFormatada = data.toISOString(); // Converte para "2025-04-04T00:00:00.000Z"
-      } else if (dataEntrada instanceof Date) {
-        dataEntradaFormatada = dataEntrada.toISOString();
-      } else {
-        throw new Error("Formato de data de entrada inválido");
+    const formatToISO = (dateStr: string): string => {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) {
+        throw new Error(`Invalid date format for ${dateStr}`);
       }
-    } catch (error) {
-      throw new Error(
-        "Erro ao processar a data de entrada: " + (error as Error).message
-      );
-    }
+      return date.toISOString();
+    };
 
-    // Converter dataValidadeLote para ISO-8601 (se ainda não estiver)
-    const dataValidadeLoteFormatada = new Date(dataValidadeLote).toISOString();
+    const formattedDataEntrada = parseISO(`${dataEntrada}`);
+    const formattedDataValidadeLote = parseISO(`${dataValidadeLote}`);
 
-    // Chamar o repositório para criar a entrada de estoque
     const result = await repositorioEntradaEstoque.criarEntradaEstoque({
       id_fornecedor,
       id_produto,
-      adicionado: adicionado || false,
       id_funcionario,
       quantidadeRecebida,
-      dataEntrada: dataEntradaFormatada,
+      adicionado: adicionado || false,
       custoUnitario,
       lote,
-      dataValidadeLote: dataValidadeLoteFormatada,
-    });
-
-    await repositorioEstoque.criarEstoque({
-      id_produto: result.id_produto,
-      quantidadeAtual: result.quantidadeRecebida,
-      lote: result.lote,
-      dataValidadeLote: result.dataValidadeLote,
+      dataEntrada: formattedDataEntrada,
+      dataValidadeLote: formattedDataValidadeLote,
     });
 
     return result;
