@@ -1,8 +1,7 @@
-// src/casos-de-uso/ListarEstoqueAtualCasoDeUso.ts
 import { RelatorioRepository } from "../../repositorio/implementacoes/RelatorioRepositorio";
 
 class ListarEstoqueAtualCasoDeUso {
-  async execute(): Promise<
+  async execute(dataInicio: Date, dataFim: Date): Promise<
     {
       id_produto: string;
       nomeProduto: string;
@@ -11,7 +10,7 @@ class ListarEstoqueAtualCasoDeUso {
     }[]
   > {
     const repositorio = new RelatorioRepository();
-    const result = await repositorio.listarEstoqueAtual();
+    const result = await repositorio.listarEstoqueAtual(dataInicio, dataFim);
     return result;
   }
 }

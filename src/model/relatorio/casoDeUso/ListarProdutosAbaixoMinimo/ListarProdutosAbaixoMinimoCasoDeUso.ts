@@ -1,7 +1,7 @@
 import { RelatorioRepository } from "../../repositorio/implementacoes/RelatorioRepositorio";
 
 class ListarProdutosAbaixoMinimoCasoDeUso {
-  async execute(): Promise<
+  async execute(dataInicio: Date, dataFim: Date): Promise<
     {
       id_produto: string;
       nomeProduto: string;
@@ -11,7 +11,7 @@ class ListarProdutosAbaixoMinimoCasoDeUso {
     }[]
   > {
     const repositorio = new RelatorioRepository();
-    const result = await repositorio.listarProdutosAbaixoMinimo();
+    const result = await repositorio.listarProdutosAbaixoMinimo(dataInicio, dataFim);
     return result;
   }
 }
