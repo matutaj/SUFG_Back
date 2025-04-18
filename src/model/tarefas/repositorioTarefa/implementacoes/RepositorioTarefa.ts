@@ -8,7 +8,8 @@ class TarefaRepositorio implements ITarefa {
         const criarTarefa = await prisma.tarefas.create({
             data: {
                 nome,
-                descricao
+                descricao,
+                
             }
         })
         return criarTarefa
@@ -41,6 +42,7 @@ class TarefaRepositorio implements ITarefa {
             data: {
                 nome,
                 descricao
+                
             }
         })
         return atualizarTarefa

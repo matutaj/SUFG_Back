@@ -3,8 +3,8 @@ import { prisma } from "../../../../prisma/client";
 import { DadosFuncionarioTarefa, IFuncionarioTarefa } from "../IFuncionarioTarefa";
 
 class FuncionarioTarefaRepositorio implements IFuncionarioTarefa {
-    async criarFuncionarioTarefa({id_funcionario, id_tarefa}: DadosFuncionarioTarefa): Promise<funcionariosTarefas> {
-        const criarFuncionarioTarefa = await prisma.funcionariosTarefas.create({ data: { id_funcionario, id_tarefa }})
+    async criarFuncionarioTarefa({id_funcionario, id_tarefa, status}: DadosFuncionarioTarefa): Promise<funcionariosTarefas> {
+        const criarFuncionarioTarefa = await prisma.funcionariosTarefas.create({ data: { id_funcionario, id_tarefa, status }})
         return criarFuncionarioTarefa
     }
     async listarTodosFuncionariosTarefas(): Promise<funcionariosTarefas[]> {
@@ -15,8 +15,8 @@ class FuncionarioTarefaRepositorio implements IFuncionarioTarefa {
         const listarUmFuncionarioTarefaPeloId = await prisma.funcionariosTarefas.findUnique({ where: { id } }) || undefined
         return listarUmFuncionarioTarefaPeloId
     }
-    async atualizarFuncionarioTarefa({id, id_funcionario, id_tarefa}: DadosFuncionarioTarefa): Promise<funcionariosTarefas> {
-        const atualizarFuncionarioTarefa = await prisma.funcionariosTarefas.update({ where: { id }, data: { id_funcionario, id_tarefa }})
+    async atualizarFuncionarioTarefa({id, id_funcionario, id_tarefa, status}: DadosFuncionarioTarefa): Promise<funcionariosTarefas> {
+        const atualizarFuncionarioTarefa = await prisma.funcionariosTarefas.update({ where: { id }, data: { id_funcionario, id_tarefa, status }})
         return atualizarFuncionarioTarefa
     }
     async eliminarFuncionarioTarefa(id: string): Promise<void> {
