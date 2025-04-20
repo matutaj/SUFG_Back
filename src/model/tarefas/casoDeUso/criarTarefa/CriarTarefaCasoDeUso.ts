@@ -4,7 +4,7 @@ import { TarefaRepositorio } from "../../repositorioTarefa/implementacoes/Reposi
 class CriarTarefaCasoDeUso {
   async execute({ nome, descricao }: DadosTarefas): Promise<tarefas> {
     const repositorioTarefa = new TarefaRepositorio();
-    const result = await repositorioTarefa.criarTarefa({ nome, descricao });
+    const result = await repositorioTarefa.criarTarefa({ nome, descricao});
     return result;
   }
 }

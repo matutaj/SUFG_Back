@@ -4,6 +4,7 @@ export interface DadosFuncionarioTarefa {
     id?: string
     id_funcionario: string;
     id_tarefa: string;
+    status: string
 }
 export interface IFuncionarioTarefa {
     criarFuncionarioTarefa({id_funcionario, id_tarefa}: DadosFuncionarioTarefa): Promise<funcionariosTarefas>

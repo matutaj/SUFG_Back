@@ -5,11 +5,13 @@ class CriarFuncionarioTarefaCasoDeUso {
   async execute({
     id_funcionario,
     id_tarefa,
+    status
   }: DadosFuncionarioTarefa): Promise<funcionariosTarefas> {
     const repositorioFuncionarioTarefa = new FuncionarioTarefaRepositorio();
     const result = await repositorioFuncionarioTarefa.criarFuncionarioTarefa({
       id_funcionario,
       id_tarefa,
+      status
     });
     return result;
   }

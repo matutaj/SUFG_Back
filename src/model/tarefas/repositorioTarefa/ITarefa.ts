@@ -4,6 +4,7 @@ export interface DadosTarefas {
     id?: string;
     nome: string;
     descricao: string
+    
 }
 export interface ITarefa{
     criarTarefa({}: DadosTarefas): Promise<tarefas>
