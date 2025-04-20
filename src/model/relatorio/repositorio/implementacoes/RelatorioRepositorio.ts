@@ -11,6 +11,7 @@ import { IRelatorioRepository } from "../IRelatorio";
 export class RelatorioRepository implements IRelatorioRepository {
   private prisma = new PrismaClient();
 
+  // Métodos existentes (mantidos como estão)
   async listarVendasPorPeriodo(
     dataInicio: Date,
     dataFim: Date,
@@ -273,7 +274,11 @@ export class RelatorioRepository implements IRelatorioRepository {
     }));
   }
 
-  async listarPeriodoMaisVendidoPorProduto(idProduto: string): Promise<{
+  async listarPeriodoMaisVendidoPorProduto(
+    idProduto: string,
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<{
     id_produto: string;
     nomeProduto: string;
     periodo: string;
@@ -290,7 +295,10 @@ export class RelatorioRepository implements IRelatorioRepository {
     }
 
     const vendasProdutos = await this.prisma.vendasProdutos.findMany({
-      where: { id_produto: idProduto },
+      where: {
+        id_produto: idProduto,
+        vendas: { dataEmissao: { gte: dataInicio, lte: dataFim } },
+      },
       include: { vendas: { select: { dataEmissao: true } } },
     });
 
@@ -351,5 +359,301 @@ export class RelatorioRepository implements IRelatorioRepository {
       quantidadeVendida: maisVendido.data?.quantidadeVendida || 0,
       valorTotal: maisVendido.data?.valorTotal || 0,
     };
+  }
+
+  // Novos métodos para os relatórios solicitados
+  async listarAtividadesCaixas(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idCaixa: string;
+      nomeCaixa: string;
+      quantidadeFaturada: number;
+      funcionarioNome: string;
+      vendas: vendas[];
+    }[]
+  > {
+    const caixasAtivos = await this.prisma.funcionariosCaixa.findMany({
+      where: { horarioAbertura: { gte: dataInicio, lte: dataFim } },
+      include: {
+        caixas: true,
+        Funcionarios: true,
+        vendas: {
+          where: idProduto
+            ? {
+                vendasProdutos: { some: { id_produto: idProduto } },
+                dataEmissao: { gte: dataInicio, lte: dataFim },
+              }
+            : { dataEmissao: { gte: dataInicio, lte: dataFim } },
+          include: { vendasProdutos: { include: { produtos: true } } },
+        },
+      },
+    });
+
+    const grouped = caixasAtivos.reduce((acc, item) => {
+      const key = item.id_caixa;
+      if (!acc[key]) {
+        acc[key] = {
+          idCaixa: item.id_caixa,
+          nomeCaixa: item.caixas.nomeCaixa,
+          quantidadeFaturada: 0,
+          funcionarioNome: item.Funcionarios?.nomeFuncionario ?? "Desconhecido",
+          vendas: [],
+        };
+      }
+      acc[key].quantidadeFaturada += Number(item.quantidadaFaturada || 0);
+      acc[key].vendas.push(...item.vendas);
+      return acc;
+    }, {} as Record<string, { idCaixa: string; nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: vendas[] }>);
+
+    return Object.values(grouped);
+  }
+
+  async listarTarefas(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
+    {
+      idTarefa: string;
+      nomeTarefa: string;
+      descricao: string | null;
+      funcionarios: { id: string; nome: string }[];
+    }[]
+  > {
+    const tarefas = await this.prisma.tarefas.findMany({
+      where: { updatedAt: { gte: dataInicio, lte: dataFim } },
+      include: {
+        funcionariosTarefas: {
+          include: {
+            funcionarios: { select: { id: true, nomeFuncionario: true } },
+          },
+        },
+      },
+    });
+
+    return tarefas.map((tarefa) => ({
+      idTarefa: tarefa.id,
+      nomeTarefa: tarefa.nome,
+      descricao: tarefa.descricao,
+      funcionarios: tarefa.funcionariosTarefas.map((ft) => ({
+        id: ft.funcionarios.id,
+        nome: ft.funcionarios.nomeFuncionario,
+      })),
+    }));
+  }
+
+  async listarRelatorioVendas(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idVenda: string;
+      numeroDocumento: string;
+      dataEmissao: Date;
+      valorTotal: number;
+      clienteNome: string;
+      funcionarioNome: string;
+      produtos: { id: string; nome: string; quantidade: number }[];
+    }[]
+  > {
+    const vendas = await this.prisma.vendas.findMany({
+      where: idProduto
+        ? {
+            vendasProdutos: { some: { id_produto: idProduto } },
+            dataEmissao: { gte: dataInicio, lte: dataFim },
+          }
+        : { dataEmissao: { gte: dataInicio, lte: dataFim } },
+      include: {
+        clientes: { select: { nomeCliente: true } },
+        funcionariosCaixa: {
+          include: { Funcionarios: { select: { nomeFuncionario: true } } },
+        },
+        vendasProdutos: {
+          include: { produtos: { select: { id: true, nomeProduto: true } } },
+        },
+      },
+    });
+
+    return vendas.map((venda) => ({
+      idVenda: venda.id,
+      numeroDocumento: venda.numeroDocumento,
+      dataEmissao: venda.dataEmissao,
+      valorTotal: Number(venda.valorTotal),
+      clienteNome: venda.clientes?.nomeCliente ?? "Desconhecido",
+      funcionarioNome:
+        venda.funcionariosCaixa?.Funcionarios?.nomeFuncionario ??
+        "Desconhecido",
+      produtos: venda.vendasProdutos.map((vp) => ({
+        id: vp.produtos.id,
+        nome: vp.produtos.nomeProduto,
+        quantidade: vp.quantidadeVendida,
+      })),
+    }));
+  }
+
+  async listarRelatorioEstoque(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idProduto: string;
+      nomeProduto: string;
+      quantidadeAtual: number;
+      localizacoes: {
+        id: string;
+        nome: string;
+        seccao: string;
+        corredor: string;
+        prateleira: string;
+      }[];
+    }[]
+  > {
+    const produtos = await this.prisma.produtos.findMany({
+      where: idProduto
+        ? { id: idProduto, updatedAt: { gte: dataInicio, lte: dataFim } }
+        : { updatedAt: { gte: dataInicio, lte: dataFim } },
+      include: {
+        estoques: { select: { quantidadeAtual: true } },
+        produtosLocalizacoes: {
+          include: {
+            Localizacoes: { select: { id: true, nomeLocalizacao: true } },
+            seccoes: { select: { nomeSeccao: true } },
+            corredores: { select: { nomeCorredor: true } },
+            prateleiras: { select: { nomePrateleira: true } },
+          },
+        },
+      },
+    });
+
+    return produtos.map((produto) => ({
+      idProduto: produto.id,
+      nomeProduto: produto.nomeProduto,
+      quantidadeAtual: produto.estoques.reduce(
+        (sum, estoque) => sum + estoque.quantidadeAtual,
+        0
+      ),
+      localizacoes: produto.produtosLocalizacoes.map((loc) => ({
+        id: loc.Localizacoes.id,
+        nome: loc.Localizacoes.nomeLocalizacao,
+        seccao: loc.seccoes.nomeSeccao,
+        corredor: loc.corredores.nomeCorredor,
+        prateleira: loc.prateleiras.nomePrateleira,
+      })),
+    }));
+  }
+
+  async listarRelatorioEntradasEstoque(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    (entradasEstoque & {
+      funcionarioNome: string;
+      fornecedorNome: string;
+      produtoNome: string;
+    })[]
+  > {
+    const entradas = await this.prisma.entradasEstoque.findMany({
+      where: idProduto
+        ? {
+            id_produto: idProduto,
+            dataEntrada: { gte: dataInicio, lte: dataFim },
+          }
+        : { dataEntrada: { gte: dataInicio, lte: dataFim } },
+      include: {
+        funcionarios: { select: { nomeFuncionario: true } },
+        Fornecedores: { select: { nomeFornecedor: true } },
+        Produtos: { select: { nomeProduto: true } },
+      },
+    });
+
+    return entradas.map((entrada) => ({
+      ...entrada,
+      funcionarioNome: entrada.funcionarios?.nomeFuncionario ?? "Desconhecido",
+      fornecedorNome: entrada.Fornecedores?.nomeFornecedor ?? "Desconhecido",
+      produtoNome: entrada.Produtos?.nomeProduto ?? "Desconhecido",
+    }));
+  }
+
+  async listarRelatorioProdutos(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
+    {
+      idProduto: string;
+      nomeProduto: string;
+      precoVenda: number;
+      quantidadePorUnidade: number;
+      categoria: string;
+    }[]
+  > {
+    const produtos = await this.prisma.produtos.findMany({
+      where: { updatedAt: { gte: dataInicio, lte: dataFim } },
+      include: {
+        categoriasProdutos: { select: { nomeCategoria: true } },
+      },
+    });
+
+    return produtos.map((produto) => ({
+      idProduto: produto.id,
+      nomeProduto: produto.nomeProduto,
+      precoVenda: Number(produto.precoVenda),
+      quantidadePorUnidade: produto.quantidadePorUnidade,
+      categoria: produto.categoriasProdutos.nomeCategoria,
+    }));
+  }
+
+  async listarRelatorioProdutoLocalizacao(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idProduto: string;
+      nomeProduto: string;
+      localizacao: {
+        id: string;
+        nome: string;
+        seccao: string;
+        corredor: string;
+        prateleira: string;
+        quantidade: number;
+        quantidadeMinima: number;
+      };
+    }[]
+  > {
+    const localizacoes = await this.prisma.produtosLocalizacoes.findMany({
+      where: idProduto
+        ? {
+            id_produto: idProduto,
+            updatedAt: { gte: dataInicio, lte: dataFim },
+          }
+        : { updatedAt: { gte: dataInicio, lte: dataFim } },
+      include: {
+        produtos: { select: { id: true, nomeProduto: true } },
+        Localizacoes: { select: { id: true, nomeLocalizacao: true } },
+        seccoes: { select: { nomeSeccao: true } },
+        corredores: { select: { nomeCorredor: true } },
+        prateleiras: { select: { nomePrateleira: true } },
+      },
+    });
+
+    return localizacoes.map((loc) => ({
+      idProduto: loc.produtos.id,
+      nomeProduto: loc.produtos.nomeProduto,
+      localizacao: {
+        id: loc.Localizacoes.id,
+        nome: loc.Localizacoes.nomeLocalizacao,
+        seccao: loc.seccoes.nomeSeccao,
+        corredor: loc.corredores.nomeCorredor,
+        prateleira: loc.prateleiras.nomePrateleira,
+        quantidade: loc.quantidadeProduto,
+        quantidadeMinima: loc.quantidadeMinimaProduto,
+      },
+    }));
   }
 }

@@ -5,8 +5,8 @@ import {
   transferencias,
   funcionariosCaixa,
 } from "@prisma/client";
-
 export interface IRelatorioRepository {
+  // Métodos existentes (mantidos como estão)
   listarVendasPorPeriodo(
     dataInicio: Date,
     dataFim: Date,
@@ -94,4 +94,105 @@ export interface IRelatorioRepository {
     quantidadeVendida: number;
     valorTotal: number;
   }>;
+
+  // Novos métodos para os relatórios solicitados
+  listarAtividadesCaixas(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idCaixa: string;
+      nomeCaixa: string;
+      quantidadeFaturada: number;
+      funcionarioNome: string;
+      vendas: vendas[];
+    }[]
+  >;
+  listarTarefas(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
+    {
+      idTarefa: string;
+      nomeTarefa: string;
+      descricao: string | null;
+      funcionarios: { id: string; nome: string }[];
+    }[]
+  >;
+  listarRelatorioVendas(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idVenda: string;
+      numeroDocumento: string;
+      dataEmissao: Date;
+      valorTotal: number;
+      clienteNome: string;
+      funcionarioNome: string;
+      produtos: { id: string; nome: string; quantidade: number }[];
+    }[]
+  >;
+  listarRelatorioEstoque(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idProduto: string;
+      nomeProduto: string;
+      quantidadeAtual: number;
+      localizacoes: {
+        id: string;
+        nome: string;
+        seccao: string;
+        corredor: string;
+        prateleira: string;
+      }[];
+    }[]
+  >;
+  listarRelatorioEntradasEstoque(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    (entradasEstoque & {
+      funcionarioNome: string;
+      fornecedorNome: string;
+      produtoNome: string;
+    })[]
+  >;
+  listarRelatorioProdutos(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
+    {
+      idProduto: string;
+      nomeProduto: string;
+      precoVenda: number;
+      quantidadePorUnidade: number;
+      categoria: string;
+    }[]
+  >;
+  listarRelatorioProdutoLocalizacao(
+    dataInicio: Date,
+    dataFim: Date,
+    idProduto?: string
+  ): Promise<
+    {
+      idProduto: string;
+      nomeProduto: string;
+      localizacao: {
+        id: string;
+        nome: string;
+        seccao: string;
+        corredor: string;
+        prateleira: string;
+        quantidade: number;
+        quantidadeMinima: number;
+      };
+    }[]
+  >;
 }

@@ -19,12 +19,17 @@ class AtualizarFuncionarioCaixaCasoDeUso {
     const repositorioFuncionario = new FuncionarioRepositorio();
 
     if (!id) {
-      throw new AppError("O ID do funcionário-caixa é obrigatório para atualização");
+      throw new AppError(
+        "O ID do funcionário-caixa é obrigatório para atualização"
+      );
     }
 
-    const existeFuncionarioCaixa = await repositorioFuncionarioCaixa.listarUmFuncionarioCaixaPeloId(id);
+    const existeFuncionarioCaixa =
+      await repositorioFuncionarioCaixa.listarUmFuncionarioCaixaPeloId(id);
     if (!existeFuncionarioCaixa) {
-      throw new AppError("Não existe um registro de funcionário-caixa com esse id");
+      throw new AppError(
+        "Não existe um registro de funcionário-caixa com esse id"
+      );
     }
 
     const existeCaixa = await repositorioCaixa.listarUmCaixaPeloId(id_caixa);
@@ -32,13 +37,10 @@ class AtualizarFuncionarioCaixaCasoDeUso {
       throw new AppError("Não existe um caixa com esse id");
     }
 
-    const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
+    const existeFuncionario =
+      await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
     if (!existeFuncionario) {
       throw new AppError("Não existe um funcionário com esse id");
-    }
-
-    if (horarioFechamento <= horarioAbertura) {
-      throw new AppError("O horário de fechamento deve ser posterior ao horário de abertura");
     }
 
     if (quantidadaFaturada < 0) {
