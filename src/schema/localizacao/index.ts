@@ -9,8 +9,7 @@ const listarLocalizacaoPeloNome = Yup.object().shape({
 });
 const atualizarLocalizacaoSchema = Yup.object().shape({
   descricaoLocalizacao: Yup.string(),
-  localProduto: Yup.string().required(),
-  nomeLocalizacao: Yup.string().required(),
+  nomeLocalizacao: Yup.string(),
 });
 const deletarLocalizacaoSchema = Yup.object().shape({
   id_localizacao: Yup.string().required(),

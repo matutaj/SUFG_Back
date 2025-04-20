@@ -9,12 +9,18 @@ const listarCorredorPeloNome = Yup.object().shape({
 });
 const atualizarCorredorSchema = Yup.object().shape({
   descricaoCorredor: Yup.string(),
-  nomeCorredor: Yup.string().required(),
-})
+  nomeCorredor: Yup.string(),
+});
 const deletarCorredorSchema = Yup.object().shape({
   id_corredor: Yup.string().required(),
-})
+});
 const listarCorredorPeloIdSchema = Yup.object().shape({
   id_corredor: Yup.string().required(),
-})
-export { criarCorredorSchema, listarCorredorPeloNome, atualizarCorredorSchema, deletarCorredorSchema, listarCorredorPeloIdSchema };
+});
+export {
+  criarCorredorSchema,
+  listarCorredorPeloNome,
+  atualizarCorredorSchema,
+  deletarCorredorSchema,
+  listarCorredorPeloIdSchema,
+};
