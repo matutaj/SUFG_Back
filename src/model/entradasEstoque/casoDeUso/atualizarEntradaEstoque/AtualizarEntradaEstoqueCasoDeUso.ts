@@ -59,6 +59,7 @@ class AtualizarEntradaEstoqueCasoDeUso {
     const formattedDataValidadeLote = parseISO(`${dataValidadeLote}`);
 
     const result = await repositorioEntradaEstoque.atualizarEntradaEstoque({
+      id,
       id_fornecedor,
       id_produto,
       id_funcionario,
