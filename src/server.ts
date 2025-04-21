@@ -3,6 +3,8 @@ import "express-async-errors";
 import { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { routes } from "./routes";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import AppErrorHandler from "./errors/errorhandler";
 

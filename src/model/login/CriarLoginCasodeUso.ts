@@ -17,8 +17,8 @@ export interface FuncionarioAutenticado {
   telefone: string;
   numeroBI: string;
   token: string;
-  roles: string[]; // Adiciona array de roles
-  permissoes: string[]; // Adiciona array de permissões
+  roles: string[];
+  permissoes: string[];
 }
 
 class LoginCasoDeUso {
@@ -49,13 +49,11 @@ class LoginCasoDeUso {
       include: { Permissoes: true },
     });
 
-    // Extrair nomes das funções e permissões
     const roles = funcoes.map((funcao) => funcao.funcoes.nome);
     const permissoesNomes = permissoes.map(
       (permissao) => permissao.Permissoes.nome
     );
 
-    // Gerar token JWT com informações do funcionário, roles e permissões
     const tokenPayload = {
       userId: existeEmail.id,
       email: existeEmail.emailFuncionario,
@@ -67,15 +65,14 @@ class LoginCasoDeUso {
       expiresIn: "8h",
     });
 
-    // Retornar dados do funcionário com roles e permissões
     const funcionarioAutenticado: FuncionarioAutenticado = {
       nome: existeEmail.nomeFuncionario,
       email: existeEmail.emailFuncionario,
       telefone: existeEmail.telefoneFuncionario,
       numeroBI: existeEmail.numeroBI,
       token,
-      roles, // Inclui as funções
-      permissoes: permissoesNomes, // Inclui as permissões
+      roles,
+      permissoes: permissoesNomes,
     };
 
     return funcionarioAutenticado;

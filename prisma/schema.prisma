@@ -41,6 +41,7 @@ model funcionarios {
   FuncionariosFuncoes funcionariosFuncoes[]
   EntradasEstoque entradasEstoque[]
   transferencias transferencias[]
+  codigoRecuperacao codigoRecuperacao[]
   funcionariosCaixa funcionariosCaixa[]
   funcionariosTarefas funcionariosTarefas[]
 }
@@ -119,7 +120,13 @@ model fornecedores {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
-
+model codigoRecuperacao {
+  id            String       @id @default(uuid())
+  codigo        String
+  id_funcionario String
+  expiresAt     DateTime
+  funcionarios   funcionarios @relation(fields: [id_funcionario], references: [id])
+}
 model entradasEstoque {
   id String @id @default(uuid())
 	id_fornecedor String
