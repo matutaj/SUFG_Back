@@ -12,6 +12,7 @@ export interface DadosLogin {
 }
 
 export interface FuncionarioAutenticado {
+  id: string;
   nome: string;
   email: string;
   telefone: string;
@@ -57,6 +58,7 @@ class LoginCasoDeUso {
     const tokenPayload = {
       userId: existeEmail.id,
       email: existeEmail.emailFuncionario,
+      nome: existeEmail.nomeFuncionario,
       roles,
       permissoes: permissoesNomes,
     };
@@ -66,6 +68,7 @@ class LoginCasoDeUso {
     });
 
     const funcionarioAutenticado: FuncionarioAutenticado = {
+      id: existeEmail.id,
       nome: existeEmail.nomeFuncionario,
       email: existeEmail.emailFuncionario,
       telefone: existeEmail.telefoneFuncionario,
