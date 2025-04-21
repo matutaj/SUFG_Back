@@ -1,4 +1,3 @@
-// src/middleware/permissoesMiddleware.ts
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { authConfig } from "../config/auth";
@@ -19,56 +18,115 @@ declare module "express" {
   }
 }
 
+// Middleware para verificar uma única permissão
 export const verificarPermissao = (permissaoRequerida: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-      throw new AppError("Token não fornecido", 401);
-    }
-
-    const token = authHeader.split(" ")[1]; // Assume "Bearer <token>"
-
     try {
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) {
+        return next(new AppError("Token não fornecido", 401));
+      }
+
+      const token = authHeader.split(" ")[1];
+
       const decoded = jwt.verify(token, authConfig.key) as JwtPayload;
 
       req.user = decoded;
 
-      // Verificar se a permissão requerida está no array de permissões do usuário
       if (!decoded.permissoes.includes(permissaoRequerida)) {
-        throw new AppError("Permissão negada", 403);
+        return next(new AppError("Permissão negada", 403));
       }
 
       next();
     } catch (error) {
-      throw new AppError("Token inválido ou expirado", 401);
+      return next(new AppError("Token inválido ou expirado", 401));
+    }
+  };
+};
+
+export const verificarPermissoes = (permissoesRequeridas: string[]) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) {
+        return next(new AppError("Token não fornecido", 401));
+      }
+
+      const token = authHeader.split(" ")[1];
+
+      const decoded = jwt.verify(token, authConfig.key) as JwtPayload;
+
+      req.user = decoded;
+
+      const hasPermission = permissoesRequeridas.some((permissao) =>
+        decoded.permissoes.includes(permissao)
+      );
+
+      if (!hasPermission) {
+        return next(new AppError("Permissão negada", 403));
+      }
+
+      next();
+    } catch (error) {
+      return next(new AppError("Token inválido ou expirado", 401));
     }
   };
 };
 
 export const verificarRole = (roleRequerida: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-      throw new AppError("Token não fornecido", 401);
-    }
-
-    const token = authHeader.split(" ")[1];
-
     try {
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) {
+        return next(new AppError("Token não fornecido", 401));
+      }
+
+      const token = authHeader.split(" ")[1];
+
       const decoded = jwt.verify(token, authConfig.key) as JwtPayload;
 
       req.user = decoded;
 
-      // Verificar se a role requerida está no array de roles do usuário
       if (!decoded.roles.includes(roleRequerida)) {
-        throw new AppError("Função requerida não encontrada", 403);
+        return next(new AppError("Função requerida não encontrada", 403));
       }
 
       next();
     } catch (error) {
-      throw new AppError("Token inválido ou expirado", 401);
+      return next(new AppError("Token inválido ou expirado", 401));
+    }
+  };
+};
+
+export const verificarRoles = (rolesRequeridas: string[]) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) {
+        return next(new AppError("Token não fornecido", 401));
+      }
+
+      const token = authHeader.split(" ")[1];
+
+      const decoded = jwt.verify(token, authConfig.key) as JwtPayload;
+
+      req.user = decoded;
+
+      const hasRole = rolesRequeridas.some((role) =>
+        decoded.roles.includes(role)
+      );
+
+      if (!hasRole) {
+        return next(new AppError("Nenhuma função requerida encontrada", 403));
+      }
+
+      next();
+    } catch (error) {
+      return next(new AppError("Token inválido ou expirado", 401));
     }
   };
 };
