@@ -6,6 +6,7 @@ import { ListarTodosCorredorController } from "../model/corredores/casoDeUso/lis
 import { AtualizarCorredorController } from "../model/corredores/casoDeUso/atualizarCorredor/AtualizarCorredorController";
 import { DeleteCorredorController } from "../model/corredores/casoDeUso/deleteCorredor/DeleteCorredorController";
 import { ListarUmCorredorPeloIdController } from "../model/corredores/casoDeUso/listarCorredorPeloId/ListarCorredorPeloIdController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 const corredorRouter = Router();
 
 const criarCorredor = new CriarCorredorController();
@@ -15,11 +16,35 @@ const deleteCorredor = new DeleteCorredorController();
 const listarCorredorPeloNome = new ListarCorredorPeloNomeController();
 const listarTodosCorredores = new ListarTodosCorredorController();
 
-corredorRouter.post("/", criarCorredor.handle);
-corredorRouter.get("/:id", listarCorredorPeloId.handle);
-corredorRouter.put("/:id", atualizarCorredor.handle);
-corredorRouter.delete("/:id", deleteCorredor.handle);
-corredorRouter.get("/:nomeCorredor", listarCorredorPeloNome.handle);
-corredorRouter.get("/", listarTodosCorredores.handle);
+corredorRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("criar_corredor"),
+  criarCorredor.handle
+);
+corredorRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_corredor"),
+  listarCorredorPeloId.handle
+);
+corredorRouter.put(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("atualizar_corredor"),
+  atualizarCorredor.handle
+);
+corredorRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("eliminar_corredor"),
+  deleteCorredor.handle
+);
+corredorRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_corredor"),
+  listarTodosCorredores.handle
+);
 
 export { corredorRouter };

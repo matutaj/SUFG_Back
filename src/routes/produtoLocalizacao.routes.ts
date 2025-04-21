@@ -5,6 +5,7 @@ import { AtualizarProdutoLocalizacaoController } from "../model/produtosLocaliza
 import { ListarUmProdutoLocalizacaoPorIdController } from "../model/produtosLocalizacoes/casoDeUso/listarProdutoLocalizacaoPeloId/ListarProdutoLocalizacaoPeloIdController";
 import { ListarTodosProdutosLocalizacoesController } from "../model/produtosLocalizacoes/casoDeUso/listarTodosProdutosLocalizacoes/ListarTodosProdutosLocalizacoesController";
 import { DeleteProdutoLocalizacaoController } from "../model/produtosLocalizacoes/casoDeUso/deleteProdutoLocalizacao/DeleteProdutoLocalizacaoController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 
 const produtoLocalizacaoRouter = Router();
 
@@ -14,10 +15,14 @@ const listarUmProdutoLocalizacaoPorId = new ListarUmProdutoLocalizacaoPorIdContr
 const listarTodosProdutosLocalizacoes = new ListarTodosProdutosLocalizacoesController();
 const deleteProdutoLocalizacao = new DeleteProdutoLocalizacaoController();
 
-produtoLocalizacaoRouter.post("/", criarProdutoLocalizacao.handle);
-produtoLocalizacaoRouter.put("/:id", atualizarProdutoLocalizacao.handle);
-produtoLocalizacaoRouter.get("/:id", listarUmProdutoLocalizacaoPorId.handle);
-produtoLocalizacaoRouter.get("/", listarTodosProdutosLocalizacoes.handle);
-produtoLocalizacaoRouter.delete("/:id", deleteProdutoLocalizacao.handle);
+produtoLocalizacaoRouter.post("/",  verificarRoles(["Admin", "Gerente"]), verificarPermissao("criar_produto_localizacao"),
+ criarProdutoLocalizacao.handle);
+produtoLocalizacaoRouter.put("/:id", verificarRoles(["Admin", "Gerente"]), verificarPermissao("atualizar_produto_localizacao"), atualizarProdutoLocalizacao.handle);
+produtoLocalizacaoRouter.get("/:id",   verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_produto_localizacao"), listarUmProdutoLocalizacaoPorId.handle);
+produtoLocalizacaoRouter.get("/",  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_produto_localizacao"), listarTodosProdutosLocalizacoes.handle);
+produtoLocalizacaoRouter.delete("/:id",  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("deletar_produto_localizacao"), deleteProdutoLocalizacao.handle);
 
 export { produtoLocalizacaoRouter };

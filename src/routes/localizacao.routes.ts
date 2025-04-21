@@ -6,6 +6,7 @@ import { DeleteLocalizacaoController } from "../model/localizacoes/casoDeUso/del
 import { ListarUmLocalizacaoPeloIdController } from "../model/localizacoes/casoDeUso/listarLocalizacaoPeloId/ListarLocalizacaoPeloIdController";
 import { ListarUmLocalizacaoPeloNomeController } from "../model/localizacoes/casoDeUso/listarLocalizacaoPeloNome/ListarLocalizacaoPeloNomeController";
 import { ListarTodosLocalizacoesController } from "../model/localizacoes/casoDeUso/listarTodasLocalizacoes/ListarTodasLocalizacoesController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 
 const localizacaoRouter = Router();
 
@@ -16,11 +17,35 @@ const listarUmLocalizacaoPeloNome = new ListarUmLocalizacaoPeloNomeController();
 const atualizarLocalizacao = new AtualizarLocalizacaoController();
 const deleteLocalizacao = new DeleteLocalizacaoController();
 
-localizacaoRouter.put("/:id", atualizarLocalizacao.handle);
-localizacaoRouter.get("/", listarTodasLocalizacoes.handle);
-localizacaoRouter.get("/:id", listarUmLocalizacaoPeloId.handle);
-localizacaoRouter.get("/:nomeLocalizacao", listarUmLocalizacaoPeloNome.handle);
-localizacaoRouter.delete("/:id", deleteLocalizacao.handle);
-localizacaoRouter.post("/", criarLocalizacao.handle);
+localizacaoRouter.put(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("atualizar_localizacao"),
+  atualizarLocalizacao.handle
+);
+localizacaoRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_localizacao   "),
+  listarTodasLocalizacoes.handle
+);
+localizacaoRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_localizacao"),
+  listarUmLocalizacaoPeloId.handle
+);
+localizacaoRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("eliminar_localizacao"),
+  deleteLocalizacao.handle
+);
+localizacaoRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("criar_localizacao"),
+  criarLocalizacao.handle
+);
 
 export { localizacaoRouter };

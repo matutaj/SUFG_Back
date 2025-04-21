@@ -6,6 +6,7 @@ import { ListarEstadoCaixaController } from "../model/funcionariosCaixa/casoDeUs
 import { ListarUmFuncionarioCaixaPeloIdController } from "../model/funcionariosCaixa/casoDeUso/listarUmFuncionarioCaixaPeloID/ListarUmFuncionarioCaixaPeloIDController";
 import { AtualizarFuncionarioCaixaController } from "../model/funcionariosCaixa/casoDeUso/atualizarFuncionarioCaixa/AtualizarFuncionarioCaixaController";
 import { ListarTodosFuncionariosCaixaController } from "../model/funcionariosCaixa/casoDeUso/listarTodosFuncionariosCaixa/ListarTodosFuncionariosCaixaController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 const funcionariorCaixaRouter = Router();
 
 const criarFuncionarioCaixa = new CriarFuncionarioCaixaController();
@@ -19,15 +20,47 @@ const listarEstadoCaixa = new ListarEstadoCaixaController();
 const listarUmFuncionarioCaixaPelaAbertura =
   new ListarUmFuncionarioCaixaPelaAberturaController();
 
-funcionariorCaixaRouter.post("/", criarFuncionarioCaixa.handle);
-funcionariorCaixaRouter.get("/", listarTodosFuncionariosCaixa.handle);
-funcionariorCaixaRouter.get("/:id", listarUmFuncionarioCaixaPeloId.handle);
+funcionariorCaixaRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("criar_funcionario_caixa"),
+  criarFuncionarioCaixa.handle
+);
+funcionariorCaixaRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("listar_funcionario_caixa"),
+  listarTodosFuncionariosCaixa.handle
+);
+funcionariorCaixaRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("listar_funcionario_caixa"),
+  listarUmFuncionarioCaixaPeloId.handle
+);
 funcionariorCaixaRouter.get(
   "/:abertura",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("listar_funcionario_caixa"),
   listarUmFuncionarioCaixaPelaAbertura.handle
 );
-funcionariorCaixaRouter.get("/:estado", listarEstadoCaixa.handle);
-funcionariorCaixaRouter.put("/:id", atualizarFuncionarioCaixa.handle);
-funcionariorCaixaRouter.delete("/:id", deleteFuncionarioCaixa.handle);
+funcionariorCaixaRouter.get(
+  "/:estado",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("listar_funcionario_caixa"),
+  listarEstadoCaixa.handle
+);
+funcionariorCaixaRouter.put(
+  "/:id",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("atualizar_funcionario_caixa"),
+  atualizarFuncionarioCaixa.handle
+);
+funcionariorCaixaRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("eliminar_funcionario_caixa"),
+  deleteFuncionarioCaixa.handle
+);
 
 export { funcionariorCaixaRouter };

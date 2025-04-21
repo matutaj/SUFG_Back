@@ -9,26 +9,53 @@ import { ListarEmailClienteController } from "../model/clientes/casoDeUso/listar
 import { ListarTelefoneClienteController } from "../model/clientes/casoDeUso/listarClientePeloTelefone/ListarClientePeloTelefoneController";
 import { ListarNumeroDeContribuinteController } from "../model/clientes/casoDeUso/listarClientePeloNumeroContribuinte/ListarClientePeloNumeroContribuinteController";
 import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosclientes/listarTodosClienteController";
-import { verificarRole } from "../middlewares/permissoes";
+import {
+  verificarPermissao,
+  verificarRole,
+  verificarRoles,
+} from "../middlewares/permissoes";
 const clientesRouter = Router();
 
 const criarClienteController = new CriarClienteController();
 const listarUmClientePeloIdController = new ListarUmClientePeloIdController();
 const listarEmailClienteController = new ListarEmailClienteController();
 const listarTelefoneClienteController = new ListarTelefoneClienteController();
-const listarNumeroContribuinteController = new ListarNumeroDeContribuinteController();
+const listarNumeroContribuinteController =
+  new ListarNumeroDeContribuinteController();
 const atualizarClienteController = new AtualizarClienteController();
 const deleteClienteController = new DeleteClienteController();
 const listarClientePeloNome = new ListarClientePeloNomeController();
 const listartodosClientes = new ListarTodosClienteController();
 
-clientesRouter.post("/", criarClienteController.handle);
-clientesRouter.get("/:id", listarUmClientePeloIdController.handle);
-clientesRouter.get("/:email", listarEmailClienteController.handle);
-clientesRouter.get("/:telefone", listarTelefoneClienteController.handle);
-clientesRouter.get("/:contribuinte", listarNumeroContribuinteController.handle);
-clientesRouter.put("/:id", atualizarClienteController.handle);
-clientesRouter.delete("/:id", verificarRole("Admin"), deleteClienteController.handle);
-clientesRouter.get("/:nomeCliente", listarClientePeloNome.handle);
+clientesRouter.post(
+  "/",
+  verificarRoles(["Admin"]),
+  verificarPermissao("criar_clientes"),
+  criarClienteController.handle
+);
+clientesRouter.get(
+  "/:id",
+  verificarRoles(["Admin"]),
+  verificarPermissao("listar_clientes"),
+  listarUmClientePeloIdController.handle
+);
+clientesRouter.get(
+  "/:email",
+  verificarRoles(["Admin"]),
+  verificarPermissao("listar_clientes"),
+  listarEmailClienteController.handle
+);
+clientesRouter.put(
+  "/:id",
+  verificarRoles(["Admin"]),
+  verificarPermissao("atualizar_clientes"),
+  atualizarClienteController.handle
+);
+clientesRouter.delete(
+  "/:id",
+  verificarRole("Admin"),
+  verificarPermissao("eliminar_clientes"),
+  deleteClienteController.handle
+);
 clientesRouter.get("/", listartodosClientes.handle);
 export { clientesRouter };

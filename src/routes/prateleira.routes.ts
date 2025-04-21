@@ -6,6 +6,7 @@ import { ListarTodasPrateleirasController } from "../model/prateleiras/casoDeUso
 import { AtualizarPrateleiraController } from "../model/prateleiras/casoDeUso/atualizarPrateleira/AtualizarPrateleiraController";
 import { DeletePrateleiraController } from "../model/prateleiras/casoDeUso/deletePrateleira/DeletePrateleiraController";
 import { ListarUmaPrateleiraPeloIdController } from "../model/prateleiras/casoDeUso/listarPrateleiraPeloId/ListarPrateleiraPeloIdController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 
 const prateleiraRouter = Router();
 
@@ -16,10 +17,34 @@ const deletePrateleira = new DeletePrateleiraController();
 const listarPrateleiraPeloNome = new ListarPrateleiraPeloNomeController();
 const listarTodasPrateleiras = new ListarTodasPrateleirasController();
 
-prateleiraRouter.get("/", listarTodasPrateleiras.handle);
-prateleiraRouter.get("/:id", listarPrateleiraPeloId.handle);
-prateleiraRouter.put("/:id", atualizarPrateleira.handle);
-prateleiraRouter.delete("/:id", deletePrateleira.handle);
-prateleiraRouter.post("/", criarPrateleira.handle);
-prateleiraRouter.get("/:nomePrateleira", listarPrateleiraPeloNome.handle);
+prateleiraRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_prateleira"),
+  listarTodasPrateleiras.handle
+);
+prateleiraRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_prateleira"),
+  listarPrateleiraPeloId.handle
+);
+prateleiraRouter.put(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("atualizar_prateleira"),
+  atualizarPrateleira.handle
+);
+prateleiraRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("eliminar_prateleira"),
+  deletePrateleira.handle
+);
+prateleiraRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("criar_prateleira"),
+  criarPrateleira.handle
+);
 export { prateleiraRouter };

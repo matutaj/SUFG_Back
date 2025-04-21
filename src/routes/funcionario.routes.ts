@@ -8,6 +8,7 @@ import { ListarUmFuncionarioPeloIdController } from "../model/funcionarios/casoD
 import { ListarEmailFuncionarioController } from "../model/funcionarios/casoDeUso/listarFuncionarioEmail/ListarFuncionarioEmailController";
 import { ListarTelefoneFuncionarioController } from "../model/funcionarios/casoDeUso/listarFuncionarioTelefone/ListarFuncionarioTelefoneController";
 import { ListarNumeroContribuinteFuncionarioController } from "../model/funcionarios/casoDeUso/listarFuncionarioNumeroContribuinte/ListarFuncionarioNumeroContribuinteController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 const funcionarioRouter = Router();
 
 const criarFuncionario = new criarFuncionarioController();
@@ -21,14 +22,41 @@ const deleteFuncionario = new DeleteFuncionarioController();
 const listarFuncionarioPeloNome = new ListarFuncionarioPeloNomeController();
 const listarTodosFuncionarios = new ListarTodosFuncionariosController();
 
-funcionarioRouter.post("/", criarFuncionario.handle);
-funcionarioRouter.get("/:id", listarFuncionarioPeloId.handle);
-funcionarioRouter.get("/:email", listarFuncionarioEmail.handle);
-funcionarioRouter.get("/:telefone", listarFuncionarioTelefone.handle);
-funcionarioRouter.get("/:contribuinte", listarFuncionarioNumeroContribuinte.handle);
-funcionarioRouter.put("/:id", atualizarFuncionario.handle);
-funcionarioRouter.delete("/:id", deleteFuncionario.handle);
-funcionarioRouter.get("/", listarTodosFuncionarios.handle);
-funcionarioRouter.get("/:nomeFuncionario", listarFuncionarioPeloNome.handle);
+funcionarioRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("criar_funcionario"),
+  criarFuncionario.handle
+);
+funcionarioRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_funcionario"),
+  listarFuncionarioPeloId.handle
+);
+funcionarioRouter.get(
+  "/:email",
+  verificarRoles(["Admin, Gerente"]),
+  verificarPermissao("listar_funcionario"),
+  listarFuncionarioEmail.handle
+);
+funcionarioRouter.put(
+  "/:id",
+  verificarRoles(["Admin, Gerente"]),
+  verificarPermissao("atualizar_funcionario"),
+  atualizarFuncionario.handle
+);
+funcionarioRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("eliminar_funcionario"),
+  deleteFuncionario.handle
+);
+funcionarioRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_funcionario"),
+  listarTodosFuncionarios.handle
+);
 
 export { funcionarioRouter };

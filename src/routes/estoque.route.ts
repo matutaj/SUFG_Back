@@ -5,6 +5,7 @@ import { ListarUmEstoquePeloLoteController } from "../model/estoques/casoDeUso/l
 import { CriarEstoqueController } from "../model/estoques/casoDeUso/criarEstoque/CriarEstoqueController";
 import { AtualizarEstoqueController } from "../model/estoques/casoDeUso/atualizarEstoque/AtualizarEstoqueController";
 import { DeleteEstoqueController } from "../model/estoques/casoDeUso/deleteEstoque/DeleteEstoqueController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 const estoqueRouter = Router();
 
 const listarTodosEstoquesController = new ListarTodosEstoquesController();
@@ -15,14 +16,41 @@ const criarEstoqueController = new CriarEstoqueController();
 const atualizarEstoqueController = new AtualizarEstoqueController();
 const deleteEstoqueController = new DeleteEstoqueController();
 
-estoqueRouter.get("/", listarTodosEstoquesController.handle);
-estoqueRouter.get("/:id", listarUmEstoquePeloIdController.handle);
+estoqueRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_estoque"),
+  listarTodosEstoquesController.handle
+);
+estoqueRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_estoque"),
+  listarUmEstoquePeloIdController.handle
+);
 estoqueRouter.get(
   "/produto/:id_produto",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_estoque"),
   listarUmEstoquePeloLoteController.handle
 );
-estoqueRouter.post("/", criarEstoqueController.handle);
-estoqueRouter.put("/:id", atualizarEstoqueController.handle);
-estoqueRouter.delete("/:id", deleteEstoqueController.handle);
+estoqueRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("criar_estoque"),
+  criarEstoqueController.handle
+);
+estoqueRouter.put(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("atualizar_estoque"),
+  atualizarEstoqueController.handle
+);
+estoqueRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("eliminar_estoque"),
+  deleteEstoqueController.handle
+);
 
 export { estoqueRouter };

@@ -4,6 +4,7 @@ import { listarTodasVendasProdutosController } from "../model/vendasProdutos/cas
 import { ListarVendaProdutoPorIdController } from "../model/vendasProdutos/casoDeUso/listarVendaProdutoPeloId/ListarVendaProdutoPeloIdController";
 import { AtualizarVendaProdutoController } from "../model/vendasProdutos/casoDeUso/atualizarVendaProduto/AtualizarVendaProdutoController";
 import { DeleteVendaProdutoController } from "../model/vendasProdutos/casoDeUso/eliminarVendaProduto/EliminarVendaProdutoController";
+import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 
 const vendaProdutoRouter = Router();
 
@@ -13,10 +14,35 @@ const listarTodasVendasProdutos = new listarTodasVendasProdutosController();
 const listarVendaProdutoPorId = new ListarVendaProdutoPorIdController();
 const eliminarVendaProduto = new DeleteVendaProdutoController();
 
-vendaProdutoRouter.post("/", criarVendaProduto.handle);
-vendaProdutoRouter.get("/", listarTodasVendasProdutos.handle);
-vendaProdutoRouter.get("/:id", listarVendaProdutoPorId.handle);
-vendaProdutoRouter.put("/:id", atualizarVendaProduto.handle);
-vendaProdutoRouter.delete("/:id", eliminarVendaProduto.handle);
+vendaProdutoRouter.post(
+  "/",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("criar_venda_produto"),
+  criarVendaProduto.handle
+);
+vendaProdutoRouter.get(
+  "/",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("listar_venda_produto"),
+  listarTodasVendasProdutos.handle
+);
+vendaProdutoRouter.get(
+  "/:id",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("listar_venda_produto"),
+  listarVendaProdutoPorId.handle
+);
+vendaProdutoRouter.put(
+  "/:id",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("atualizar_venda_produto"),
+  atualizarVendaProduto.handle
+);
+vendaProdutoRouter.delete(
+  "/:id",
+  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
+  verificarPermissao("eliminar_venda_produto"),
+  eliminarVendaProduto.handle
+);
 
 export { vendaProdutoRouter };
