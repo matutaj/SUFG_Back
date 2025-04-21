@@ -20,21 +20,25 @@ const deleteCategoriaProduto = new DeleteCategoriaProdutoController();
 categoriaProdutoRouter.get(
   "/",
   verificarPermissao("listar_categoria_produto"),
+  verificarRoles(["Admin", "Gerente"]),
   listarTodasCategoriasProdutos.handle
 );
 categoriaProdutoRouter.get(
   "/:id",
   verificarPermissao("listar_categoria_produto"),
+  verificarRoles(["Admin", "Gerente"]),
   listarCategoriaProdutoPeloId.handle
 );
 categoriaProdutoRouter.put(
   "/:id",
   verificarPermissao("atualizar_categoria_produto"),
+  verificarRoles(["Admin", "Gerente"]),
   atualizarCategoriaProduto.handle
 );
 categoriaProdutoRouter.delete(
   "/:id",
   verificarPermissao("eliminar_categoria_produto"),
+  verificarRoles(["Admin", "Gerente"]),
   deleteCategoriaProduto.handle
 );
 categoriaProdutoRouter.post(
