@@ -1,21 +1,27 @@
 import * as Yup from "yup";
 
 const criarPermissaoSchema = Yup.object().shape({
-    descricaoPermissao: Yup.string(),
-    nomePermissao: Yup.string().required(),
+  descricao: Yup.string(),
+  nome: Yup.string().required(),
 });
 const listarPermissaoPeloNome = Yup.object().shape({
-    nomePermissao: Yup.string().required(),
+  nome: Yup.string().required(),
 });
 const atualizarPermissaoSchema = Yup.object().shape({
-    descricaoPermissao: Yup.string(),
-    nomePermissao: Yup.string().required(),
-    id: Yup.string().required(),
-})
+  descricao: Yup.string(),
+  nome: Yup.string().required(),
+  id: Yup.string().required(),
+});
 const deletarPermissaoSchema = Yup.object().shape({
-    id_permissao: Yup.string().required(),
-})
+  id_permissao: Yup.string().required(),
+});
 const listarPermissaoPeloIdSchema = Yup.object().shape({
-    id_permissao: Yup.string().required(),
-})
-export { criarPermissaoSchema, listarPermissaoPeloNome, atualizarPermissaoSchema, deletarPermissaoSchema, listarPermissaoPeloIdSchema };
+  id_permissao: Yup.string().required(),
+});
+export {
+  criarPermissaoSchema,
+  listarPermissaoPeloNome,
+  atualizarPermissaoSchema,
+  deletarPermissaoSchema,
+  listarPermissaoPeloIdSchema,
+};
