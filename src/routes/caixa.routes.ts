@@ -18,39 +18,39 @@ const listarTodosCaixas = new ListarTodosCaixasController();
 const listarUmCaixaPeloId = new ListarUmCaixaPeloIdController();
 
 caixaRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_caixa"),
+  verificarPermissao("atualizar_caixa"), */,
   atualizarCaixa.handle
 );
 caixaRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_caixa"),
+  verificarPermissao("listar_caixa"), */,
   listarUmCaixaPeloId.handle
 );
 caixaRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_caixa"),
+  verificarPermissao("eliminar_caixa"), */,
   deleteCaixa.handle
 );
 caixaRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_caixa"),
+  verificarPermissao("criar_caixa"), */,
   criarCaixa.handle
 );
 caixaRouter.get(
-  "/:nomeCaixa",
+  "/:nomeCaixa" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_caixa"),
+  verificarPermissao("listar_caixa"), */,
   listarCaixaPeloNome.handle
 );
 caixaRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_caixa"),
+  verificarPermissao("listar_caixa"), */,
   listarTodosCaixas.handle
 );
 

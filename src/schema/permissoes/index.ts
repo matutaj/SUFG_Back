@@ -13,10 +13,10 @@ const atualizarPermissaoSchema = Yup.object().shape({
   id: Yup.string().required(),
 });
 const deletarPermissaoSchema = Yup.object().shape({
-  id_permissao: Yup.string().required(),
+  id: Yup.string().required(),
 });
 const listarPermissaoPeloIdSchema = Yup.object().shape({
-  id_permissao: Yup.string().required(),
+  id: Yup.string().required(),
 });
 export {
   criarPermissaoSchema,

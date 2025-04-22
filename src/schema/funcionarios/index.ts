@@ -18,10 +18,10 @@ const atualizarFuncionarioSchema = Yup.object().shape({
   emailFuncionario: Yup.string(),
 });
 const deletarFuncionarioSchema = Yup.object().shape({
-  id_funcionario: Yup.string().required(),
+  id: Yup.string().required(),
 });
 const listarFuncionarioPeloIdSchema = Yup.object().shape({
-  id_funcionario: Yup.string().required(),
+  id: Yup.string().required(),
 });
 const listarFuncionarioEmailSchema = Yup.object().shape({
   emailFuncionario: Yup.string().required(),
