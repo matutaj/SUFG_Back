@@ -15,33 +15,33 @@ const listarVendaPeloId = new ListarVendaPorIdController();
 const listarTodasVendas = new ListarTodasVendasController();
 
 vendaRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_venda"),
+  verificarPermissao("listar_venda"), */,
   listarTodasVendas.handle
 );
 vendaRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_venda"),
+  verificarPermissao("listar_venda"), */,
   listarVendaPeloId.handle
 );
 vendaRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("atualizar_venda"),
+  verificarPermissao("atualizar_venda"), */,
   atualizarVenda.handle
 );
 vendaRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("eliminar_venda"),
+  verificarPermissao("eliminar_venda"), */,
   eliminarVenda.handle
 );
 vendaRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("criar_venda"),
+  verificarPermissao("criar_venda"), */,
   criarVenda.handle
 );
 

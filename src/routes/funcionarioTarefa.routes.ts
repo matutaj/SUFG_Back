@@ -18,33 +18,33 @@ const eliminarFuncionarioTarefaController =
   new DeleteFuncionarioTarefaController();
 
 funcionarioTarefaRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_funcionario_tarefa"),
+  verificarPermissao("criar_funcionario_tarefa"), */,
   criarFuncionarioTarefaController.handle
 );
 funcionarioTarefaRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_funcionario_tarefa"),
+  verificarPermissao("listar_funcionario_tarefa"), */,
   listarTodosFuncionariosTarefasController.handle
 );
 funcionarioTarefaRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_funcionario_tarefa"),
+  verificarPermissao("listar_funcionario_tarefa"), */,
   listarUmFuncionarioTarefaPeloIdController.handle
 );
 funcionarioTarefaRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_funcionario_tarefa"),
+  verificarPermissao("atualizar_funcionario_tarefa"), */,
   atualizarFuncionarioTarefaController.handle
 );
 funcionarioTarefaRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_funcionario_tarefa"),
+  verificarPermissao("eliminar_funcionario_tarefa"), */,
   eliminarFuncionarioTarefaController.handle
 );
 

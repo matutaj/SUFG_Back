@@ -17,39 +17,39 @@ const atualizarEstoqueController = new AtualizarEstoqueController();
 const deleteEstoqueController = new DeleteEstoqueController();
 
 estoqueRouter.get(
-  "/",
+  "/",/* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_estoque"),
+  verificarPermissao("listar_estoque"), */
   listarTodosEstoquesController.handle
 );
 estoqueRouter.get(
-  "/:id",
+  "/:id",/* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_estoque"),
+  verificarPermissao("listar_estoque"), */
   listarUmEstoquePeloIdController.handle
 );
 estoqueRouter.get(
-  "/produto/:id_produto",
+  "/produto/:id_produto",/* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_estoque"),
+  verificarPermissao("listar_estoque"), */
   listarUmEstoquePeloLoteController.handle
 );
 estoqueRouter.post(
-  "/",
+  "/",/* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_estoque"),
+  verificarPermissao("criar_estoque"), */
   criarEstoqueController.handle
 );
 estoqueRouter.put(
-  "/:id",
+  "/:id",/* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_estoque"),
+  verificarPermissao("atualizar_estoque"), */
   atualizarEstoqueController.handle
 );
 estoqueRouter.delete(
-  "/:id",
+  "/:id",/* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_estoque"),
+  verificarPermissao("eliminar_estoque"), */
   deleteEstoqueController.handle
 );
 

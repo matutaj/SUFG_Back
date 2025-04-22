@@ -14,27 +14,27 @@ const atualizarEntradaEstoque = new AtualizarEntradaEstoqueController();
 const deleteEntradaEstoque = new DeleteEntradaEstoqueController();
 
 entradaEstoqueRoutes.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_entrada_estoque"),
+  verificarPermissao("criar_entrada_estoque"), */,
   criarEntradaEstoque.handle
 );
 entradaEstoqueRoutes.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_entrada_estoque"),
+  verificarPermissao("listar_entrada_estoque"), */,
   listarTodasEntradasEstoque.handle
 );
 entradaEstoqueRoutes.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_entrada_estoque"),
+  verificarPermissao("atualizar_entrada_estoque"), */,
   atualizarEntradaEstoque.handle
 );
 entradaEstoqueRoutes.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_entrada_estoque"),
+  verificarPermissao("eliminar_entrada_estoque"), */,
   deleteEntradaEstoque.handle
 );
 

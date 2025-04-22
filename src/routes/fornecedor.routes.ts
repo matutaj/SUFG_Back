@@ -24,39 +24,39 @@ const listarFornecedorPeloNome = new ListarFornecedorPeloNomeController();
 const listarTodosFornecedores = new ListarTodosFornecedoresController();
 
 fornecedorRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_fornecedor"),
+  verificarPermissao("listar_fornecedor"), */,
   listarTodosFornecedores.handle
 );
 fornecedorRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_fornecedor"),
+  verificarPermissao("listar_fornecedor"), */,
   listarFornecedorPeloId.handle
 );
 fornecedorRouter.get(
-  "/:email",
+  "/:email" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_fornecedor"),
+  verificarPermissao("listar_fornecedor"), */,
   listarEmailFornecedor.handle
 );
 fornecedorRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_fornecedor"),
+  verificarPermissao("atualizar_fornecedor"), */,
   atualizarFornecedor.handle
 );
 fornecedorRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_fornecedor"),
+  verificarPermissao("eliminar_fornecedor"), */,
   deleteFornecedor.handle
 );
 fornecedorRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_fornecedor"),
+  verificarPermissao("criar_fornecedor"), */,
   criarFornecedor.handle
 );
 

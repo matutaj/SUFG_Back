@@ -29,32 +29,32 @@ const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.post(
   "/",
-  verificarRoles(["Admin"]),
-  verificarPermissao("criar_clientes"),
+  /*  verificarRoles(["Admin"]),
+  verificarPermissao("criar_clientes"), */
   criarClienteController.handle
 );
 clientesRouter.get(
   "/:id",
-  verificarRoles(["Admin"]),
-  verificarPermissao("listar_clientes"),
+  /*  verificarRoles(["Admin"]),
+  verificarPermissao("listar_clientes"), */
   listarUmClientePeloIdController.handle
 );
 clientesRouter.get(
   "/:email",
-  verificarRoles(["Admin"]),
-  verificarPermissao("listar_clientes"),
+  /*  verificarRoles(["Admin"]),
+  verificarPermissao("listar_clientes"), */
   listarEmailClienteController.handle
 );
 clientesRouter.put(
   "/:id",
-  verificarRoles(["Admin"]),
-  verificarPermissao("atualizar_clientes"),
+  /*  verificarRoles(["Admin"]),
+  verificarPermissao("atualizar_clientes"), */
   atualizarClienteController.handle
 );
 clientesRouter.delete(
   "/:id",
-  verificarRole("Admin"),
-  verificarPermissao("eliminar_clientes"),
+  /* verificarRole("Admin"),
+  verificarPermissao("eliminar_clientes"), */
   deleteClienteController.handle
 );
 clientesRouter.get("/", listartodosClientes.handle);

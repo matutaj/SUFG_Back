@@ -18,33 +18,33 @@ const listarPrateleiraPeloNome = new ListarPrateleiraPeloNomeController();
 const listarTodasPrateleiras = new ListarTodasPrateleirasController();
 
 prateleiraRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_prateleira"),
+  verificarPermissao("listar_prateleira"), */,
   listarTodasPrateleiras.handle
 );
 prateleiraRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_prateleira"),
+  verificarPermissao("listar_prateleira"), */,
   listarPrateleiraPeloId.handle
 );
 prateleiraRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_prateleira"),
+  verificarPermissao("atualizar_prateleira"), */,
   atualizarPrateleira.handle
 );
 prateleiraRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_prateleira"),
+  verificarPermissao("eliminar_prateleira"), */,
   deletePrateleira.handle
 );
 prateleiraRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_prateleira"),
+  verificarPermissao("criar_prateleira"), */,
   criarPrateleira.handle
 );
 export { prateleiraRouter };

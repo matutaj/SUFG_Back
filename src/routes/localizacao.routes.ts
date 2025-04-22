@@ -18,33 +18,33 @@ const atualizarLocalizacao = new AtualizarLocalizacaoController();
 const deleteLocalizacao = new DeleteLocalizacaoController();
 
 localizacaoRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_localizacao"),
+  verificarPermissao("atualizar_localizacao"), */,
   atualizarLocalizacao.handle
 );
 localizacaoRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_localizacao   "),
+  verificarPermissao("listar_localizacao   "), */,
   listarTodasLocalizacoes.handle
 );
 localizacaoRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_localizacao"),
+  verificarPermissao("listar_localizacao"), */,
   listarUmLocalizacaoPeloId.handle
 );
 localizacaoRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_localizacao"),
+  verificarPermissao("eliminar_localizacao"), */,
   deleteLocalizacao.handle
 );
 localizacaoRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_localizacao"),
+  verificarPermissao("criar_localizacao"), */,
   criarLocalizacao.handle
 );
 

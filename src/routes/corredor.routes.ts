@@ -18,32 +18,32 @@ const listarTodosCorredores = new ListarTodosCorredorController();
 
 corredorRouter.post(
   "/",
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_corredor"),
+  /* verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("criar_corredor"), */
   criarCorredor.handle
 );
 corredorRouter.get(
   "/:id",
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_corredor"),
+ /*  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_corredor"), */
   listarCorredorPeloId.handle
 );
 corredorRouter.put(
   "/:id",
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_corredor"),
+  /* verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("atualizar_corredor"), */
   atualizarCorredor.handle
 );
 corredorRouter.delete(
   "/:id",
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_corredor"),
+ /*  verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("eliminar_corredor"), */
   deleteCorredor.handle
 );
 corredorRouter.get(
   "/",
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_corredor"),
+  /* verificarRoles(["Admin", "Gerente"]),
+  verificarPermissao("listar_corredor"), */
   listarTodosCorredores.handle
 );
 

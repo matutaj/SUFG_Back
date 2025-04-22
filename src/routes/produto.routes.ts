@@ -17,33 +17,33 @@ const listarTodosProdutos = new ListarTodosProdutosController();
 const listarProdutoPeloNome = new ListarProdutoPeloNomeController();
 
 produtoRouter.get(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_produto"),
+  verificarPermissao("listar_produto"), */,
   listarTodosProdutos.handle
 );
 produtoRouter.get(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_produto"),
+  verificarPermissao("listar_produto"), */,
   listarProdutoPeloId.handle
 );
 produtoRouter.put(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_produto"),
+  verificarPermissao("atualizar_produto"), */,
   atualizarProduto.handle
 );
 produtoRouter.delete(
-  "/:id",
+  "/:id" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("deletar_produto"),
+  verificarPermissao("deletar_produto"), */,
   deleteProduto.handle
 );
 produtoRouter.post(
-  "/",
+  "/" /* 
   verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_produto"),
+  verificarPermissao("criar_produto"), */,
   criarProduto.handle
 );
 
