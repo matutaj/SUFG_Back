@@ -20,11 +20,17 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
         id_caixa,
         id_funcionario,
       },
+      include: {
+        caixas: true,
+        Funcionarios: true,
+        vendas: true,
+      },
     });
   }
   async listarTodosFuncionariosCaixa(): Promise<funcionariosCaixa[]> {
     const listarTodosFuncionariosCaixa =
-      await prisma.funcionariosCaixa.findMany();
+      await prisma.funcionariosCaixa.findMany({ include: { caixas: true, Funcionarios: true, vendas: true
+      }});
     return listarTodosFuncionariosCaixa;
   }
   async listarEstadoCaixa(
@@ -53,13 +59,17 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
 
     return listarHoraDeAbertura;
   }
-  async atualizarFuncionarioCaixa(dadosFuncionarioCaixa: DadosFuncionarioCaixa): Promise<funcionariosCaixa> {
+  async atualizarFuncionarioCaixa(dadosFuncionarioCaixa: Partial<DadosFuncionarioCaixa>): Promise<funcionariosCaixa> {
+    const { id, id_caixa, id_funcionario, estadoCaixa, quantidadaFaturada, horarioAbertura, horarioFechamento } = dadosFuncionarioCaixa;
     return await prisma.funcionariosCaixa.update({
-      where: { id: dadosFuncionarioCaixa.id },
+      where: { id },
       data: {
-        estadoCaixa: dadosFuncionarioCaixa.estadoCaixa,
-        horarioFechamento: dadosFuncionarioCaixa.horarioFechamento,
-        quantidadaFaturada: dadosFuncionarioCaixa.quantidadaFaturada,
+        ...(id_caixa && { id_caixa }),
+        ...(id_funcionario && { id_funcionario }),
+        ...(estadoCaixa !== undefined && { estadoCaixa }),
+        ...(quantidadaFaturada !== undefined && { quantidadaFaturada }),
+        ...(horarioAbertura && { horarioAbertura }),
+        ...(horarioFechamento && { horarioFechamento }),
       },
     });
   }
