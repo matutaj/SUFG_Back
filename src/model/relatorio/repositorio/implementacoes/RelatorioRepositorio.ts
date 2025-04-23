@@ -656,4 +656,142 @@ export class RelatorioRepository implements IRelatorioRepository {
       },
     }));
   }
+  async listarAtividadesDoDia(data: Date): Promise<
+    {
+      idTarefa: string;
+      nomeTarefa: string;
+      descricao: string | null;
+      funcionarioNome: string;
+      status: string;
+      dataCriacao: Date;
+    }[]
+  > {
+    // Normaliza a data para incluir o dia inteiro
+    const startOfDay = new Date(data.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(data.setHours(23, 59, 59, 999));
+
+    const atividades = await this.prisma.funcionariosTarefas.findMany({
+      where: {
+        createdAt: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      include: {
+        tarefas: {
+          select: {
+            id: true,
+            nome: true,
+            descricao: true,
+          },
+        },
+        funcionarios: {
+          select: {
+            nomeFuncionario: true,
+          },
+        },
+      },
+    });
+
+    return atividades.map((atividade) => ({
+      idTarefa: atividade.tarefas.id,
+      nomeTarefa: atividade.tarefas.nome,
+      descricao: atividade.tarefas.descricao,
+      funcionarioNome:
+        atividade.funcionarios?.nomeFuncionario ?? "Desconhecido",
+      status: atividade.status,
+      dataCriacao: atividade.createdAt,
+    }));
+  }
+
+  async listarRelatorioCaixas(
+    idCaixa?: string,
+    dataInicio?: Date,
+    dataFim?: Date
+  ): Promise<
+    {
+      idCaixa: string;
+      nomeCaixa: string;
+      quantidadeFaturada: number;
+      funcionarios: { id: string; nome: string }[];
+      vendas: (vendas & { clienteNome: string })[];
+      horarioAbertura: Date;
+      horarioFechamento: Date | null;
+    }[]
+  > {
+    const whereClause: any = {};
+    if (idCaixa) {
+      whereClause.id_caixa = idCaixa;
+    }
+    if (dataInicio && dataFim) {
+      whereClause.horarioAbertura = {
+        gte: dataInicio,
+        lte: dataFim,
+      };
+    }
+
+    const caixasAtivos = await this.prisma.funcionariosCaixa.findMany({
+      where: whereClause,
+      include: {
+        caixas: {
+          select: {
+            id: true,
+            nomeCaixa: true,
+          },
+        },
+        Funcionarios: {
+          select: {
+            id: true,
+            nomeFuncionario: true,
+          },
+        },
+        vendas: {
+          include: {
+            vendasProdutos: {
+              include: {
+                produtos: true,
+              },
+            },
+            clientes: {
+              select: {
+                nomeCliente: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const grouped = caixasAtivos.reduce((acc, item) => {
+      const key = item.id_caixa;
+      if (!acc[key]) {
+        acc[key] = {
+          idCaixa: item.id_caixa,
+          nomeCaixa: item.caixas.nomeCaixa,
+          quantidadeFaturada: 0,
+          funcionarios: new Set<{ id: string; nome: string }>(),
+          vendas: [],
+          horarioAbertura: item.horarioAbertura,
+          horarioFechamento: item.horarioFechamento,
+        };
+      }
+      acc[key].quantidadeFaturada += Number(item.quantidadaFaturada || 0);
+      acc[key].funcionarios.add({
+        id: item.Funcionarios.id,
+        nome: item.Funcionarios?.nomeFuncionario ?? "Desconhecido",
+      });
+      acc[key].vendas.push(
+        ...item.vendas.map((venda) => ({
+          ...venda,
+          clienteNome: venda.clientes?.nomeCliente ?? "Desconhecido",
+        }))
+      );
+      return acc;
+    }, {} as Record<string, { idCaixa: string; nomeCaixa: string; quantidadeFaturada: number; funcionarios: Set<{ id: string; nome: string }>; vendas: (vendas & { clienteNome: string })[]; horarioAbertura: Date; horarioFechamento: Date | null }>);
+
+    return Object.values(grouped).map((item) => ({
+      ...item,
+      funcionarios: Array.from(item.funcionarios),
+    }));
+  }
 }

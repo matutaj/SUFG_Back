@@ -1,0 +1,109 @@
+// src/controladores/RelatorioControlador.ts
+import { Request, Response } from "express";
+import { GerarRelatorioCasoDeUso } from "./ListarRelatorioCasoDeUso";
+
+class RelatorioControlador {
+  async handle(req: Request, res: Response): Promise<any> {
+    try {
+      const { dataInicio, dataFim, data, limite, idProduto, idCliente } =
+        req.query;
+      const {
+        idCliente: idClienteParam,
+        idProduto: idProdutoParam,
+        idCaixa,
+      } = req.params;
+
+      // Validação dos parâmetros
+      if (!dataInicio && !dataFim && !data && !req.path.includes("caixas")) {
+        return res
+          .status(400)
+          .json({ error: "Pelo menos uma data é obrigatória" });
+      }
+
+      // Determina o tipo de relatório com base na URL
+      let tipoRelatorio: string;
+      switch (req.path.split("/").pop()) {
+        case "vendas-periodo":
+          tipoRelatorio = "vendas-por-periodo";
+          break;
+        case "vendas-cliente":
+          tipoRelatorio = "vendas-por-cliente";
+          break;
+        case "produtos-mais-vendidos":
+          tipoRelatorio = "produtos-mais-vendidos";
+          break;
+        case "faturamento-periodo":
+          tipoRelatorio = "faturamento-por-periodo";
+          break;
+        case "faturamento-caixa":
+          tipoRelatorio = "quantidade-faturada-por-caixa";
+          break;
+        case "estoque":
+          tipoRelatorio = "estoque-atual";
+          break;
+        case "entradas-estoque":
+          tipoRelatorio = "entradas-estoque-por-periodo";
+          break;
+        case "transferencias":
+          tipoRelatorio = "transferencias-por-periodo";
+          break;
+        case "produtos-abaixo-minimo":
+          tipoRelatorio = "produtos-abaixo-minimo";
+          break;
+        case "atividade-caixa":
+          tipoRelatorio = "atividade-funcionarios-caixa";
+          break;
+        case "periodo-mais-vendido":
+          tipoRelatorio = "periodo-mais-vendido-por-produto";
+          break;
+        case "atividades-caixas":
+          tipoRelatorio = "atividades-caixas";
+          break;
+        case "tarefas":
+          tipoRelatorio = "tarefas";
+          break;
+        case "relatorio-vendas":
+          tipoRelatorio = "relatorio-vendas";
+          break;
+        case "relatorio-estoque":
+          tipoRelatorio = "relatorio-estoque";
+          break;
+        case "relatorio-entradas-estoque":
+          tipoRelatorio = "relatorio-entradas-estoque";
+          break;
+        case "relatorio-produtos":
+          tipoRelatorio = "relatorio-produtos";
+          break;
+        case "relatorio-produto-localizacao":
+          tipoRelatorio = "relatorio-produto-localizacao";
+          break;
+        case "atividades-do-dia":
+          tipoRelatorio = "atividades-do-dia";
+          break;
+        case "caixas":
+          tipoRelatorio = "relatorio-caixas";
+          break;
+        default:
+          return res.status(400).json({ error: "Rota de relatório inválida" });
+      }
+
+      const casoDeUso = new GerarRelatorioCasoDeUso();
+      const result = await casoDeUso.execute({
+        tipoRelatorio,
+        dataInicio: dataInicio ? new Date(dataInicio as string) : undefined,
+        dataFim: dataFim ? new Date(dataFim as string) : undefined,
+        data: data ? new Date(data as string) : undefined,
+        idProduto: idProdutoParam || (idProduto as string) || undefined,
+        idCliente: idClienteParam || (idCliente as string) || undefined,
+        idCaixa: idCaixa || (req.query.idCaixa as string) || undefined,
+        limite: limite ? Number(limite) : undefined,
+      });
+
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(400).json({ error });
+    }
+  }
+}
+
+export { RelatorioControlador };

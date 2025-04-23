@@ -1,3 +1,4 @@
+// src/repositorio/IRelatorio.ts
 import {
   vendas,
   produtos,
@@ -5,6 +6,7 @@ import {
   transferencias,
   funcionariosCaixa,
 } from "@prisma/client";
+
 export interface IRelatorioRepository {
   // Métodos existentes (mantidos como estão)
   listarVendasPorPeriodo(
@@ -94,8 +96,6 @@ export interface IRelatorioRepository {
     quantidadeVendida: number;
     valorTotal: number;
   }>;
-
-  // Novos métodos para os relatórios solicitados
   listarAtividadesCaixas(
     dataInicio: Date,
     dataFim: Date,
@@ -193,6 +193,33 @@ export interface IRelatorioRepository {
         quantidade: number;
         quantidadeMinima: number;
       };
+    }[]
+  >;
+
+  // Novos métodos para os relatórios solicitados
+  listarAtividadesDoDia(data: Date): Promise<
+    {
+      idTarefa: string;
+      nomeTarefa: string;
+      descricao: string | null;
+      funcionarioNome: string;
+      status: string;
+      dataCriacao: Date;
+    }[]
+  >;
+  listarRelatorioCaixas(
+    idCaixa?: string,
+    dataInicio?: Date,
+    dataFim?: Date
+  ): Promise<
+    {
+      idCaixa: string;
+      nomeCaixa: string;
+      quantidadeFaturada: number;
+      funcionarios: { id: string; nome: string }[];
+      vendas: (vendas & { clienteNome: string })[];
+      horarioAbertura: Date;
+      horarioFechamento: Date | null;
     }[]
   >;
 }
