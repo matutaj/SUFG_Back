@@ -5,7 +5,7 @@ const criarProdutoSchema = Yup.object().shape({
   referenciaProduto: Yup.string(),
   nomeProduto: Yup.string().required(),
   descricaoProduto: Yup.string(),
-  precoVenda: Yup.number().required(),
+  precoVenda: Yup.number(),
   quantidadePorUnidade: Yup.number(),
   unidadeMedida: Yup.string(),
   unidadeConteudo: Yup.string(),

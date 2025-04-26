@@ -16,7 +16,7 @@ class ProdutoRepositorio implements IProduto {
       data: {
         nomeProduto,
         precoVenda,
-        quantidadePorUnidade,
+        quantidadePorUnidade: quantidadePorUnidade ?? 0,
         referenciaProduto,
         unidadeConteudo,
         unidadeMedida,

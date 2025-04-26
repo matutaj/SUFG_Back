@@ -6,7 +6,7 @@ export interface DadosProduto {
   referenciaProduto: string;
   nomeProduto: string;
   precoVenda: number;
-  quantidadePorUnidade: number;
+  quantidadePorUnidade?: number;
   unidadeMedida: string;
   unidadeConteudo: string;
 }
