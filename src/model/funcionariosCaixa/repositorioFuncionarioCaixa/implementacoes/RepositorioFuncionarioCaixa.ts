@@ -1,6 +1,6 @@
 import { funcionariosCaixa } from "@prisma/client";
 import { DadosFuncionarioCaixa, IFuncionarioCaixa } from "../IFuncionarioCaixa";
-import { prisma } from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 
 class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
   async criarFuncionarioCaixa({
@@ -29,8 +29,9 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
   }
   async listarTodosFuncionariosCaixa(): Promise<funcionariosCaixa[]> {
     const listarTodosFuncionariosCaixa =
-      await prisma.funcionariosCaixa.findMany({ include: { caixas: true, Funcionarios: true, vendas: true
-      }});
+      await prisma.funcionariosCaixa.findMany({
+        include: { caixas: true, Funcionarios: true, vendas: true },
+      });
     return listarTodosFuncionariosCaixa;
   }
   async listarEstadoCaixa(
@@ -59,8 +60,18 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
 
     return listarHoraDeAbertura;
   }
-  async atualizarFuncionarioCaixa(dadosFuncionarioCaixa: Partial<DadosFuncionarioCaixa>): Promise<funcionariosCaixa> {
-    const { id, id_caixa, id_funcionario, estadoCaixa, quantidadaFaturada, horarioAbertura, horarioFechamento } = dadosFuncionarioCaixa;
+  async atualizarFuncionarioCaixa(
+    dadosFuncionarioCaixa: Partial<DadosFuncionarioCaixa>
+  ): Promise<funcionariosCaixa> {
+    const {
+      id,
+      id_caixa,
+      id_funcionario,
+      estadoCaixa,
+      quantidadaFaturada,
+      horarioAbertura,
+      horarioFechamento,
+    } = dadosFuncionarioCaixa;
     return await prisma.funcionariosCaixa.update({
       where: { id },
       data: {
@@ -74,11 +85,8 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
     });
   }
   async eliminarFuncionarioCaixa(id: string): Promise<void> {
-    
-      await prisma.funcionariosCaixa.delete({ where: { id } });
-  
+    await prisma.funcionariosCaixa.delete({ where: { id } });
   }
 }
-
 
 export { FuncionarioCaixaRepositorio };

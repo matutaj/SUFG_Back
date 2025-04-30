@@ -1,4 +1,3 @@
-// src/repositorio/IRelatorio.ts
 import {
   vendas,
   produtos,
@@ -8,25 +7,23 @@ import {
 } from "@prisma/client";
 
 export interface IRelatorioRepository {
-  // Métodos existentes (mantidos como estão)
   listarVendasPorPeriodo(
     dataInicio: Date,
     dataFim: Date,
     limite?: number
-  ): Promise<(vendas & { funcionarioNome: string })[]>;
+  ): Promise<(vendas & { funcionarioNome: string; nomeCaixa: string })[]>;
   listarVendasPorCliente(
     idCliente: string,
     dataInicio: Date,
     dataFim: Date,
     limite?: number
-  ): Promise<(vendas & { funcionarioNome: string })[]>;
+  ): Promise<(vendas & { funcionarioNome: string; nomeCaixa: string })[]>;
   listarProdutosMaisVendidos(
     dataInicio: Date,
     dataFim: Date,
     limite?: number
   ): Promise<
     {
-      id_produto: string;
       nomeProduto: string;
       quantidadeVendida: number;
       valorTotal: number;
@@ -37,14 +34,13 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<{
     totalFaturado: number;
-    vendas: (vendas & { funcionarioNome: string })[];
+    vendas: (vendas & { funcionarioNome: string; nomeCaixa: string })[];
   }>;
   listarQuantidadeFaturadaPorCaixa(
     dataInicio: Date,
     dataFim: Date
   ): Promise<
     {
-      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarios: string[];
@@ -55,10 +51,9 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      id_produto: string;
       nomeProduto: string;
       quantidadeEstoque: number;
-      localizacoes: { id: string; nome: string }[];
+      localizacoes: { nome: string }[];
     }[]
   >;
   listarEntradasEstoquePorPeriodo(
@@ -74,7 +69,6 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      id_produto: string;
       nomeProduto: string;
       quantidadeAtual: number;
       quantidadeMinima: number;
@@ -84,13 +78,14 @@ export interface IRelatorioRepository {
   listarAtividadeFuncionariosCaixa(
     dataInicio: Date,
     dataFim: Date
-  ): Promise<(funcionariosCaixa & { funcionarioNome: string })[]>;
+  ): Promise<
+    (funcionariosCaixa & { funcionarioNome: string; nomeCaixa: string })[]
+  >;
   listarPeriodoMaisVendidoPorProduto(
     idProduto: string,
     dataInicio: Date,
     dataFim: Date
   ): Promise<{
-    id_produto: string;
     nomeProduto: string;
     periodo: string;
     quantidadeVendida: number;
@@ -102,7 +97,6 @@ export interface IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
-      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarioNome: string;
@@ -114,10 +108,9 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      idTarefa: string;
       nomeTarefa: string;
       descricao: string | null;
-      funcionarios: { id: string; nome: string }[];
+      funcionarios: { nome: string }[];
     }[]
   >;
   listarRelatorioVendas(
@@ -126,13 +119,40 @@ export interface IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
-      idVenda: string;
       numeroDocumento: string;
       dataEmissao: Date;
+      dataValidade: Date;
       valorTotal: number;
-      clienteNome: string;
-      funcionarioNome: string;
-      produtos: { id: string; nome: string; quantidade: number }[];
+      cliente: {
+        nomeCliente: string;
+        numeroContribuinte: string | null;
+        moradaCliente: string | null;
+        telefoneCliente: string | null;
+        emailCliente: string | null;
+      };
+      funcionarioCaixa: {
+        nomeCaixa: string;
+        descricaoCaixa: string | null;
+        quantidadaFaturada: number;
+        horarioAbertura: Date;
+        horarioFechamento: Date | null;
+        funcionario: {
+          nomeFuncionario: string;
+          numeroBI: string;
+          moradaFuncionario: string;
+          telefoneFuncionario: string;
+          emailFuncionario: string;
+        };
+      };
+      produtos: {
+        nomeProduto: string;
+        referenciaProduto: string;
+        quantidadeVendida: number;
+        precoVenda: number;
+        unidadeMedida: string | null;
+        unidadeConteudo: string | null;
+        categoria: string;
+      }[];
     }[]
   >;
   listarRelatorioEstoque(
@@ -141,11 +161,9 @@ export interface IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
-      idProduto: string;
       nomeProduto: string;
       quantidadeAtual: number;
       localizacoes: {
-        id: string;
         nome: string;
         seccao: string;
         corredor: string;
@@ -169,7 +187,6 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      idProduto: string;
       nomeProduto: string;
       precoVenda: number;
       quantidadePorUnidade: number;
@@ -182,10 +199,8 @@ export interface IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
-      idProduto: string;
       nomeProduto: string;
       localizacao: {
-        id: string;
         nome: string;
         seccao: string;
         corredor: string;
@@ -195,11 +210,8 @@ export interface IRelatorioRepository {
       };
     }[]
   >;
-
-  // Novos métodos para os relatórios solicitados
   listarAtividadesDoDia(data: Date): Promise<
     {
-      idTarefa: string;
       nomeTarefa: string;
       descricao: string | null;
       funcionarioNome: string;
@@ -213,10 +225,9 @@ export interface IRelatorioRepository {
     dataFim?: Date
   ): Promise<
     {
-      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
-      funcionarios: { id: string; nome: string }[];
+      funcionarios: { nome: string }[];
       vendas: (vendas & { clienteNome: string })[];
       horarioAbertura: Date;
       horarioFechamento: Date | null;

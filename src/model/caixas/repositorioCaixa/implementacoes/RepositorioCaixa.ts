@@ -1,6 +1,6 @@
 import { caixas } from "@prisma/client";
 import { DadosCaixa, ICaixa } from "../ICaixa";
-import { prisma } from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 
 class CaixaRepositorio implements ICaixa {
   async criarCaixa({ descricao, nomeCaixa }: DadosCaixa): Promise<caixas> {

@@ -1,26 +1,39 @@
-// src/controladores/RelatorioControlador.ts
 import { Request, Response } from "express";
 import { GerarRelatorioCasoDeUso } from "./ListarRelatorioCasoDeUso";
+import fs from "fs";
+import { AppError } from "../../../../errors/AppError";
 
 class RelatorioControlador {
-  async handle(req: Request, res: Response): Promise<any> {
-    try {
-      const { dataInicio, dataFim, data, limite, idProduto, idCliente } =
-        req.query;
+  async handle(req: Request, res: Response): Promise<void> {
+   
+      const { data, limite, idProduto, idCliente } = req.body;
       const {
         idCliente: idClienteParam,
         idProduto: idProdutoParam,
         idCaixa,
       } = req.params;
 
-      // Validação dos parâmetros
-      if (!dataInicio && !dataFim && !data && !req.path.includes("caixas")) {
-        return res
-          .status(400)
-          .json({ error: "Pelo menos uma data é obrigatória" });
+      const parseDate = (dateStr: any): Date | null => {
+        if (!dateStr) return null;
+        try {
+          const date = new Date(dateStr);
+          return isNaN(date.getTime()) ? null : date;
+        } catch {
+          return null;
+        }
+      };
+
+      const dataInicio = parseDate(req.body.dataInicio);
+      const dataFim = parseDate(req.body.dataFim);
+
+      if (!dataInicio || !dataFim) {
+        throw new AppError("Datas inválidas ou ausentes");
       }
 
-      // Determina o tipo de relatório com base na URL
+      if (!dataInicio && !dataFim && !data && !req.path.includes("caixas")) {
+        throw new AppError("Pelo menos uma data é obrigatória");
+      }
+
       let tipoRelatorio: string;
       switch (req.path.split("/").pop()) {
         case "vendas-periodo":
@@ -38,7 +51,7 @@ class RelatorioControlador {
         case "faturamento-caixa":
           tipoRelatorio = "quantidade-faturada-por-caixa";
           break;
-        case "estoque":
+        case "estoque-atual":
           tipoRelatorio = "estoque-atual";
           break;
         case "entradas-estoque":
@@ -84,14 +97,14 @@ class RelatorioControlador {
           tipoRelatorio = "relatorio-caixas";
           break;
         default:
-          return res.status(400).json({ error: "Rota de relatório inválida" });
+          throw new AppError("Rota de relatório inválida");
       }
 
       const casoDeUso = new GerarRelatorioCasoDeUso();
-      const result = await casoDeUso.execute({
+      const { filePath } = await casoDeUso.execute({
         tipoRelatorio,
-        dataInicio: dataInicio ? new Date(dataInicio as string) : undefined,
-        dataFim: dataFim ? new Date(dataFim as string) : undefined,
+        dataInicio: dataInicio || undefined,
+        dataFim: dataFim,
         data: data ? new Date(data as string) : undefined,
         idProduto: idProdutoParam || (idProduto as string) || undefined,
         idCliente: idClienteParam || (idCliente as string) || undefined,
@@ -99,10 +112,24 @@ class RelatorioControlador {
         limite: limite ? Number(limite) : undefined,
       });
 
-      return res.status(200).json(result);
-    } catch (error) {
-      return res.status(400).json({ error });
-    }
+      res.download(filePath, (err) => {
+        if (err) {
+          res.status(500).json({
+            error: "Erro ao enviar o arquivo",
+            details: err.message,
+          });
+          return;
+        }
+        fs.unlink(filePath, (unlinkErr) => {
+          if (unlinkErr) {
+            res.status(500).json({
+              error: "Erro ao excluir o arquivo temporário",
+              details: unlinkErr.message,
+            });
+          }
+        });
+      });
+   
   }
 }
 
