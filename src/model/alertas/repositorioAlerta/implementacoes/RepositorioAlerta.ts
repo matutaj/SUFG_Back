@@ -1,6 +1,6 @@
 import { alertas } from "@prisma/client";
 import { DadosAlerta, IAlerta } from "../IAlerta";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 class AlertaRepositorio implements IAlerta {
   async criarAlerta({
     descricao,

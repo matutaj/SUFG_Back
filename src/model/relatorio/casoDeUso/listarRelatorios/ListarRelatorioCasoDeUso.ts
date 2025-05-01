@@ -1,8 +1,5 @@
 import { AppError } from "../../../../errors/AppError";
 import { RelatorioRepository } from "../../repositorio/implementacoes/RelatorioRepositorio";
-import PDFDocument from "pdfkit";
-import fs from "fs";
-import path from "path";
 
 interface RelatorioParams {
   tipoRelatorio: string;
@@ -18,7 +15,7 @@ interface RelatorioParams {
 class GerarRelatorioCasoDeUso {
   private repositorio = new RelatorioRepository();
 
-  async execute(params: RelatorioParams): Promise<{ filePath: string }> {
+  async execute(params: RelatorioParams): Promise<any> {
     const {
       tipoRelatorio,
       dataInicio,
@@ -30,188 +27,171 @@ class GerarRelatorioCasoDeUso {
       limite,
     } = params;
 
-    if (params.dataInicio && params.dataFim) {
-      if (
-        !(params.dataInicio instanceof Date) ||
-        !(params.dataFim instanceof Date)
-      ) {
-        throw new AppError("Datas devem ser objetos Date válidos");
-      }
-
-      if (params.dataInicio > params.dataFim) {
-        throw new AppError("Data inicial maior que data final");
-      }
+    // Validação de datas para relatórios que usam dataInicio e dataFim
+    if (dataInicio && dataFim && dataInicio > dataFim) {
+      throw new AppError("Data inicial deve ser anterior à data final");
     }
-    let resultado: any;
 
     switch (tipoRelatorio) {
       case "vendas-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarVendasPorPeriodo(
+        return this.repositorio.listarVendasPorPeriodo(
           dataInicio,
           dataFim,
           limite
         );
-        break;
+
       case "vendas-por-cliente":
         if (!idCliente) throw new AppError("ID do cliente é obrigatório");
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarVendasPorCliente(
+        return this.repositorio.listarVendasPorCliente(
           idCliente,
           dataInicio,
           dataFim,
           limite
         );
-        break;
+
       case "produtos-mais-vendidos":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarProdutosMaisVendidos(
+        return this.repositorio.listarProdutosMaisVendidos(
           dataInicio,
           dataFim,
           limite
         );
-        break;
+
       case "faturamento-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarFaturamentoPorPeriodo(
+        return this.repositorio.listarFaturamentoPorPeriodo(
           dataInicio,
           dataFim
         );
-        break;
+
       case "quantidade-faturada-por-caixa":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarQuantidadeFaturadaPorCaixa(
+        return this.repositorio.listarQuantidadeFaturadaPorCaixa(
           dataInicio,
           dataFim
         );
-        break;
+
       case "estoque-atual":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarEstoqueAtual(
-          dataInicio,
-          dataFim
-        );
-        break;
+        return this.repositorio.listarEstoqueAtual(dataInicio, dataFim);
+
       case "entradas-estoque-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarEntradasEstoquePorPeriodo(
+        return this.repositorio.listarEntradasEstoquePorPeriodo(
           dataInicio,
           dataFim
         );
-        break;
+
       case "transferencias-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarTransferenciasPorPeriodo(
+        return this.repositorio.listarTransferenciasPorPeriodo(
           dataInicio,
           dataFim
         );
-        break;
+
       case "produtos-abaixo-minimo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarProdutosAbaixoMinimo(
-          dataInicio,
-          dataFim
-        );
-        break;
+        return this.repositorio.listarProdutosAbaixoMinimo(dataInicio, dataFim);
+
       case "atividade-funcionarios-caixa":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarAtividadeFuncionariosCaixa(
+        return this.repositorio.listarAtividadeFuncionariosCaixa(
           dataInicio,
           dataFim
         );
-        break;
+
       case "periodo-mais-vendido-por-produto":
         if (!idProduto) throw new AppError("ID do produto é obrigatório");
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarPeriodoMaisVendidoPorProduto(
+        return this.repositorio.listarPeriodoMaisVendidoPorProduto(
           idProduto,
           dataInicio,
           dataFim
         );
-        break;
+
       case "atividades-caixas":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarAtividadesCaixas(
+        return this.repositorio.listarAtividadesCaixas(
           dataInicio,
           dataFim,
           idProduto
         );
-        break;
+
       case "tarefas":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarTarefas(dataInicio, dataFim);
-        break;
+        return this.repositorio.listarTarefas(dataInicio, dataFim);
+
       case "relatorio-vendas":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarRelatorioVendas(
+        return this.repositorio.listarRelatorioVendas(
           dataInicio,
           dataFim,
           idProduto
         );
-        break;
+
       case "relatorio-estoque":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarRelatorioEstoque(
+        return this.repositorio.listarRelatorioEstoque(
           dataInicio,
           dataFim,
           idProduto
         );
-        break;
+
       case "relatorio-entradas-estoque":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarRelatorioEntradasEstoque(
+        return this.repositorio.listarRelatorioEntradasEstoque(
           dataInicio,
           dataFim,
           idProduto
         );
-        break;
+
       case "relatorio-produtos":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarRelatorioProdutos(
-          dataInicio,
-          dataFim
-        );
-        break;
+        return this.repositorio.listarRelatorioProdutos(dataInicio, dataFim);
+
       case "relatorio-produto-localizacao":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        resultado = await this.repositorio.listarRelatorioProdutoLocalizacao(
+        return this.repositorio.listarRelatorioProdutoLocalizacao(
           dataInicio,
           dataFim,
           idProduto
         );
-        break;
+
       case "atividades-do-dia":
         if (!data) throw new AppError("Data é obrigatória");
-        resultado = await this.repositorio.listarAtividadesDoDia(data);
-        break;
+        return this.repositorio.listarAtividadesDoDia(data);
+
       case "relatorio-caixas":
-        resultado = await this.repositorio.listarRelatorioCaixas(
+        return this.repositorio.listarRelatorioCaixas(
           idCaixa,
           dataInicio,
           dataFim
         );
-        break;
+
       default:
         throw new AppError("Tipo de relatório inválido");
     }
+<<<<<<< HEAD
 
     if (!resultado || (Array.isArray(resultado) && resultado.length === 0)) {
       throw new AppError("Nenhum dado encontrado para o relatório");
@@ -1742,6 +1722,8 @@ class GerarRelatorioCasoDeUso {
         );
       }
     });
+=======
+>>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
   }
 }
 

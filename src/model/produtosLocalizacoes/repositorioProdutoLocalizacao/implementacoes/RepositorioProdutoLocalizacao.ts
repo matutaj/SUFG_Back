@@ -3,7 +3,7 @@ import {
   DadosProdutoLocalizacao,
   IProdutoLocalizacao,
 } from "../IProdutoLocalizacao";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 
 class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
   async criarProdutoLocalizacao({

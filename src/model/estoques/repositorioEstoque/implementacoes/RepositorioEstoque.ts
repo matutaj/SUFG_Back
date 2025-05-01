@@ -1,6 +1,6 @@
 import { estoques } from "@prisma/client";
 import { DadosEstoque, IEstoque } from "../IEstoque";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 
 class EstoqueRepositorio implements IEstoque {
   async criarEstoque({

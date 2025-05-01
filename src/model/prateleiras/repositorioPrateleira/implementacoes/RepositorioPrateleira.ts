@@ -1,6 +1,6 @@
 import { prateleiras } from "@prisma/client";
 import { DadosPrateleira, IPrateleira } from "../IPrateleira";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 
 class PrateleiraRepositorio implements IPrateleira {
   async criarPrateleira({

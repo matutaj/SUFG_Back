@@ -1,5 +1,5 @@
 import { funcionariosPermissoes } from "@prisma/client";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 import {
   DadosFuncionarioPermissao,
   IFuncionarioPermissao,

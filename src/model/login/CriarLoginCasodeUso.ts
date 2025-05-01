@@ -1,5 +1,5 @@
 // src/casosDeUso/login/LoginCasoDeUso.ts
-import prisma from "../../prisma/client";
+import { prisma } from "../../prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { FuncionarioRepositorio } from "../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";

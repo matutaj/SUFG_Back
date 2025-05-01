@@ -1,6 +1,6 @@
 import { produtos } from "@prisma/client";
 import { DadosProduto, IProduto } from "../IProduto";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 
 class ProdutoRepositorio implements IProduto {
   async criarProduto({

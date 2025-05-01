@@ -1,6 +1,6 @@
 import { entradasEstoque } from "@prisma/client";
 import { DadosEntradaEstoque, IEntradaEstoque } from "../IEntradaEstoque";
-import prisma from "../../../../prisma/client";
+import { prisma } from "../../../../prisma/client";
 
 class EntradaEstoqueRepositorio implements IEntradaEstoque {
   async criarEntradaEstoque({
