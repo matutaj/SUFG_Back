@@ -51,6 +51,7 @@ class GerarRelatorioCasoDeUso {
         resultado = await this.repositorio.listarVendasPorPeriodo(
           dataInicio,
           dataFim,
+          limite
         );
         break;
       case "vendas-por-cliente":
@@ -158,7 +159,8 @@ class GerarRelatorioCasoDeUso {
           throw new AppError("Datas são obrigatórias");
         resultado = await this.repositorio.listarRelatorioVendas(
           dataInicio,
-          dataFim
+          dataFim,
+          idProduto
         );
         break;
       case "relatorio-estoque":
@@ -211,7 +213,7 @@ class GerarRelatorioCasoDeUso {
         throw new AppError("Tipo de relatório inválido");
     }
 
-    if (!resultado || !Array.isArray(resultado) || resultado.length === 0) {
+    if (!resultado || (Array.isArray(resultado) && resultado.length === 0)) {
       throw new AppError("Nenhum dado encontrado para o relatório");
     }
 
@@ -219,7 +221,7 @@ class GerarRelatorioCasoDeUso {
   }
 
   private async gerarRelatorio(
-    data: any[],
+    data: any,
     tipoRelatorio: string,
     dataInicio?: Date,
     dataFim?: Date
@@ -239,7 +241,7 @@ class GerarRelatorioCasoDeUso {
   }
 
   private async gerarPDF(
-    data: any[],
+    data: any,
     tipoRelatorio: string,
     filePath: string,
     dataInicio?: Date,
@@ -247,312 +249,1486 @@ class GerarRelatorioCasoDeUso {
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        const doc = new PDFDocument();
+        const doc = new PDFDocument({ size: "A4", margin: 50 });
         const writeStream = fs.createWriteStream(filePath);
         doc.pipe(writeStream);
 
         doc
           .fontSize(20)
+          .font("Helvetica-Bold")
           .text(`Relatório: ${tipoRelatorio.replace(/-/g, " ")}`, {
             align: "center",
           });
         if (dataInicio && dataFim) {
           doc
             .fontSize(12)
+            .font("Helvetica")
             .text(
               `Período: ${dataInicio.toLocaleDateString()} a ${dataFim.toLocaleDateString()}`,
               { align: "center" }
             );
         }
+        doc
+          .fontSize(12)
+          .font("Helvetica")
+          .text(`Data de Emissão: ${new Date().toLocaleDateString()}`, {
+            align: "center",
+          });
         doc.moveDown();
 
+        let y = 100;
+        const maxY = 700;
+
         if (tipoRelatorio === "relatorio-vendas") {
-          let y = 100;
-          data.forEach((item, index) => {
+          const headers = [
+            "Data",
+            "Nº Doc",
+            "Valor Total",
+            "Cliente",
+            "Caixa",
+            "Funcionário",
+            "Produtos",
+          ];
+          const columnWidths = [60, 60, 60, 90, 80, 90, 100];
+          const columnPositions = [50, 110, 170, 230, 320, 400, 490];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
             if (!item) {
               throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
             }
 
-            doc.fontSize(14).text(`Venda ${index + 1}`, 50, y);
-            y += 20;
-
-            // Informações gerais
-            doc.fontSize(12).text("Informações Gerais:", 50, y);
-            y += 15;
-            doc.text(
-              `Número do Documento: ${item.numeroDocumento || "-"}`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Data de Emissão: ${
-                item.dataEmissao
-                  ? new Date(item.dataEmissao).toLocaleDateString()
-                  : "-"
-              }`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Data de Validade: ${
-                item.dataValidade
-                  ? new Date(item.dataValidade).toLocaleDateString()
-                  : "-"
-              }`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Valor Total: ${
-                item.valorTotal != null ? item.valorTotal.toFixed(2) : "-"
-              }`,
-              60,
-              y
-            );
-            y += 20;
-
-            // Cliente
-            doc.fontSize(12).text("Cliente:", 50, y);
-            y += 15;
-            const cliente = item.cliente || {};
-            if (!cliente) {
-              throw new AppError(
-                `Dados do cliente ausentes na venda ${index + 1}`
-              );
-            }
-            doc.text(`Nome: ${cliente.nomeCliente || "-"}`, 60, y);
-            y += 15;
-            doc.text(
-              `Contribuinte: ${cliente.numeroContribuinte || "-"}`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(`Morada: ${cliente.moradaCliente || "-"}`, 60, y);
-            y += 15;
-            doc.text(`Telefone: ${cliente.telefoneCliente || "-"}`, 60, y);
-            y += 15;
-            doc.text(`Email: ${cliente.emailCliente || "-"}`, 60, y);
-            y += 20;
-
-            // Caixa e Funcionário
-            doc.fontSize(12).text("Caixa e Funcionário:", 50, y);
-            y += 15;
-            const funcionarioCaixa = item.funcionarioCaixa || {};
-            if (!funcionarioCaixa) {
-              throw new AppError(
-                `Dados do caixa ausentes na venda ${index + 1}`
-              );
-            }
-            const funcionario = funcionarioCaixa.funcionario || {};
-            doc.text(`Caixa: ${funcionarioCaixa.nomeCaixa || "-"}`, 60, y);
-            y += 15;
-            doc.text(
-              `Descrição do Caixa: ${funcionarioCaixa.descricaoCaixa || "-"}`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Faturamento: ${
-                funcionarioCaixa.quantidadaFaturada != null
-                  ? funcionarioCaixa.quantidadaFaturada.toFixed(2)
-                  : "-"
-              }`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Abertura: ${
-                funcionarioCaixa.horarioAbertura
-                  ? new Date(funcionarioCaixa.horarioAbertura).toLocaleString()
-                  : "-"
-              }`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Fechamento: ${
-                funcionarioCaixa.horarioFechamento
-                  ? new Date(
-                      funcionarioCaixa.horarioFechamento
-                    ).toLocaleString()
-                  : "-"
-              }`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(
-              `Funcionário: ${funcionario.nomeFuncionario || "-"}`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(`BI: ${funcionario.numeroBI || "-"}`, 60, y);
-            y += 15;
-            doc.text(`Morada: ${funcionario.moradaFuncionario || "-"}`, 60, y);
-            y += 15;
-            doc.text(
-              `Telefone: ${funcionario.telefoneFuncionario || "-"}`,
-              60,
-              y
-            );
-            y += 15;
-            doc.text(`Email: ${funcionario.emailFuncionario || "-"}`, 60, y);
-            y += 20;
-
-            // Produtos
-            doc.fontSize(12).text("Produtos Vendidos:", 50, y);
-            y += 15;
-            if (!item.produtos || !Array.isArray(item.produtos)) {
-              throw new AppError(
-                `Lista de produtos inválida na venda ${index + 1}`
-              );
-            }
-            if (item.produtos.length > 0) {
-              item.produtos.forEach((produto: any, produtoIndex: number) => {
-                if (!produto) {
-                  throw new AppError(
-                    `Produto ${produtoIndex + 1} é nulo na venda ${index + 1}`
-                  );
-                }
-                doc.text(`- Nome: ${produto.nomeProduto || "-"}`, 60, y);
-                y += 15;
-                doc.text(
-                  `  Referência: ${produto.referenciaProduto || "-"}`,
-                  60,
-                  y
-                );
-                y += 15;
-                doc.text(
-                  `  Quantidade: ${produto.quantidadeVendida || "-"}`,
-                  60,
-                  y
-                );
-                y += 15;
-                doc.text(
-                  `  Preço: ${
-                    produto.precoVenda != null
-                      ? produto.precoVenda.toFixed(2)
-                      : "-"
-                  }`,
-                  60,
-                  y
-                );
-                y += 15;
-                doc.text(
-                  `  Unidade de Medida: ${produto.unidadeMedida || "-"}`,
-                  60,
-                  y
-                );
-                y += 15;
-                doc.text(
-                  `  Conteúdo: ${produto.unidadeConteudo || "-"}`,
-                  60,
-                  y
-                );
-                y += 15;
-                doc.text(`  Categoria: ${produto.categoria || "-"}`, 60, y);
-                y += 15;
-              });
-            } else {
-              doc.text("Nenhum produto registrado.", 60, y);
-              y += 15;
-            }
-
-            y += 20;
-            doc.moveTo(50, y).lineTo(550, y).stroke();
-            y += 20;
-
-            if (y > 700) {
+            if (y > maxY) {
               doc.addPage();
               y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
             }
+
+            const produtos = Array.isArray(item.produtos) ? item.produtos : [];
+            let produtosText = "";
+            if (produtos.length > 0) {
+              produtosText = produtos
+                .map((produto: any) => {
+                  return `${produto.nomeProduto || "-"} (Qtd: ${
+                    produto.quantidadeVendida || "-"
+                  }, kzs${produto.precoVenda?.toFixed(2) || "-"})`;
+                })
+                .join("; ");
+            } else {
+              produtosText = "Nenhum produto.";
+            }
+
+            const produtosHeight = doc.heightOfString(produtosText, {
+              width: columnWidths[6],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, produtosHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(
+              item.dataEmissao
+                ? new Date(item.dataEmissao).toLocaleDateString()
+                : "-",
+              columnPositions[0],
+              y,
+              { width: columnWidths[0] }
+            );
+            doc.text(item.numeroDocumento || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.valorTotal != null ? item.valorTotal.toFixed(2) : "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(item.cliente?.nomeCliente || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+            doc.text(
+              item.funcionarioCaixa?.nomeCaixa || "-",
+              columnPositions[4],
+              y,
+              { width: columnWidths[4] }
+            );
+            doc.text(
+              item.funcionarioCaixa?.funcionario?.nomeFuncionario || "-",
+              columnPositions[5],
+              y,
+              { width: columnWidths[5] }
+            );
+            doc.text(produtosText, columnPositions[6], y, {
+              width: columnWidths[6],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
           });
-        } else {
-          // Outros relatórios
-          let headers: string[] = [];
-          switch (tipoRelatorio) {
-            case "vendas-por-periodo":
-            case "vendas-por-cliente":
-              headers = [
-                "Data",
-                "Cliente",
-                "Valor Total",
-                "Caixa",
-                "Funcionário",
-              ];
-              break;
-            case "produtos-mais-vendidos":
-              headers = ["Produto", "Quantidade Vendida", "Valor Total"];
-              break;
-            case "estoque-atual":
-            case "relatorio-estoque":
-              headers = ["Produto", "Quantidade", "Localização"];
-              break;
-            case "produtos-abaixo-minimo":
-              headers = [
-                "Produto",
-                "Quantidade Atual",
-                "Quantidade Mínima",
-                "Localização",
-              ];
-              break;
-            case "quantidade-faturada-por-caixa":
-              headers = ["Caixa", "Quantidade Faturada", "Funcionários"];
-              break;
-            case "tarefas":
-              headers = ["Tarefa", "Descrição", "Funcionários"];
-              break;
-            case "atividade-funcionarios-caixa":
-              headers = ["Caixa", "Funcionário", "Horário Abertura"];
-              break;
-            case "atividades-do-dia":
-              headers = [
-                "Tarefa",
-                "Descrição",
-                "Funcionário",
-                "Status",
-                "Data Criação",
-              ];
-              break;
-            default:
-              headers = Object.keys(data[0] || {}).filter(
-                (key) => !key.includes("id")
-              );
-          }
+        } else if (
+          tipoRelatorio === "vendas-por-periodo" ||
+          tipoRelatorio === "vendas-por-cliente"
+        ) {
+          const headers = [
+            "Data",
+            "Nº Doc",
+            "Valor Total",
+            "Cliente",
+            "Caixa",
+            "Funcionário",
+            "Produtos",
+          ];
+          const columnWidths = [60, 60, 60, 90, 80, 90, 100];
+          const columnPositions = [50, 110, 170, 230, 320, 400, 490];
 
-          doc.fontSize(12).text(headers.join("  |  "), 50, 100);
-          doc.moveTo(50, 120).lineTo(550, 120).stroke();
-          doc.moveDown();
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
 
-          let y = 140;
-          data.forEach((item, index) => {
+          data.forEach((item: any, index: number) => {
             if (!item) {
               throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
             }
-            const row = headers.map((header) => {
-              let value: any;
-              const key = header.toLowerCase().replace(/ /g, "_");
-              value = item[key] || item[header] || "-";
-              if (value instanceof Date) {
-                value = value.toLocaleDateString();
-              } else if (typeof value === "number") {
-                value = value.toFixed(2);
-              } else if (Array.isArray(value)) {
-                value = value.map((v: any) => v.nome || v).join(", ");
-              }
-              return String(value).padEnd(20);
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const produtos = Array.isArray(item.vendasProdutos)
+              ? item.vendasProdutos
+              : [];
+            let produtosText = "";
+            if (produtos.length > 0) {
+              produtosText = produtos
+                .map((vp: any) => {
+                  return `${vp.produtos?.nomeProduto || "-"} (Qtd: ${
+                    vp.quantidadeVendida || "-"
+                  }, kzs${vp.produtos?.precoVenda?.toFixed(2) || "-"})`;
+                })
+                .join("; ");
+            } else {
+              produtosText = "Nenhum produto.";
+            }
+
+            const produtosHeight = doc.heightOfString(produtosText, {
+              width: columnWidths[6],
+              fontSize: 9,
             });
-            doc.text(row.join(" "), 50, y);
-            y += 20;
+            const rowHeight = Math.max(20, produtosHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(
+              item.dataEmissao
+                ? new Date(item.dataEmissao).toLocaleDateString()
+                : "-",
+              columnPositions[0],
+              y,
+              { width: columnWidths[0] }
+            );
+            doc.text(item.numeroDocumento || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.valorTotal != null ? item.valorTotal.toFixed(2) : "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(item.clientes?.nomeCliente || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+            doc.text(item.nomeCaixa || "-", columnPositions[4], y, {
+              width: columnWidths[4],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[5], y, {
+              width: columnWidths[5],
+            });
+            doc.text(produtosText, columnPositions[6], y, {
+              width: columnWidths[6],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
           });
+        } else if (tipoRelatorio === "produtos-mais-vendidos") {
+          const headers = ["Produto", "Quantidade Vendida", "Valor Total"];
+          const columnWidths = [200, 150, 150];
+          const columnPositions = [50, 250, 400];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.quantidadeVendida?.toString() || "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(
+              item.valorTotal != null ? item.valorTotal.toFixed(2) : "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "faturamento-por-periodo") {
+          doc.fontSize(12).font("Helvetica-Bold");
+          doc.text(
+            `Total Faturado: kzs${data.totalFaturado?.toFixed(2) || "0.00"}`,
+            50,
+            y
+          );
+          y += 30;
+
+          const headers = [
+            "Data",
+            "Nº Doc",
+            "Valor Total",
+            "Cliente",
+            "Caixa",
+            "Funcionário",
+            "Produtos",
+          ];
+          const columnWidths = [60, 60, 60, 90, 80, 90, 100];
+          const columnPositions = [50, 110, 170, 230, 320, 400, 490];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.vendas.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const produtos = Array.isArray(item.vendasProdutos)
+              ? item.vendasProdutos
+              : [];
+            let produtosText = "";
+            if (produtos.length > 0) {
+              produtosText = produtos
+                .map((vp: any) => {
+                  return `${vp.produtos?.nomeProduto || "-"} (Qtd: ${
+                    vp.quantidadeVendida || "-"
+                  }, kzs${vp.produtos?.precoVenda?.toFixed(2) || "-"})`;
+                })
+                .join("; ");
+            } else {
+              produtosText = "Nenhum produto.";
+            }
+
+            const produtosHeight = doc.heightOfString(produtosText, {
+              width: columnWidths[6],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, produtosHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(
+              item.dataEmissao
+                ? new Date(item.dataEmissao).toLocaleDateString()
+                : "-",
+              columnPositions[0],
+              y,
+              { width: columnWidths[0] }
+            );
+            doc.text(item.numeroDocumento || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.valorTotal != null ? item.valorTotal.toFixed(2) : "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(item.clientes?.nomeCliente || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+            doc.text(item.nomeCaixa || "-", columnPositions[4], y, {
+              width: columnWidths[4],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[5], y, {
+              width: columnWidths[5],
+            });
+            doc.text(produtosText, columnPositions[6], y, {
+              width: columnWidths[6],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "quantidade-faturada-por-caixa") {
+          const headers = ["Caixa", "Quantidade Faturada", "Funcionários"];
+          const columnWidths = [150, 150, 200];
+          const columnPositions = [50, 200, 350];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const funcionariosText = item.funcionarios?.join(", ") || "-";
+            const funcionariosHeight = doc.heightOfString(funcionariosText, {
+              width: columnWidths[2],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, funcionariosHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(item.nomeCaixa || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.quantidadeFaturada != null
+                ? item.quantidadeFaturada.toFixed(2)
+                : "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(funcionariosText, columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "estoque-atual") {
+          const headers = ["Produto", "Quantidade", "Localizações"];
+          const columnWidths = [150, 100, 250];
+          const columnPositions = [50, 200, 300];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const localizacoesText =
+              item.localizacoes?.map((loc: any) => loc.nome).join(", ") || "-";
+            const localizacoesHeight = doc.heightOfString(localizacoesText, {
+              width: columnWidths[2],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, localizacoesHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.quantidadeEstoque?.toString() || "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(localizacoesText, columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "entradas-estoque-por-periodo") {
+          const headers = [
+            "Data",
+            "Produto",
+            "Quantidade",
+            "Fornecedor",
+            "Funcionário",
+          ];
+          const columnWidths = [80, 120, 80, 120, 120];
+          const columnPositions = [50, 130, 250, 330, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(
+              item.dataEntrada
+                ? new Date(item.dataEntrada).toLocaleDateString()
+                : "-",
+              columnPositions[0],
+              y,
+              { width: columnWidths[0] }
+            );
+            doc.text(item.produtoNome || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.quantidadeEntrada?.toString() || "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(item.fornecedorNome || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[4], y, {
+              width: columnWidths[4],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "transferencias-por-periodo") {
+          const headers = [
+            "Data",
+            "Produto",
+            "Quantidade",
+            "Localização",
+            "Funcionário",
+          ];
+          const columnWidths = [80, 120, 80, 120, 120];
+          const columnPositions = [50, 130, 250, 330, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(
+              item.dataTransferencia
+                ? new Date(item.dataTransferencia).toLocaleDateString()
+                : "-",
+              columnPositions[0],
+              y,
+              { width: columnWidths[0] }
+            );
+            doc.text(item.Produtos?.nomeProduto || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.quantidadeTransferida?.toString() || "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(
+              item.Localizacoes?.nomeLocalizacao || "-",
+              columnPositions[3],
+              y,
+              { width: columnWidths[3] }
+            );
+            doc.text(item.funcionarioNome || "-", columnPositions[4], y, {
+              width: columnWidths[4],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "produtos-abaixo-minimo") {
+          const headers = [
+            "Produto",
+            "Quantidade Atual",
+            "Quantidade Mínima",
+            "Localização",
+          ];
+          const columnWidths = [150, 100, 100, 150];
+          const columnPositions = [50, 200, 300, 400];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.quantidadeAtual?.toString() || "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(
+              item.quantidadeMinima?.toString() || "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(item.localizacao || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "atividade-funcionarios-caixa") {
+          const headers = [
+            "Caixa",
+            "Funcionário",
+            "Horário Abertura",
+            "Horário Fechamento",
+          ];
+          const columnWidths = [120, 120, 100, 100];
+          const columnPositions = [50, 170, 290, 390];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(item.nomeCaixa || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.horarioAbertura
+                ? new Date(item.horarioAbertura).toLocaleString()
+                : "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(
+              item.horarioFechamento
+                ? new Date(item.horarioFechamento).toLocaleString()
+                : "-",
+              columnPositions[3],
+              y,
+              { width: columnWidths[3] }
+            );
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "periodo-mais-vendido-por-produto") {
+          const headers = [
+            "Produto",
+            "Período",
+            "Quantidade Vendida",
+            "Valor Total",
+          ];
+          const columnWidths = [150, 150, 100, 100];
+          const columnPositions = [50, 200, 350, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          const item = Array.isArray(data) ? data[0] : data;
+          if (!item) {
+            throw new AppError("Item é nulo ou indefinido");
+          }
+
+          if (y > maxY) {
+            doc.addPage();
+            y = 50;
+            doc.fontSize(10).font("Helvetica-Bold");
+            headers.forEach((header, i) => {
+              doc.text(header, columnPositions[i], y, {
+                width: columnWidths[i],
+                align: "left",
+              });
+            });
+            y += 20;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+            doc.font("Helvetica");
+          }
+
+          const rowHeight = 20;
+          doc.fontSize(9);
+          doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+            width: columnWidths[0],
+          });
+          doc.text(item.periodo || "-", columnPositions[1], y, {
+            width: columnWidths[1],
+          });
+          doc.text(
+            item.quantidadeVendida?.toString() || "-",
+            columnPositions[2],
+            y,
+            { width: columnWidths[2] }
+          );
+          doc.text(
+            item.valorTotal != null ? item.valorTotal.toFixed(2) : "-",
+            columnPositions[3],
+            y,
+            { width: columnWidths[3] }
+          );
+
+          y += rowHeight;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+        } else if (tipoRelatorio === "atividades-caixas") {
+          const headers = [
+            "Caixa",
+            "Funcionário",
+            "Quantidade Faturada",
+            "Nº Vendas",
+          ];
+          const columnWidths = [150, 150, 100, 100];
+          const columnPositions = [50, 200, 350, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(item.nomeCaixa || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.quantidadeFaturada != null
+                ? item.quantidadeFaturada.toFixed(2)
+                : "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(
+              item.vendas?.length?.toString() || "0",
+              columnPositions[3],
+              y,
+              { width: columnWidths[3] }
+            );
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "tarefas") {
+          const headers = ["Tarefa", "Descrição", "Funcionários"];
+          const columnWidths = [150, 150, 200];
+          const columnPositions = [50, 200, 350];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const funcionariosText =
+              item.funcionarios?.map((f: any) => f.nome).join(", ") || "-";
+            const funcionariosHeight = doc.heightOfString(funcionariosText, {
+              width: columnWidths[2],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, funcionariosHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(item.nomeTarefa || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(item.descricao || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(funcionariosText, columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "relatorio-estoque") {
+          const headers = ["Produto", "Quantidade Atual", "Localizações"];
+          const columnWidths = [150, 100, 250];
+          const columnPositions = [50, 200, 300];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const localizacoesText =
+              item.localizacoes
+                ?.map(
+                  (loc: any) =>
+                    `${loc.nome} (Seção: ${loc.seccao}, Corredor: ${loc.corredor}, Prateleira: ${loc.prateleira})`
+                )
+                .join("; ") || "-";
+            const localizacoesHeight = doc.heightOfString(localizacoesText, {
+              width: columnWidths[2],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, localizacoesHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.quantidadeAtual?.toString() || "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(localizacoesText, columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "relatorio-entradas-estoque") {
+          const headers = [
+            "Data",
+            "Produto",
+            "Quantidade",
+            "Preço",
+            "Fornecedor",
+            "Funcionário",
+          ];
+          const columnWidths = [80, 120, 80, 50, 80, 100];
+          const columnPositions = [50, 130, 250, 330, 360, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(
+              item.dataEntrada
+                ? new Date(item.dataEntrada).toLocaleDateString()
+                : "-",
+              columnPositions[0],
+              y,
+              { width: columnWidths[0] }
+            );
+            doc.text(item.produtoNome || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(
+              item.quantidadeRecebida?.toString() || "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(
+              item.custoUnitario?.toString() || "-",
+              columnPositions[3],
+              y,
+              { width: columnWidths[3] }
+            );
+            doc.text(item.fornecedorNome || "-", columnPositions[4], y, {
+              width: columnWidths[4],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[5], y, {
+              width: columnWidths[5],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "relatorio-produtos") {
+          const headers = ["Produto", "Preço Venda", "Quantidade", "Categoria"];
+          const columnWidths = [150, 100, 100, 150];
+          const columnPositions = [50, 200, 300, 400];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.precoVenda != null ? item.precoVenda.toFixed(2) : "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(
+              item.quantidadePorUnidade?.toString() || "-",
+              columnPositions[2],
+              y,
+              { width: columnWidths[2] }
+            );
+            doc.text(item.categoria || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "relatorio-produto-localizacao") {
+          const headers = [
+            "Produto",
+            "Localização",
+            "Seção",
+            "Corredor",
+            "Prateleira",
+            "Quantidade",
+          ];
+          const columnWidths = [100, 100, 80, 80, 80, 80];
+          const columnPositions = [50, 150, 250, 330, 410, 490];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const rowHeight = 20;
+            doc.fontSize(9);
+            doc.text(item.nomeProduto || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(item.localizacao?.nome || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(item.localizacao?.seccao || "-", columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+            doc.text(item.localizacao?.corredor || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+            doc.text(
+              item.localizacao?.prateleira || "-",
+              columnPositions[4],
+              y,
+              {
+                width: columnWidths[4],
+              }
+            );
+            doc.text(
+              item.localizacao?.quantidade?.toString() || "-",
+              columnPositions[5],
+              y,
+              { width: columnWidths[5] }
+            );
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "atividades-do-dia") {
+          const headers = [
+            "Tarefa",
+            "Descrição",
+            "Funcionário",
+            "Status",
+            "Data Criação",
+          ];
+          const columnWidths = [100, 120, 100, 80, 100];
+          const columnPositions = [50, 150, 270, 370, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const descricaoHeight = doc.heightOfString(item.descricao || "-", {
+              width: columnWidths[1],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, descricaoHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(item.nomeTarefa || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(item.descricao || "-", columnPositions[1], y, {
+              width: columnWidths[1],
+            });
+            doc.text(item.funcionarioNome || "-", columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+            doc.text(item.status || "-", columnPositions[3], y, {
+              width: columnWidths[3],
+            });
+            doc.text(
+              item.dataCriacao
+                ? new Date(item.dataCriacao).toLocaleDateString()
+                : "-",
+              columnPositions[4],
+              y,
+              { width: columnWidths[4] }
+            );
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else if (tipoRelatorio === "relatorio-caixas") {
+          const headers = [
+            "Caixa",
+            "Quantidade Faturada",
+            "Funcionários",
+            "Nº Vendas",
+          ];
+          const columnWidths = [150, 100, 150, 100];
+          const columnPositions = [50, 200, 300, 450];
+
+          doc.fontSize(10).font("Helvetica-Bold");
+          headers.forEach((header, i) => {
+            doc.text(header, columnPositions[i], y, {
+              width: columnWidths[i],
+              align: "left",
+            });
+          });
+          y += 20;
+          doc.moveTo(50, y).lineTo(550, y).stroke();
+          y += 10;
+          doc.font("Helvetica");
+
+          data.forEach((item: any, index: number) => {
+            if (!item) {
+              throw new AppError(`Item ${index + 1} é nulo ou indefinido`);
+            }
+
+            if (y > maxY) {
+              doc.addPage();
+              y = 50;
+              doc.fontSize(10).font("Helvetica-Bold");
+              headers.forEach((header, i) => {
+                doc.text(header, columnPositions[i], y, {
+                  width: columnWidths[i],
+                  align: "left",
+                });
+              });
+              y += 20;
+              doc.moveTo(50, y).lineTo(550, y).stroke();
+              y += 10;
+              doc.font("Helvetica");
+            }
+
+            const funcionariosText =
+              item.funcionarios?.map((f: any) => f.nome).join(", ") || "-";
+            const funcionariosHeight = doc.heightOfString(funcionariosText, {
+              width: columnWidths[2],
+              fontSize: 9,
+            });
+            const rowHeight = Math.max(20, funcionariosHeight + 5);
+
+            doc.fontSize(9);
+            doc.text(item.nomeCaixa || "-", columnPositions[0], y, {
+              width: columnWidths[0],
+            });
+            doc.text(
+              item.quantidadeFaturada != null
+                ? item.quantidadeFaturada.toFixed(2)
+                : "-",
+              columnPositions[1],
+              y,
+              { width: columnWidths[1] }
+            );
+            doc.text(funcionariosText, columnPositions[2], y, {
+              width: columnWidths[2],
+            });
+            doc.text(
+              item.vendas?.length?.toString() || "0",
+              columnPositions[3],
+              y,
+              { width: columnWidths[3] }
+            );
+
+            y += rowHeight;
+            doc.moveTo(50, y).lineTo(550, y).stroke();
+            y += 10;
+          });
+        } else {
+          throw new AppError(
+            `Relatório ${tipoRelatorio} não suportado para renderização`
+          );
         }
 
         doc.end();
@@ -569,4 +1745,4 @@ class GerarRelatorioCasoDeUso {
   }
 }
 
-export { GerarRelatorioCasoDeUso };
+export { GerarRelatorioCasoDeUso, RelatorioParams };

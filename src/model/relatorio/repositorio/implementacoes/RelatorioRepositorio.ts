@@ -458,20 +458,39 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date,
     idProduto?: string
-  ): Promise<any[]> {
-    // Adicionar validação de datas
+  ): Promise<
+    {
+      numeroDocumento: string;
+      dataEmissao: Date;
+      dataValidade: Date;
+      valorTotal: number;
+      cliente: {
+        nomeCliente: string;
+      };
+      funcionarioCaixa: {
+        nomeCaixa: string;
+        quantidadaFaturada: number;
+        funcionario: {
+          nomeFuncionario: string;
+        };
+      };
+      produtos: {
+        nomeProduto: string;
+        referenciaProduto: string;
+        quantidadeVendida: number;
+        precoVenda: number;
+      }[];
+    }[]
+  > {
+    // Validação de datas
     if (!(dataInicio instanceof Date) || !(dataFim instanceof Date)) {
       throw new Error("Datas devem ser instâncias de Date");
     }
 
-    // Converter para ISO string para evitar problemas de timezone
-    const inicioISO = dataInicio.toISOString();
-    const fimISO = dataFim.toISOString();
-
     const where: any = {
       dataEmissao: {
-        gte: inicioISO, // Usar string ISO formatada
-        lte: fimISO, // Usar string ISO formatada
+        gte: dataInicio,
+        lte: dataFim,
       },
     };
 
@@ -479,7 +498,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       where.vendasProdutos = { some: { id_produto: idProduto } };
     }
 
-    return await prisma.vendas.findMany({
+    const vendas = await prisma.vendas.findMany({
       where,
       include: {
         clientes: true,
@@ -500,6 +519,33 @@ export class RelatorioRepository implements IRelatorioRepository {
         },
       },
     });
+
+    return vendas.map((venda) => ({
+      numeroDocumento: venda.numeroDocumento,
+      dataEmissao: venda.dataEmissao,
+      dataValidade: venda.dataValidade,
+      valorTotal: Number(venda.valorTotal),
+      cliente: {
+        nomeCliente: venda.clientes?.nomeCliente ?? "Desconhecido",
+      },
+      funcionarioCaixa: {
+        nomeCaixa: venda.funcionariosCaixa?.caixas?.nomeCaixa ?? "Desconhecido",
+        quantidadaFaturada: Number(
+          venda.funcionariosCaixa?.quantidadaFaturada ?? 0
+        ),
+        funcionario: {
+          nomeFuncionario:
+            venda.funcionariosCaixa?.Funcionarios?.nomeFuncionario ??
+            "Desconhecido",
+        },
+      },
+      produtos: venda.vendasProdutos.map((vp) => ({
+        nomeProduto: vp.produtos.nomeProduto,
+        referenciaProduto: vp.produtos.referenciaProduto ?? "-",
+        quantidadeVendida: vp.quantidadeVendida,
+        precoVenda: Number(vp.produtos.precoVenda),
+      })),
+    }));
   }
   async listarRelatorioEstoque(
     dataInicio: Date,

@@ -125,23 +125,12 @@ export interface IRelatorioRepository {
       valorTotal: number;
       cliente: {
         nomeCliente: string;
-        numeroContribuinte: string | null;
-        moradaCliente: string | null;
-        telefoneCliente: string | null;
-        emailCliente: string | null;
       };
       funcionarioCaixa: {
         nomeCaixa: string;
-        descricaoCaixa: string | null;
         quantidadaFaturada: number;
-        horarioAbertura: Date;
-        horarioFechamento: Date | null;
         funcionario: {
           nomeFuncionario: string;
-          numeroBI: string;
-          moradaFuncionario: string;
-          telefoneFuncionario: string;
-          emailFuncionario: string;
         };
       };
       produtos: {
@@ -149,9 +138,6 @@ export interface IRelatorioRepository {
         referenciaProduto: string;
         quantidadeVendida: number;
         precoVenda: number;
-        unidadeMedida: string | null;
-        unidadeConteudo: string | null;
-        categoria: string;
       }[];
     }[]
   >;
