@@ -450,6 +450,48 @@ export class RelatorioRepository implements IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
+<<<<<<< HEAD
+      numeroDocumento: string;
+      dataEmissao: Date;
+      dataValidade: Date;
+      valorTotal: number;
+      cliente: {
+        nomeCliente: string;
+      };
+      funcionarioCaixa: {
+        nomeCaixa: string;
+        quantidadaFaturada: number;
+        funcionario: {
+          nomeFuncionario: string;
+        };
+      };
+      produtos: {
+        nomeProduto: string;
+        referenciaProduto: string;
+        quantidadeVendida: number;
+        precoVenda: number;
+      }[];
+    }[]
+  > {
+    // Validação de datas
+    if (!(dataInicio instanceof Date) || !(dataFim instanceof Date)) {
+      throw new Error("Datas devem ser instâncias de Date");
+    }
+
+    const where: any = {
+      dataEmissao: {
+        gte: dataInicio,
+        lte: dataFim,
+      },
+    };
+
+    if (idProduto) {
+      where.vendasProdutos = { some: { id_produto: idProduto } };
+    }
+
+    const vendas = await prisma.vendas.findMany({
+      where,
+=======
       idVenda: string;
       numeroDocumento: string;
       dataEmissao: Date;
@@ -466,6 +508,7 @@ export class RelatorioRepository implements IRelatorioRepository {
             dataEmissao: { gte: dataInicio, lte: dataFim },
           }
         : { dataEmissao: { gte: dataInicio, lte: dataFim } },
+>>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
       include: {
         clientes: { select: { nomeCliente: true } },
         funcionariosCaixa: {
@@ -478,6 +521,31 @@ export class RelatorioRepository implements IRelatorioRepository {
     });
 
     return vendas.map((venda) => ({
+<<<<<<< HEAD
+      numeroDocumento: venda.numeroDocumento,
+      dataEmissao: venda.dataEmissao,
+      dataValidade: venda.dataValidade,
+      valorTotal: Number(venda.valorTotal),
+      cliente: {
+        nomeCliente: venda.clientes?.nomeCliente ?? "Desconhecido",
+      },
+      funcionarioCaixa: {
+        nomeCaixa: venda.funcionariosCaixa?.caixas?.nomeCaixa ?? "Desconhecido",
+        quantidadaFaturada: Number(
+          venda.funcionariosCaixa?.quantidadaFaturada ?? 0
+        ),
+        funcionario: {
+          nomeFuncionario:
+            venda.funcionariosCaixa?.Funcionarios?.nomeFuncionario ??
+            "Desconhecido",
+        },
+      },
+      produtos: venda.vendasProdutos.map((vp) => ({
+        nomeProduto: vp.produtos.nomeProduto,
+        referenciaProduto: vp.produtos.referenciaProduto ?? "-",
+        quantidadeVendida: vp.quantidadeVendida,
+        precoVenda: Number(vp.produtos.precoVenda),
+=======
       idVenda: venda.id,
       numeroDocumento: venda.numeroDocumento,
       dataEmissao: venda.dataEmissao,
@@ -490,6 +558,7 @@ export class RelatorioRepository implements IRelatorioRepository {
         id: vp.produtos.id,
         nome: vp.produtos.nomeProduto,
         quantidade: vp.quantidadeVendida,
+>>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
       })),
     }));
   }

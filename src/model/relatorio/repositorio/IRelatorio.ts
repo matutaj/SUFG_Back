@@ -130,9 +130,28 @@ export interface IRelatorioRepository {
       numeroDocumento: string;
       dataEmissao: Date;
       valorTotal: number;
+<<<<<<< HEAD
+      cliente: {
+        nomeCliente: string;
+      };
+      funcionarioCaixa: {
+        nomeCaixa: string;
+        quantidadaFaturada: number;
+        funcionario: {
+          nomeFuncionario: string;
+        };
+      };
+      produtos: {
+        nomeProduto: string;
+        referenciaProduto: string;
+        quantidadeVendida: number;
+        precoVenda: number;
+      }[];
+=======
       clienteNome: string;
       funcionarioNome: string;
       produtos: { id: string; nome: string; quantidade: number }[];
+>>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
     }[]
   >;
   listarRelatorioEstoque(
