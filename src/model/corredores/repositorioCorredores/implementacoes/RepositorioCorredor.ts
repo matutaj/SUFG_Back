@@ -1,6 +1,6 @@
 import { corredores } from "@prisma/client";
 import { DadosCorredor, ICorredor } from "../ICorredor";
-import { prisma } from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 
 class CorredorRepositorio implements ICorredor {
   async criarCorredor({

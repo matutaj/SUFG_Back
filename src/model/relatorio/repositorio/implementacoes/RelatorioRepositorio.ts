@@ -7,17 +7,15 @@ import {
   funcionariosCaixa,
 } from "@prisma/client";
 import { IRelatorioRepository } from "../IRelatorio";
-
+import prisma from "../../../../prisma/client";
 export class RelatorioRepository implements IRelatorioRepository {
-  private prisma = new PrismaClient();
-
   // Métodos existentes (mantidos como estão)
   async listarVendasPorPeriodo(
     dataInicio: Date,
     dataFim: Date,
     limite?: number
   ): Promise<(vendas & { funcionarioNome: string })[]> {
-    const vendas = await this.prisma.vendas.findMany({
+    const vendas = await prisma.vendas.findMany({
       where: { dataEmissao: { gte: dataInicio, lte: dataFim } },
       include: {
         vendasProdutos: { include: { produtos: true } },
@@ -42,7 +40,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataFim: Date,
     limite?: number
   ): Promise<(vendas & { funcionarioNome: string })[]> {
-    const vendas = await this.prisma.vendas.findMany({
+    const vendas = await prisma.vendas.findMany({
       where: {
         id_cliente: idCliente,
         dataEmissao: { gte: dataInicio, lte: dataFim },
@@ -75,7 +73,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       valorTotal: number;
     }[]
   > {
-    const vendasProdutos = await this.prisma.vendasProdutos.findMany({
+    const vendasProdutos = await prisma.vendasProdutos.findMany({
       where: { vendas: { dataEmissao: { gte: dataInicio, lte: dataFim } } },
       include: {
         produtos: { select: { nomeProduto: true, precoVenda: true } },
@@ -130,7 +128,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       funcionarios: string[];
     }[]
   > {
-    const caixasAtivos = await this.prisma.funcionariosCaixa.findMany({
+    const caixasAtivos = await prisma.funcionariosCaixa.findMany({
       where: { horarioAbertura: { gte: dataInicio, lte: dataFim } },
       include: { caixas: true, Funcionarios: true },
     });
@@ -169,7 +167,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       localizacoes: { id: string; nome: string }[];
     }[]
   > {
-    const produtos = await this.prisma.produtos.findMany({
+    const produtos = await prisma.produtos.findMany({
       where: { updatedAt: { gte: dataInicio, lte: dataFim } },
       select: {
         id: true,
@@ -198,7 +196,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date
   ): Promise<(entradasEstoque & { funcionarioNome: string })[]> {
-    const entradas = await this.prisma.entradasEstoque.findMany({
+    const entradas = await prisma.entradasEstoque.findMany({
       where: { dataEntrada: { gte: dataInicio, lte: dataFim } },
       include: { Produtos: true, Fornecedores: true, funcionarios: true },
     });
@@ -213,7 +211,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date
   ): Promise<(transferencias & { funcionarioNome: string })[]> {
-    const transferencias = await this.prisma.transferencias.findMany({
+    const transferencias = await prisma.transferencias.findMany({
       where: { dataTransferencia: { gte: dataInicio, lte: dataFim } },
       include: { Produtos: true, Localizacoes: true, funcionarios: true },
     });
@@ -237,7 +235,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       localizacao: string;
     }[]
   > {
-    const localizacoes = await this.prisma.produtosLocalizacoes.findMany({
+    const localizacoes = await prisma.produtosLocalizacoes.findMany({
       where: { updatedAt: { gte: dataInicio, lte: dataFim } },
       include: {
         produtos: { select: { nomeProduto: true } },
@@ -262,7 +260,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date
   ): Promise<(funcionariosCaixa & { funcionarioNome: string })[]> {
-    const atividades = await this.prisma.funcionariosCaixa.findMany({
+    const atividades = await prisma.funcionariosCaixa.findMany({
       where: { horarioAbertura: { gte: dataInicio, lte: dataFim } },
       include: { caixas: true, Funcionarios: true },
     });
@@ -285,7 +283,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     quantidadeVendida: number;
     valorTotal: number;
   }> {
-    const produto = await this.prisma.produtos.findUnique({
+    const produto = await prisma.produtos.findUnique({
       where: { id: idProduto },
       select: { nomeProduto: true, precoVenda: true },
     });
@@ -294,7 +292,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       throw new Error(`Produto com ID ${idProduto} não encontrado`);
     }
 
-    const vendasProdutos = await this.prisma.vendasProdutos.findMany({
+    const vendasProdutos = await prisma.vendasProdutos.findMany({
       where: {
         id_produto: idProduto,
         vendas: { dataEmissao: { gte: dataInicio, lte: dataFim } },
@@ -375,7 +373,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       vendas: vendas[];
     }[]
   > {
-    const caixasAtivos = await this.prisma.funcionariosCaixa.findMany({
+    const caixasAtivos = await prisma.funcionariosCaixa.findMany({
       where: { horarioAbertura: { gte: dataInicio, lte: dataFim } },
       include: {
         caixas: true,
@@ -422,7 +420,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       funcionarios: { id: string; nome: string }[];
     }[]
   > {
-    const tarefas = await this.prisma.tarefas.findMany({
+    const tarefas = await prisma.tarefas.findMany({
       where: { updatedAt: { gte: dataInicio, lte: dataFim } },
       include: {
         funcionariosTarefas: {
@@ -450,7 +448,6 @@ export class RelatorioRepository implements IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
-<<<<<<< HEAD
       numeroDocumento: string;
       dataEmissao: Date;
       dataValidade: Date;
@@ -491,24 +488,6 @@ export class RelatorioRepository implements IRelatorioRepository {
 
     const vendas = await prisma.vendas.findMany({
       where,
-=======
-      idVenda: string;
-      numeroDocumento: string;
-      dataEmissao: Date;
-      valorTotal: number;
-      clienteNome: string;
-      funcionarioNome: string;
-      produtos: { id: string; nome: string; quantidade: number }[];
-    }[]
-  > {
-    const vendas = await this.prisma.vendas.findMany({
-      where: idProduto
-        ? {
-            vendasProdutos: { some: { id_produto: idProduto } },
-            dataEmissao: { gte: dataInicio, lte: dataFim },
-          }
-        : { dataEmissao: { gte: dataInicio, lte: dataFim } },
->>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
       include: {
         clientes: { select: { nomeCliente: true } },
         funcionariosCaixa: {
@@ -520,8 +499,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       },
     });
 
-    return vendas.map((venda) => ({
-<<<<<<< HEAD
+    return vendas.map((venda: any) => ({
       numeroDocumento: venda.numeroDocumento,
       dataEmissao: venda.dataEmissao,
       dataValidade: venda.dataValidade,
@@ -540,25 +518,11 @@ export class RelatorioRepository implements IRelatorioRepository {
             "Desconhecido",
         },
       },
-      produtos: venda.vendasProdutos.map((vp) => ({
+      produtos: venda.vendasProdutos.map((vp: any) => ({
         nomeProduto: vp.produtos.nomeProduto,
         referenciaProduto: vp.produtos.referenciaProduto ?? "-",
         quantidadeVendida: vp.quantidadeVendida,
         precoVenda: Number(vp.produtos.precoVenda),
-=======
-      idVenda: venda.id,
-      numeroDocumento: venda.numeroDocumento,
-      dataEmissao: venda.dataEmissao,
-      valorTotal: Number(venda.valorTotal),
-      clienteNome: venda.clientes?.nomeCliente ?? "Desconhecido",
-      funcionarioNome:
-        venda.funcionariosCaixa?.Funcionarios?.nomeFuncionario ??
-        "Desconhecido",
-      produtos: venda.vendasProdutos.map((vp) => ({
-        id: vp.produtos.id,
-        nome: vp.produtos.nomeProduto,
-        quantidade: vp.quantidadeVendida,
->>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
       })),
     }));
   }
@@ -581,7 +545,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       }[];
     }[]
   > {
-    const produtos = await this.prisma.produtos.findMany({
+    const produtos = await prisma.produtos.findMany({
       where: idProduto
         ? { id: idProduto, updatedAt: { gte: dataInicio, lte: dataFim } }
         : { updatedAt: { gte: dataInicio, lte: dataFim } },
@@ -626,7 +590,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       produtoNome: string;
     })[]
   > {
-    const entradas = await this.prisma.entradasEstoque.findMany({
+    const entradas = await prisma.entradasEstoque.findMany({
       where: idProduto
         ? {
             id_produto: idProduto,
@@ -660,7 +624,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       categoria: string;
     }[]
   > {
-    const produtos = await this.prisma.produtos.findMany({
+    const produtos = await prisma.produtos.findMany({
       where: { updatedAt: { gte: dataInicio, lte: dataFim } },
       include: {
         categoriasProdutos: { select: { nomeCategoria: true } },
@@ -695,7 +659,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       };
     }[]
   > {
-    const localizacoes = await this.prisma.produtosLocalizacoes.findMany({
+    const localizacoes = await prisma.produtosLocalizacoes.findMany({
       where: idProduto
         ? {
             id_produto: idProduto,
@@ -739,7 +703,7 @@ export class RelatorioRepository implements IRelatorioRepository {
     const startOfDay = new Date(data.setHours(0, 0, 0, 0));
     const endOfDay = new Date(data.setHours(23, 59, 59, 999));
 
-    const atividades = await this.prisma.funcionariosTarefas.findMany({
+    const atividades = await prisma.funcionariosTarefas.findMany({
       where: {
         createdAt: {
           gte: startOfDay,
@@ -799,7 +763,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       };
     }
 
-    const caixasAtivos = await this.prisma.funcionariosCaixa.findMany({
+    const caixasAtivos = await prisma.funcionariosCaixa.findMany({
       where: whereClause,
       include: {
         caixas: {

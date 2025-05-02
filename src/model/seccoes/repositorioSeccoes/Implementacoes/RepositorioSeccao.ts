@@ -1,5 +1,5 @@
 import { seccoes } from "@prisma/client";
-import { prisma } from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 import { DadosSeccao, ISeccao } from "../ISeccao";
 
 class SeccaoRepositorio implements ISeccao {

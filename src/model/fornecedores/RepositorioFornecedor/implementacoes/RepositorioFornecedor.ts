@@ -1,6 +1,6 @@
 import { fornecedores } from "@prisma/client";
 import { DadosFornecedor, IFornecedor } from "../IFornecedor";
-import { prisma } from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 
 class FornecedorRepositorio implements IFornecedor {
   async criarFornecedor({
@@ -21,7 +21,7 @@ class FornecedorRepositorio implements IFornecedor {
     });
     return criarFornecedor;
   }
-  
+
   async listarTodosFornecedores(): Promise<fornecedores[]> {
     const listarTodosFornecedores = await prisma.fornecedores.findMany();
     return listarTodosFornecedores;

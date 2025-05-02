@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/client";
+import prisma from "../../prisma/client";
 import { FuncionarioRepositorio } from "../funcionarios/repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { AppError } from "../../errors/AppError";
 import bcrypt from "bcrypt";

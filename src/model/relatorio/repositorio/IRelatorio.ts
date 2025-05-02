@@ -126,11 +126,9 @@ export interface IRelatorioRepository {
     idProduto?: string
   ): Promise<
     {
-      idVenda: string;
       numeroDocumento: string;
       dataEmissao: Date;
       valorTotal: number;
-<<<<<<< HEAD
       cliente: {
         nomeCliente: string;
       };
@@ -147,11 +145,6 @@ export interface IRelatorioRepository {
         quantidadeVendida: number;
         precoVenda: number;
       }[];
-=======
-      clienteNome: string;
-      funcionarioNome: string;
-      produtos: { id: string; nome: string; quantidade: number }[];
->>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
     }[]
   >;
   listarRelatorioEstoque(

@@ -1,5 +1,7 @@
 import { AppError } from "../../../../errors/AppError";
 import { RelatorioRepository } from "../../repositorio/implementacoes/RelatorioRepositorio";
+import PDFDocument from "pdfkit"; // Added import
+import fs from "fs"; // Added import
 
 interface RelatorioParams {
   tipoRelatorio: string;
@@ -32,190 +34,212 @@ class GerarRelatorioCasoDeUso {
       throw new AppError("Data inicial deve ser anterior à data final");
     }
 
+    let resultado: any; // Declared resultado to fix "Cannot find name" error
+
     switch (tipoRelatorio) {
       case "vendas-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarVendasPorPeriodo(
+        resultado = await this.repositorio.listarVendasPorPeriodo(
           dataInicio,
           dataFim,
           limite
         );
+        break; // Changed from return to break
 
       case "vendas-por-cliente":
         if (!idCliente) throw new AppError("ID do cliente é obrigatório");
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarVendasPorCliente(
+        resultado = await this.repositorio.listarVendasPorCliente(
           idCliente,
           dataInicio,
           dataFim,
           limite
         );
+        break; // Changed from return to break
 
       case "produtos-mais-vendidos":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarProdutosMaisVendidos(
+        resultado = await this.repositorio.listarProdutosMaisVendidos(
           dataInicio,
           dataFim,
           limite
         );
+        break; // Changed from return to break
 
       case "faturamento-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarFaturamentoPorPeriodo(
+        resultado = await this.repositorio.listarFaturamentoPorPeriodo(
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       case "quantidade-faturada-por-caixa":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarQuantidadeFaturadaPorCaixa(
+        resultado = await this.repositorio.listarQuantidadeFaturadaPorCaixa(
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       case "estoque-atual":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarEstoqueAtual(dataInicio, dataFim);
+        resultado = await this.repositorio.listarEstoqueAtual(
+          dataInicio,
+          dataFim
+        );
+        break; // Changed from return to break
 
       case "entradas-estoque-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarEntradasEstoquePorPeriodo(
+        resultado = await this.repositorio.listarEntradasEstoquePorPeriodo(
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       case "transferencias-por-periodo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarTransferenciasPorPeriodo(
+        resultado = await this.repositorio.listarTransferenciasPorPeriodo(
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       case "produtos-abaixo-minimo":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarProdutosAbaixoMinimo(dataInicio, dataFim);
+        resultado = await this.repositorio.listarProdutosAbaixoMinimo(
+          dataInicio,
+          dataFim
+        );
+        break; // Changed from return to break
 
       case "atividade-funcionarios-caixa":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarAtividadeFuncionariosCaixa(
+        resultado = await this.repositorio.listarAtividadeFuncionariosCaixa(
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       case "periodo-mais-vendido-por-produto":
         if (!idProduto) throw new AppError("ID do produto é obrigatório");
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarPeriodoMaisVendidoPorProduto(
+        resultado = await this.repositorio.listarPeriodoMaisVendidoPorProduto(
           idProduto,
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       case "atividades-caixas":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarAtividadesCaixas(
+        resultado = await this.repositorio.listarAtividadesCaixas(
           dataInicio,
           dataFim,
           idProduto
         );
+        break; // Changed from return to break
 
       case "tarefas":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarTarefas(dataInicio, dataFim);
+        resultado = await this.repositorio.listarTarefas(dataInicio, dataFim);
+        break; // Changed from return to break
 
       case "relatorio-vendas":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarRelatorioVendas(
+        resultado = await this.repositorio.listarRelatorioVendas(
           dataInicio,
           dataFim,
           idProduto
         );
+        break; // Changed from return to break
 
       case "relatorio-estoque":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarRelatorioEstoque(
+        resultado = await this.repositorio.listarRelatorioEstoque(
           dataInicio,
           dataFim,
           idProduto
         );
+        break; // Changed from return to break
 
       case "relatorio-entradas-estoque":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarRelatorioEntradasEstoque(
+        resultado = await this.repositorio.listarRelatorioEntradasEstoque(
           dataInicio,
           dataFim,
           idProduto
         );
+        break; // Changed from return to break
 
       case "relatorio-produtos":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarRelatorioProdutos(dataInicio, dataFim);
+        resultado = await this.repositorio.listarRelatorioProdutos(
+          dataInicio,
+          dataFim
+        );
+        break; // Changed from return to break
 
       case "relatorio-produto-localizacao":
         if (!dataInicio || !dataFim)
           throw new AppError("Datas são obrigatórias");
-        return this.repositorio.listarRelatorioProdutoLocalizacao(
+        resultado = await this.repositorio.listarRelatorioProdutoLocalizacao(
           dataInicio,
           dataFim,
           idProduto
         );
+        break; // Changed from return to break
 
       case "atividades-do-dia":
         if (!data) throw new AppError("Data é obrigatória");
-        return this.repositorio.listarAtividadesDoDia(data);
+        resultado = await this.repositorio.listarAtividadesDoDia(data);
+        break; // Changed from return to break
 
       case "relatorio-caixas":
-        return this.repositorio.listarRelatorioCaixas(
+        resultado = await this.repositorio.listarRelatorioCaixas(
           idCaixa,
           dataInicio,
           dataFim
         );
+        break; // Changed from return to break
 
       default:
         throw new AppError("Tipo de relatório inválido");
     }
-<<<<<<< HEAD
 
     if (!resultado || (Array.isArray(resultado) && resultado.length === 0)) {
       throw new AppError("Nenhum dado encontrado para o relatório");
     }
 
-    return this.gerarRelatorio(resultado, tipoRelatorio, dataInicio, dataFim);
-  }
+    // Define filePath to fix undefined reference
+    const filePath = `./relatorio-${tipoRelatorio}-${Date.now()}.pdf`;
 
-  private async gerarRelatorio(
-    data: any,
-    tipoRelatorio: string,
-    dataInicio?: Date,
-    dataFim?: Date
-  ): Promise<{ filePath: string }> {
-    const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
-    const outputDir = path.join(__dirname, "../../../../../relatorios");
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
-
-    const fileName = `${tipoRelatorio}_${timestamp}.pdf`;
-    const filePath = path.join(outputDir, fileName);
-
-    await this.gerarPDF(data, tipoRelatorio, filePath, dataInicio, dataFim);
+    // Call gerarPDF with the correct data
+    await this.gerarPDF(
+      resultado,
+      tipoRelatorio,
+      filePath,
+      dataInicio,
+      dataFim
+    );
 
     return { filePath };
   }
@@ -1722,8 +1746,6 @@ class GerarRelatorioCasoDeUso {
         );
       }
     });
-=======
->>>>>>> d92e43e15bf9abd533f70547a505a886f0e4faaa
   }
 }
 
