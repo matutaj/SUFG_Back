@@ -1,5 +1,5 @@
 import { permissoes } from "@prisma/client";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 import { DadosPermissao, IPermissao } from "../IPermissao";
 
 class PermissaoRepositorio implements IPermissao {

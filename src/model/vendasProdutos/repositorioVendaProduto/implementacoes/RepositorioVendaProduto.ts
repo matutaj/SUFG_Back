@@ -1,6 +1,6 @@
 import { vendasProdutos } from "@prisma/client";
 import { DadosVendaProduto, IVendaProduto } from "../IVendaProduto";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 class VendaProdutoRepositorio implements IVendaProduto {
     async criarVendaProduto({id_produto, id_venda, quantidadeVendida}: DadosVendaProduto): Promise<vendasProdutos> {

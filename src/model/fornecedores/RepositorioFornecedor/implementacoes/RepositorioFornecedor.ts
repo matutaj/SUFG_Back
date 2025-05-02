@@ -1,6 +1,6 @@
 import { fornecedores } from "@prisma/client";
 import { DadosFornecedor, IFornecedor } from "../IFornecedor";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 class FornecedorRepositorio implements IFornecedor {
   async criarFornecedor({

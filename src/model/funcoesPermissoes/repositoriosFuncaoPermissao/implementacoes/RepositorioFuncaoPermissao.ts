@@ -1,6 +1,6 @@
 import { funcoesPermissoes } from "@prisma/client";
 import { DadosFuncaoPermissao, IFuncaoPermissao } from "../IFuncaoPermissao";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 class FuncaoPermissaoRepositorio implements IFuncaoPermissao {
     async criarFuncaoPermissao({id_funcao, id_permissao}: DadosFuncaoPermissao): Promise<funcoesPermissoes> {

@@ -1,6 +1,6 @@
 import { transferencias } from "@prisma/client";
 import { DadosTransferencia, ITransferencia } from "../ITransferencia";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 
 class TransferenciaRepositorio implements ITransferencia {

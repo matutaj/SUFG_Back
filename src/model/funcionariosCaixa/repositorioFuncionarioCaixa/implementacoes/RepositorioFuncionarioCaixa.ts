@@ -1,6 +1,6 @@
 import { funcionariosCaixa } from "@prisma/client";
 import { DadosFuncionarioCaixa, IFuncionarioCaixa } from "../IFuncionarioCaixa";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
   async criarFuncionarioCaixa({

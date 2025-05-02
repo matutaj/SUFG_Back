@@ -1,6 +1,6 @@
 import { funcionariosFuncoes } from "@prisma/client";
 import { DadosFuncionarioFuncao } from "../IFuncionarioFuncao";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 class FuncionarioFuncaoRepositorio {
     async criarFuncionarioFuncao({id_funcionario, id_funcao}: DadosFuncionarioFuncao): Promise<funcionariosFuncoes> {

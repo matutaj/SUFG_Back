@@ -1,5 +1,5 @@
 import { tarefas } from "@prisma/client";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 import { DadosTarefas, ITarefa } from "../ITarefa";
 
 

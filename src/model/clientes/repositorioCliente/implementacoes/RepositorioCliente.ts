@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 import { clientes } from "@prisma/client";
 import { DadosCliente, IClientes } from "../ICliente";
 

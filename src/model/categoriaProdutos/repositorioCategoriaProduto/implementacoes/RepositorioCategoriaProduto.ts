@@ -1,6 +1,6 @@
 import { categoriasProdutos } from "@prisma/client";
 import { DadosCategoriaProduto, ICategoriaProduto } from "../ICategoriaProduto";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 
 class CategoriaProdutoRepositorio implements ICategoriaProduto {
     async criarCategoriaProduto({descricao, nomeCategoria }: DadosCategoriaProduto): Promise<categoriasProdutos> {

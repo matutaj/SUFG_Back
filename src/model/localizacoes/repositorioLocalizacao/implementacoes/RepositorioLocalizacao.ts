@@ -1,5 +1,5 @@
 import { localizacoes } from "@prisma/client";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 import { DadosLocalizacao, ILocalizacao } from "../ILocalizacao";
 
 class LocalizacaoRepositorio implements ILocalizacao {

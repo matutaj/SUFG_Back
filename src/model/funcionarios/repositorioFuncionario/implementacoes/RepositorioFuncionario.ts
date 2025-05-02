@@ -1,5 +1,5 @@
 import { funcionarios } from "@prisma/client";
-import { prisma } from "../../../../prisma/client";
+import  prisma  from "../../../../prisma/client";
 import { DadosFuncionario, IFuncionario } from "../IFuncionario";
 
 class FuncionarioRepositorio implements IFuncionario {
