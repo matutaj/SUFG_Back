@@ -21,7 +21,7 @@ class FornecedorRepositorio implements IFornecedor {
     });
     return criarFornecedor;
   }
-  
+
   async listarTodosFornecedores(): Promise<fornecedores[]> {
     const listarTodosFornecedores = await prisma.fornecedores.findMany();
     return listarTodosFornecedores;

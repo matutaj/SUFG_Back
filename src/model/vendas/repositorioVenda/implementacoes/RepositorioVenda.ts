@@ -19,9 +19,7 @@ class VendaRepositorio implements IVenda {
         dataValidade,
         id_cliente,
         id_funcionarioCaixa,
-       
       },
-    
     });
     return criarVenda;
   }
@@ -59,7 +57,6 @@ class VendaRepositorio implements IVenda {
         id_funcionarioCaixa,
         numeroDocumento,
         valorTotal,
-       
       },
     });
     return atualizarVenda;

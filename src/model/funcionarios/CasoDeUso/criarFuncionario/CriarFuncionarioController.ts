@@ -12,6 +12,7 @@ class criarFuncionarioController {
       moradaFuncionario,
       senha,
       numeroBI,
+      id_funcao
     } = req.body;
     if (!await criarFuncionarioSchema.isValid(req.body))
       throw new AppError("Erro na Validação dos dados");
@@ -22,6 +23,7 @@ class criarFuncionarioController {
       moradaFuncionario,
       senha,
       numeroBI,
+      id_funcao
     });
     return res.status(201).json(result);
   }

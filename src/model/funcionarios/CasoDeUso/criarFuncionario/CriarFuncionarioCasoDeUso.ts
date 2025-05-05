@@ -12,6 +12,7 @@ class CriarFuncionarioCasoDeUso {
     numeroBI,
     telefoneFuncionario,
     senha,
+    id_funcao
   }: DadosFuncionario): Promise<funcionarios> {
     const repositorioFuncionario = new FuncionarioRepositorio();
     const existeEmail = await repositorioFuncionario.listarEmailFuncionario(
@@ -44,6 +45,7 @@ class CriarFuncionarioCasoDeUso {
       nomeFuncionario,
       numeroBI,
       telefoneFuncionario,
+      id_funcao,
       senha: cryptografarSenha,
     });
     return result;

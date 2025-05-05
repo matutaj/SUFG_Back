@@ -6,6 +6,7 @@ const criarFuncionarioSchema = Yup.object().shape({
   moradaFuncionario: Yup.string(),
   telefoneFuncionario: Yup.string(),
   emailFuncionario: Yup.string().required().email(),
+  id_funcao: Yup.string()
 });
 const listarFuncionarioPeloNome = Yup.object().shape({
   nomeFuncionario: Yup.string().required(),
@@ -16,6 +17,7 @@ const atualizarFuncionarioSchema = Yup.object().shape({
   moradaFuncionario: Yup.string(),
   telefoneFuncionario: Yup.string(),
   emailFuncionario: Yup.string(),
+  id_funcao: Yup.string(),
 });
 const deletarFuncionarioSchema = Yup.object().shape({
   id: Yup.string().required(),

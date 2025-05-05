@@ -34,9 +34,38 @@ model clientes {
   updatedAt    DateTime      @updatedAt
 }
 
+model funcoes {
+	id String @id @default(uuid())
+  nome String
+  descricao String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  funcoesPermissoes funcoesPermissoes[]
+  funcionarios funcionarios[]
+}
+
+model permissoes {
+	id String @id @default(uuid())
+  nome String
+  descricao String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  funcoesPermissoes funcoesPermissoes[]
+}
+
+model funcoesPermissoes {
+  id String @id @default(uuid())
+	id_funcao String
+  id_permissao String
+  funcoes funcoes @relation(fields: [id_funcao], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  Permissoes permissoes @relation(fields: [id_permissao], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
 
 model funcionarios {
 	id String @id @default(uuid())
+  id_funcao String?
   numeroBI String
   nomeFuncionario String
   senha String
@@ -45,13 +74,12 @@ model funcionarios {
   emailFuncionario String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  FuncionariosPermissoes funcionariosPermissoes[]
-  FuncionariosFuncoes funcionariosFuncoes[]
   EntradasEstoque entradasEstoque[]
   transferencias transferencias[]
   codigoRecuperacao codigoRecuperacao[]
   funcionariosCaixa funcionariosCaixa[]
   funcionariosTarefas funcionariosTarefas[]
+  funcoes funcoes? @relation(fields: [id_funcao], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 model tarefas {
   id String @id @default(uuid())
@@ -298,56 +326,6 @@ model alertas {
   descricao String?
   caixas caixas @relation(fields: [id_caixa], references: [id],onDelete: Cascade, onUpdate: Cascade)
   produtos produtos @relation(fields: [id_produto], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-}
-
-model funcoes {
-	id String @id @default(uuid())
-  nome String
-  descricao String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  funcionariosFuncoes funcionariosFuncoes[]
-  funcoesPermissoes funcoesPermissoes[]
-}
-
-model permissoes {
-	id String @id @default(uuid())
-  nome String
-  descricao String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  funcionariosPermissoes funcionariosPermissoes[]
-  funcoesPermissoes funcoesPermissoes[]
-}
-
-model funcionariosFuncoes {
-  id String @id @default(uuid())
-	id_funcionario String
-  id_funcao String
-  funcionarios funcionarios @relation(fields: [id_funcionario], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  funcoes funcoes @relation(fields: [id_funcao], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-}
-
-model funcionariosPermissoes {
-  id String @id @default(uuid())
-	id_funcionario String
-  id_permissao String
-  funcionarios funcionarios @relation(fields: [id_funcionario], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Permissoes permissoes @relation(fields: [id_permissao], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-}
-
-model funcoesPermissoes {
-  id String @id @default(uuid())
-	id_funcao String
-  id_permissao String
-  funcoes funcoes @relation(fields: [id_funcao], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  Permissoes permissoes @relation(fields: [id_permissao], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }

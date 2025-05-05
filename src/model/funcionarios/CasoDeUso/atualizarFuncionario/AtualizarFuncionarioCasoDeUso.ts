@@ -12,6 +12,7 @@ class AtualizarFuncionarioCasoDeUso {
     moradaFuncionario,
     telefoneFuncionario,
     emailFuncionario,
+    id_funcao
   }: DadosFuncionario): Promise<funcionarios> {
     const repositorioFuncionario = new FuncionarioRepositorio();
 
@@ -47,6 +48,7 @@ class AtualizarFuncionarioCasoDeUso {
       moradaFuncionario,
       telefoneFuncionario,
       emailFuncionario,
+      id_funcao
     });
 
     return result;

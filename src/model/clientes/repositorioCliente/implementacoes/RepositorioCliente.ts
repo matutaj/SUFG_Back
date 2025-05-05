@@ -26,12 +26,9 @@ class ClienteRepositorio implements IClientes {
     const listarTodosClientes = await prisma.clientes.findMany();
     return listarTodosClientes;
   }
-  async listarUmClientePeloId(
-    id: string
-  ): Promise<clientes | undefined> {
+  async listarUmClientePeloId(id: string): Promise<clientes | undefined> {
     const listarUmClientePeloId =
-      (await prisma.clientes.findUnique({ where: { id } })) ||
-      undefined;
+      (await prisma.clientes.findUnique({ where: { id } })) || undefined;
 
     return listarUmClientePeloId;
   }
@@ -44,25 +41,29 @@ class ClienteRepositorio implements IClientes {
       undefined;
     return listaClientePeloNome;
   }
-  async listarEmailCliente(emailCliente: string): Promise<clientes | undefined> {
+  async listarEmailCliente(
+    emailCliente: string
+  ): Promise<clientes | undefined> {
     const listarEmailCliente =
       (await prisma.clientes.findFirst({ where: { emailCliente } })) ||
       undefined;
     return listarEmailCliente;
   }
-  async listarTelefoneCliente(telefoneCliente: string): Promise<clientes | undefined> {
+  async listarTelefoneCliente(
+    telefoneCliente: string
+  ): Promise<clientes | undefined> {
     const listarTelefoneCliente =
       (await prisma.clientes.findFirst({ where: { telefoneCliente } })) ||
       undefined;
     return listarTelefoneCliente;
-    
   }
-  async listarNumeroDeContribuinte(numeroContribuinte: string): Promise<clientes | undefined> {
+  async listarNumeroDeContribuinte(
+    numeroContribuinte: string
+  ): Promise<clientes | undefined> {
     const listarNumeroDeContribuinte =
       (await prisma.clientes.findFirst({ where: { numeroContribuinte } })) ||
       undefined;
     return listarNumeroDeContribuinte;
-    
   }
 
   async eliminarCliente(id: string): Promise<void> {
@@ -81,14 +82,13 @@ class ClienteRepositorio implements IClientes {
       data: {
         emailCliente,
         moradaCliente,
-        nomeCliente, 
+        nomeCliente,
         numeroContribuinte,
         telefoneCliente,
       },
     });
     return atualizarCliente;
   }
-
 }
 
 export { ClienteRepositorio };

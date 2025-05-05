@@ -10,6 +10,7 @@ class FuncionarioRepositorio implements IFuncionario {
     moradaFuncionario,
     numeroBI,
     senha,
+    id_funcao
   }: DadosFuncionario): Promise<funcionarios> {
     const criarFuncionario = await prisma.funcionarios.create({
       data: {
@@ -19,6 +20,7 @@ class FuncionarioRepositorio implements IFuncionario {
         moradaFuncionario,
         numeroBI,
         senha,
+        id_funcao
       },
     });
     return criarFuncionario;
@@ -57,6 +59,7 @@ class FuncionarioRepositorio implements IFuncionario {
     numeroBI,
     senha,
     id,
+    id_funcao
   }: DadosFuncionario): Promise<funcionarios> {
     const atualizarFuncionario = await prisma.funcionarios.update({
       where: {
@@ -69,6 +72,7 @@ class FuncionarioRepositorio implements IFuncionario {
         moradaFuncionario,
         numeroBI,
         senha,
+        id_funcao
       },
     });
     return atualizarFuncionario;
@@ -89,11 +93,10 @@ class FuncionarioRepositorio implements IFuncionario {
           emailFuncionario: emailFuncionario,
         },
         include: {
-          FuncionariosFuncoes: true,
           EntradasEstoque: true,
           funcionariosCaixa: true,
-          FuncionariosPermissoes: true,
           transferencias: true,
+          funcoes: true
         },
       })) || undefined;
     return listarEmailFuncionario;
