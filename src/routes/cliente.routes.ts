@@ -8,7 +8,7 @@ import { ListarUmClientePeloIdController } from "../model/clientes/casoDeUso/lis
 import { ListarEmailClienteController } from "../model/clientes/casoDeUso/listarClientePeloEmail/ListarClientePeloEmailController";
 import { ListarTelefoneClienteController } from "../model/clientes/casoDeUso/listarClientePeloTelefone/ListarClientePeloTelefoneController";
 import { ListarNumeroDeContribuinteController } from "../model/clientes/casoDeUso/listarClientePeloNumeroContribuinte/ListarClientePeloNumeroContribuinteController";
-import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosclientes/listarTodosClienteController";
+import { ListarTodosClienteController } from "../model/clientes/casoDeUso/listarTodosclientes/ListarTodosClienteController";
 import {
   verificarPermissao,
   verificarRole,

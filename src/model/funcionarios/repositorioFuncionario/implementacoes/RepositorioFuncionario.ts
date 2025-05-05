@@ -1,5 +1,5 @@
 import { funcionarios } from "@prisma/client";
-import  prisma  from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 import { DadosFuncionario, IFuncionario } from "../IFuncionario";
 
 class FuncionarioRepositorio implements IFuncionario {
@@ -10,7 +10,7 @@ class FuncionarioRepositorio implements IFuncionario {
     moradaFuncionario,
     numeroBI,
     senha,
-    id_funcao
+    id_funcao,
   }: DadosFuncionario): Promise<funcionarios> {
     const criarFuncionario = await prisma.funcionarios.create({
       data: {
@@ -20,13 +20,23 @@ class FuncionarioRepositorio implements IFuncionario {
         moradaFuncionario,
         numeroBI,
         senha,
-        id_funcao
+        id_funcao,
       },
     });
     return criarFuncionario;
   }
   async listarTodosFuncionarios(): Promise<funcionarios[]> {
-    const listarFuncionario = await prisma.funcionarios.findMany();
+    const listarFuncionario = await prisma.funcionarios.findMany({
+      include: {
+        funcionariosCaixa: true,
+        funcoes: {
+          include: { funcoesPermissoes: { include: { Permissoes: true } } },
+        },
+        funcionariosTarefas: true,
+        EntradasEstoque: true,
+        transferencias: true,
+      },
+    });
     return listarFuncionario;
   }
   async listarUmFuncionarioPeloId(
@@ -59,7 +69,7 @@ class FuncionarioRepositorio implements IFuncionario {
     numeroBI,
     senha,
     id,
-    id_funcao
+    id_funcao,
   }: DadosFuncionario): Promise<funcionarios> {
     const atualizarFuncionario = await prisma.funcionarios.update({
       where: {
@@ -72,7 +82,7 @@ class FuncionarioRepositorio implements IFuncionario {
         moradaFuncionario,
         numeroBI,
         senha,
-        id_funcao
+        id_funcao,
       },
     });
     return atualizarFuncionario;
@@ -96,7 +106,7 @@ class FuncionarioRepositorio implements IFuncionario {
           EntradasEstoque: true,
           funcionariosCaixa: true,
           transferencias: true,
-          funcoes: true
+          funcoes: true,
         },
       })) || undefined;
     return listarEmailFuncionario;

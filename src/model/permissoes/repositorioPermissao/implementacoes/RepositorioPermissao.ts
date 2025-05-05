@@ -1,5 +1,5 @@
 import { permissoes } from "@prisma/client";
-import  prisma  from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 import { DadosPermissao, IPermissao } from "../IPermissao";
 
 class PermissaoRepositorio implements IPermissao {
@@ -45,11 +45,10 @@ class PermissaoRepositorio implements IPermissao {
     await prisma.permissoes.delete({ where: { id } });
   }
   async listarUmaPermissaoPeloNome(
-    nomePermissao: string
+    nome: string
   ): Promise<permissoes | undefined> {
     const listarUmaPermissaoPeloNome =
-      (await prisma.permissoes.findFirst({ where: { nome: nomePermissao } })) ||
-      undefined;
+      (await prisma.permissoes.findFirst({ where: { nome } })) || undefined;
     return listarUmaPermissaoPeloNome;
   }
 }

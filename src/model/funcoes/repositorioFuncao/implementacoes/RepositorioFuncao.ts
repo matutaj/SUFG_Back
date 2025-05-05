@@ -1,6 +1,6 @@
 import { funcoes } from "@prisma/client";
 import { DadosFuncao, IFuncao } from "../IFuncao";
-import  prisma  from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 
 class FuncaoRepositorio implements IFuncao {
   async criarFuncao({ descricao, nome }: DadosFuncao): Promise<funcoes> {
@@ -14,7 +14,9 @@ class FuncaoRepositorio implements IFuncao {
   }
 
   async listarTodasFuncoes(): Promise<funcoes[]> {
-    const listarTodasFuncoes = await prisma.funcoes.findMany();
+    const listarTodasFuncoes = await prisma.funcoes.findMany({
+      include: { funcionarios: true, funcoesPermissoes: true },
+    });
     return listarTodasFuncoes;
   }
 
