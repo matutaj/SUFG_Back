@@ -1,8 +1,17 @@
 import { funcionarios } from "@prisma/client";
-import { DadosFuncionario } from "../../repositorioFuncionario/IFuncionario";
 import { FuncionarioRepositorio } from "../../repositorioFuncionario/implementacoes/RepositorioFuncionario";
 import { AppError } from "../../../../errors/AppError";
 import bcypt from "bcrypt";
+
+export interface DadosFuncionario {
+  emailFuncionario: string;
+  moradaFuncionario: string;
+  nomeFuncionario: string;
+  numeroBI: string;
+  telefoneFuncionario: string;
+  senha: string;
+  id_funcao: string;
+}
 
 class CriarFuncionarioCasoDeUso {
   async execute({
@@ -12,9 +21,10 @@ class CriarFuncionarioCasoDeUso {
     numeroBI,
     telefoneFuncionario,
     senha,
-    id_funcao
+    id_funcao,
   }: DadosFuncionario): Promise<funcionarios> {
     const repositorioFuncionario = new FuncionarioRepositorio();
+
     const existeEmail = await repositorioFuncionario.listarEmailFuncionario(
       emailFuncionario
     );
@@ -48,6 +58,7 @@ class CriarFuncionarioCasoDeUso {
       id_funcao,
       senha: cryptografarSenha,
     });
+
     return result;
   }
 }

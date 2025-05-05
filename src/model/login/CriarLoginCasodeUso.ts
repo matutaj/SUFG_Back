@@ -1,4 +1,3 @@
-// src/casosDeUso/login/LoginCasoDeUso.ts
 import prisma from "../../prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -18,8 +17,7 @@ export interface FuncionarioAutenticado {
   telefone: string;
   numeroBI: string;
   token: string;
-  roles: string[];
-  permissoes: string[];
+  role?: string;
 }
 
 class LoginCasoDeUso {
@@ -31,36 +29,32 @@ class LoginCasoDeUso {
     );
 
     if (!existeEmail) {
-      throw new AppError("Não existe Nenhum funcionário com esse email");
+      throw new AppError("Não existe nenhum funcionário com esse email", 404);
     }
 
     const isPasswordValid = await bcrypt.compare(senha, existeEmail.senha);
 
     if (!isPasswordValid) {
-      throw new AppError("Senha Errada");
+      throw new AppError("Senha incorreta", 401);
     }
 
-    const funcoes = await prisma.funcionariosFuncoes.findMany({
-      where: { id_funcionario: existeEmail.id },
+    // Buscar a função do funcionário
+    const funcao = await prisma.funcionarios.findFirst({
+      where: { id: existeEmail.id },
       include: { funcoes: true },
     });
 
-    const permissoes = await prisma.funcionariosPermissoes.findMany({
-      where: { id_funcionario: existeEmail.id },
-      include: { Permissoes: true },
-    });
+    if (!funcao) {
+      throw new AppError("Nenhuma função associada ao funcionário", 400);
+    }
 
-    const roles = funcoes.map((funcao) => funcao.funcoes.nome);
-    const permissoesNomes = permissoes.map(
-      (permissao) => permissao.Permissoes.nome
-    );
+    const role = funcao.funcoes?.nome;
 
     const tokenPayload = {
       userId: existeEmail.id,
       email: existeEmail.emailFuncionario,
       nome: existeEmail.nomeFuncionario,
-      roles,
-      permissoes: permissoesNomes,
+      role,
     };
 
     const token = jwt.sign(tokenPayload, authConfig.key, {
@@ -74,8 +68,7 @@ class LoginCasoDeUso {
       telefone: existeEmail.telefoneFuncionario,
       numeroBI: existeEmail.numeroBI,
       token,
-      roles,
-      permissoes: permissoesNomes,
+      role,
     };
 
     return funcionarioAutenticado;
