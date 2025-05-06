@@ -23,6 +23,7 @@ import { loginRouter } from "./login.routes";
 import { estoqueRouter } from "./estoque.route";
 import { tarefaRouter } from "./tarefa.routes";
 import { funcionarioTarefaRouter } from "./funcionarioTarefa.routes";
+import { relatorioRouter } from "./relatorio.routes";
 
 const routes = Router();
 
@@ -37,6 +38,7 @@ routes.use("/funcao", funcaoRouter);
 routes.use("/login", loginRouter);
 routes.use("/transferencia", transferenciaRouter);
 routes.use("/venda", vendaRouter);
+routes.use("/relatorio", relatorioRouter);
 routes.use("/cliente", clientesRouter);
 routes.use("/corredor", corredorRouter);
 routes.use("/categoriaProduto", categoriaProdutoRouter);
@@ -50,6 +52,5 @@ routes.use("/localizacao", localizacaoRouter);
 routes.use("/permissao", permissaoRouter);
 routes.use("/produtoLocalizacao", produtoLocalizacaoRouter);
 routes.use("/vendaProduto", vendaProdutoRouter);
-
 
 export { routes };

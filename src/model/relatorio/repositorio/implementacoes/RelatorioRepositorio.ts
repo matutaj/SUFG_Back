@@ -613,9 +613,7 @@ export class RelatorioRepository implements IRelatorioRepository {
   }
 
   async listarRelatorioProdutos(
-    dataInicio: Date,
-    dataFim: Date
-  ): Promise<
+dataInicio: Date, dataFim: Date, limite: number  ): Promise<
     {
       idProduto: string;
       nomeProduto: string;
