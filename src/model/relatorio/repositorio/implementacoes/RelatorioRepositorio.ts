@@ -14,7 +14,18 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date,
     limite?: number
-  ): Promise<(vendas & { funcionarioNome: string })[]> {
+  ): Promise<
+    (vendas & {
+      dataEmissao: Date;
+      funcionarioNome: string;
+      nomeCliente: string;
+      produtos: {
+        nomeProduto: string;
+        quantidadeVendida: number;
+        valorTotal: number;
+      }[];
+    })[]
+  > {
     const vendas = await prisma.vendas.findMany({
       where: { dataEmissao: { gte: dataInicio, lte: dataFim } },
       include: {
@@ -27,10 +38,17 @@ export class RelatorioRepository implements IRelatorioRepository {
     });
 
     return vendas.map((venda) => ({
-      ...venda,
+      nomeCliente: venda.clientes?.nomeCliente ?? "Desconhecido",
       funcionarioNome:
         venda.funcionariosCaixa?.Funcionarios?.nomeFuncionario ??
         "Desconhecido",
+      dataEmissao: venda.dataEmissao,
+      valorTotal: venda.valorTotal,
+
+      produtos: venda.vendasProdutos.map((vp) => ({
+        nomeProduto: vp.produtos!.nomeProduto ?? "Desconhecido",
+        quantidadeVendida: vp.quantidadeVendida,
+      })),
     }));
   }
 
@@ -122,7 +140,6 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarios: string[];
@@ -137,7 +154,6 @@ export class RelatorioRepository implements IRelatorioRepository {
       const key = item.id_caixa;
       if (!acc[key]) {
         acc[key] = {
-          idCaixa: item.id_caixa,
           nomeCaixa: item.caixas.nomeCaixa,
           quantidadeFaturada: 0,
           funcionarios: new Set<string>(),
@@ -148,7 +164,7 @@ export class RelatorioRepository implements IRelatorioRepository {
         item.Funcionarios?.nomeFuncionario ?? "Desconhecido"
       );
       return acc;
-    }, {} as Record<string, { idCaixa: string; nomeCaixa: string; quantidadeFaturada: number; funcionarios: Set<string> }>);
+    }, {} as Record<string, { nomeCaixa: string; quantidadeFaturada: number; funcionarios: Set<string> }>);
 
     return Object.values(grouped).map((item) => ({
       ...item,
@@ -161,10 +177,9 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      id_produto: string;
       nomeProduto: string;
       quantidadeEstoque: number;
-      localizacoes: { id: string; nome: string }[];
+      localizacoes: { nome: string }[];
     }[]
   > {
     const produtos = await prisma.produtos.findMany({
@@ -175,18 +190,16 @@ export class RelatorioRepository implements IRelatorioRepository {
         quantidadePorUnidade: true,
         produtosLocalizacoes: {
           include: {
-            Localizacoes: { select: { id: true, nomeLocalizacao: true } },
+            Localizacoes: { select: { nomeLocalizacao: true } },
           },
         },
       },
     });
 
     return produtos.map((produto) => ({
-      id_produto: produto.id,
       nomeProduto: produto.nomeProduto,
       quantidadeEstoque: produto.quantidadePorUnidade,
       localizacoes: produto.produtosLocalizacoes.map((loc) => ({
-        id: loc.Localizacoes.id,
         nome: loc.Localizacoes.nomeLocalizacao,
       })),
     }));
@@ -613,9 +626,10 @@ export class RelatorioRepository implements IRelatorioRepository {
   }
 
   async listarRelatorioProdutos(
-dataInicio: Date, dataFim: Date, limite: number  ): Promise<
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<
     {
-      idProduto: string;
       nomeProduto: string;
       precoVenda: number;
       quantidadePorUnidade: number;

@@ -13,7 +13,18 @@ export interface IRelatorioRepository {
     dataInicio: Date,
     dataFim: Date,
     limite?: number
-  ): Promise<(vendas & { funcionarioNome: string })[]>;
+  ): Promise<
+    (vendas & {
+      dataEmissao: Date;
+      funcionarioNome: string;
+      nomeCliente: string;
+      valorTotal: number;
+      produtos: {
+        nomeProduto: string;
+        quantidadeVendida: number;
+      };
+    })[]
+  >;
   listarVendasPorCliente(
     idCliente: string,
     dataInicio: Date,
@@ -44,7 +55,6 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarios: string[];
@@ -55,10 +65,9 @@ export interface IRelatorioRepository {
     dataFim: Date
   ): Promise<
     {
-      id_produto: string;
       nomeProduto: string;
       quantidadeEstoque: number;
-      localizacoes: { id: string; nome: string }[];
+      localizacoes: { nome: string }[];
     }[]
   >;
   listarEntradasEstoquePorPeriodo(
