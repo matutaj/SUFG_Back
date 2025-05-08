@@ -18,33 +18,28 @@ const listarTodosProdutosLocalizacoes =
 const deleteProdutoLocalizacao = new DeleteProdutoLocalizacaoController();
 
 produtoLocalizacaoRouter.post(
-  "/",/* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_produto_localizacao"), */
+  "/",
+  verificarPermissao("criar_produto_localizacao"),
   criarProdutoLocalizacao.handle
 );
 produtoLocalizacaoRouter.put(
-  "/:id",/* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_produto_localizacao"), */
+  "/:id",
+  verificarPermissao("atualizar_produto_localizacao"),
   atualizarProdutoLocalizacao.handle
 );
 produtoLocalizacaoRouter.get(
-  "/:id",/* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_produto_localizacao"), */
+  "/:id",
+  verificarPermissao("listar_produto_localizacao"),
   listarUmProdutoLocalizacaoPorId.handle
 );
 produtoLocalizacaoRouter.get(
-  "/",/* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_produto_localizacao"), */
+  "/",
+  verificarPermissao("listar_produto_localizacao"),
   listarTodosProdutosLocalizacoes.handle
 );
 produtoLocalizacaoRouter.delete(
-  "/:id",/* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("deletar_produto_localizacao"), */
+  "/:id",
+  verificarPermissao("deletar_produto_localizacao"),
   deleteProdutoLocalizacao.handle
 );
 

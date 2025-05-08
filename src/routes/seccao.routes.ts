@@ -17,34 +17,25 @@ const listarTodasSeccoes = new ListarTodasSeccoesController();
 const listarSeccaoPeloNome = new ListarSeccaoPeloNomeController();
 
 seccaoRouter.get(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_seccao"), */,
+  "/",
+  verificarPermissao("listar_seccao"),
   listarTodasSeccoes.handle
 );
 seccaoRouter.get(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_seccao"), */,
+  "/:id",
+  verificarPermissao("listar_seccao"),
   listarSeccaoPeloId.handle
 );
 seccaoRouter.put(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("atualizar_seccao"), */,
+  "/:id",
+  verificarPermissao("atualizar_seccao"),
   atualizarSeccao.handle
 );
 seccaoRouter.delete(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_seccao"), */,
+  "/:id",
+  verificarPermissao("eliminar_seccao"),
   deleteSeccao.handle
 );
-seccaoRouter.post(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_seccao"), */,
-  criarSeccao.handle
-);
+seccaoRouter.post("/", verificarPermissao("criar_seccao"), criarSeccao.handle);
 
 export { seccaoRouter };

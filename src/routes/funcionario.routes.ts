@@ -23,39 +23,33 @@ const listarFuncionarioPeloNome = new ListarFuncionarioPeloNomeController();
 const listarTodosFuncionarios = new ListarTodosFuncionariosController();
 
 funcionarioRouter.post(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("criar_funcionario"), */,
+  "/",
+  verificarPermissao("criar_funcionario"),
   criarFuncionario.handle
 );
 funcionarioRouter.get(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_funcionario"), */,
+  "/:id",
+  verificarPermissao("listar_funcionario"),
   listarFuncionarioPeloId.handle
 );
 funcionarioRouter.get(
-  "/:email" /* 
-  verificarRoles(["Admin, Gerente"]),
-  verificarPermissao("listar_funcionario"), */,
+  "/:email",
+  verificarPermissao("listar_funcionario"),
   listarFuncionarioEmail.handle
 );
 funcionarioRouter.put(
-  "/:id" /* 
-  verificarRoles(["Admin, Gerente"]),
-  verificarPermissao("atualizar_funcionario"), */,
+  "/:id",
+  verificarPermissao("atualizar_funcionario"),
   atualizarFuncionario.handle
 );
 funcionarioRouter.delete(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("eliminar_funcionario"), */,
+  "/:id",
+  verificarPermissao("eliminar_funcionario"),
   deleteFuncionario.handle
 );
 funcionarioRouter.get(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente"]),
-  verificarPermissao("listar_funcionario"), */,
+  "/",
+  verificarPermissao("listar_funcionario"),
   listarTodosFuncionarios.handle
 );
 
