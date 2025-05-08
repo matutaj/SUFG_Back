@@ -1,30 +1,22 @@
 import { Request, Response, RequestHandler } from "express";
 import { Prisma } from "@prisma/client";
-import { GerarRelatorioCasoDeUso } from "./ListarRelatorioCasoDeUso";
+import {
+  GerarRelatorioCasoDeUso,
+  RelatorioParams,
+} from "./ListarRelatorioCasoDeUso";
 import { AppError } from "../../../../errors/AppError";
 
-// Mapeamento de endpoints para tipoRelatorio
 const endpointToTipoRelatorio: { [key: string]: string } = {
-  "vendas-periodo": "vendas-por-periodo",
-  "vendas-cliente": "vendas-por-cliente",
-  "produtos-mais-vendidos": "produtos-mais-vendidos",
-  "faturamento-periodo": "faturamento-por-periodo",
-  "faturamento-caixa": "quantidade-faturada-por-caixa",
-  "estoque-atual": "estoque-atual",
-  "entradas-estoque": "entradas-estoque-por-periodo",
-  transferencias: "transferencias-por-periodo",
-  "produtos-abaixo-minimo": "produtos-abaixo-minimo",
-  "atividade-caixa": "atividade-funcionarios-caixa",
-  "periodo-mais-vendido": "periodo-mais-vendido-por-producto",
   "atividades-caixas": "atividades-caixas",
-  tarefas: "tarefas",
-  "relatorio-vendas": "relatorio-vendas",
-  "relatorio-estoque": "relatorio-estoque",
-  "relatorio-entradas-estoque": "relatorio-entradas-estoque",
-  "relatorio-produtos": "relatorio-produtos",
-  "relatorio-produto-localizacao": "relatorio-produto-localizacao",
   "atividades-do-dia": "atividades-do-dia",
-  caixas: "relatorio-caixas",
+  "relatorio-entradas-estoque": "relatorio-entradas-estoque",
+  "relatorio-estoque": "relatorio-estoque",
+  "relatorio-produto-localizacao": "relatorio-produto-localizacao",
+  "produtos-mais-vendidos": "produtos-mais-vendidos",
+  transferencias: "transferencias",
+  "faturamento-periodo": "faturamento-periodo",
+  "relatorio-vendas": "relatorio-vendas",
+  "vendas-cliente": "vendas-cliente",
 };
 
 class RelatorioControlador {
@@ -46,7 +38,6 @@ class RelatorioControlador {
         idCliente,
         idCaixa,
         limite,
-        format,
       } = req.query;
 
       const endpoint = req.path.split("/").pop();
@@ -59,12 +50,17 @@ class RelatorioControlador {
         throw new AppError("Tipo de relatório não suportado", 400);
       }
 
-      if (
-        tipoRelatorio !== "relatorio-caixas" &&
-        tipoRelatorio !== "atividades-do-dia" &&
-        (!dataInicio || !dataFim)
-      ) {
+      // Validação de parâmetros obrigatórios
+      if (tipoRelatorio === "vendas-cliente" && !idCliente) {
+        throw new AppError("ID do cliente é obrigatório", 400);
+      }
+
+      if (tipoRelatorio !== "atividades-do-dia" && (!dataInicio || !dataFim)) {
         throw new AppError("Datas de início e fim são obrigatórias", 400);
+      }
+
+      if (tipoRelatorio === "atividades-do-dia" && !data) {
+        throw new AppError("Data é obrigatória", 400);
       }
 
       let parsedDataInicio: Date | undefined;
@@ -109,38 +105,25 @@ class RelatorioControlador {
         ? Math.min(Number(limite), maxLimite)
         : defaultLimite;
 
-      const params = {
+      const params: RelatorioParams = {
         tipoRelatorio,
         dataInicio: parsedDataInicio,
         dataFim: parsedDataFim,
         data: parsedData,
-        idProduto: idProduto as string,
-        idCliente: idCliente as string,
-        idCaixa: idCaixa as string,
+        idProduto: idProduto as string | undefined,
+        idCliente: idCliente as string | undefined,
+        idCaixa: idCaixa as string | undefined,
         limite: parsedLimite,
       };
 
       console.log("Parâmetros para o caso de uso:", params);
 
       const gerarRelatorioCasoDeUso = new GerarRelatorioCasoDeUso();
-      const response = await gerarRelatorioCasoDeUso.execute(
-        params,
-        format === "pdf" ? "pdf" : "json"
-      );
+      const response = await gerarRelatorioCasoDeUso.execute(params);
 
-      if (format === "pdf" && response.pdfBuffer) {
-        console.log(`Gerando PDF para ${tipoRelatorio}`);
-        res.setHeader("Content-Type", "application/pdf");
-        res.setHeader(
-          "Content-Disposition",
-          `attachment; filename=relatorio_${tipoRelatorio}.pdf`
-        );
-        res.send(response.pdfBuffer);
-      } else {
-        console.log(`Gerando JSON para ${tipoRelatorio}`);
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json({ data: response.data });
-      }
+      console.log(`Gerando JSON para ${tipoRelatorio}`);
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({ data: response.data });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         console.error("Erro Prisma:", error.message);
