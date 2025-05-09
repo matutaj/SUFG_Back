@@ -8,6 +8,7 @@ class AtualizarLocalizacaoCasoDeUso {
     id,
     nomeLocalizacao,
     descricao,
+    tipo
   }: DadosLocalizacao): Promise<localizacoes> {
     const repositorioLocalizacao = new LocalizacaoRepositorio();
 
@@ -28,7 +29,8 @@ class AtualizarLocalizacaoCasoDeUso {
     const result = await repositorioLocalizacao.atualizarLocalizacao({
       id,
       nomeLocalizacao,
-      descricao
+      descricao,
+      tipo
     });
 
     return result;

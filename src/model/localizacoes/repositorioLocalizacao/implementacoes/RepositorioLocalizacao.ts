@@ -6,11 +6,13 @@ class LocalizacaoRepositorio implements ILocalizacao {
   async criarLocalizacao({
     nomeLocalizacao,
     descricao,
+    tipo
   }: DadosLocalizacao): Promise<localizacoes> {
     const localizacao = await prisma.localizacoes.create({
       data: {
         nomeLocalizacao,
         descricao,
+        tipo
       },
     });
     return localizacao;
@@ -42,12 +44,14 @@ class LocalizacaoRepositorio implements ILocalizacao {
     id,
     nomeLocalizacao,
     descricao,
+    tipo
   }: DadosLocalizacao): Promise<localizacoes> {
     const atualizarLocalizacao = await prisma.localizacoes.update({
       where: { id },
       data: {
         nomeLocalizacao,
         descricao,
+        tipo
       },
     });
     return atualizarLocalizacao;
