@@ -24,7 +24,7 @@ localizacaoRouter.put(
 );
 localizacaoRouter.get(
   "/",
-  verificarPermissao("listar_localizacao   "),
+  verificarPermissao("listar_localizacao"),
   listarTodasLocalizacoes.handle
 );
 localizacaoRouter.get(

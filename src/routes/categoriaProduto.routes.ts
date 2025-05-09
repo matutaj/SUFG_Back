@@ -19,27 +19,27 @@ const deleteCategoriaProduto = new DeleteCategoriaProdutoController();
 
 categoriaProdutoRouter.get(
   "/",
-  verificarPermissao("listar_categoria_produto"),
+  verificarPermissao("listar_categoria"),
   listarTodasCategoriasProdutos.handle
 );
 categoriaProdutoRouter.get(
   "/:id",
-  verificarPermissao("listar_categoria_produto"),
+  verificarPermissao("listar_categoria"),
   listarCategoriaProdutoPeloId.handle
 );
 categoriaProdutoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_categoria_produto"),
+  verificarPermissao("atualizar_categoria"),
   atualizarCategoriaProduto.handle
 );
 categoriaProdutoRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_categoria_produto"),
+  verificarPermissao("eliminar_categoria"),
   deleteCategoriaProduto.handle
 );
 categoriaProdutoRouter.post(
   "/",
-  verificarPermissao("criar_categoria_produto"),
+  verificarPermissao("criar_categoria"),
   criarCategoriaProduto.handle
 );
 
