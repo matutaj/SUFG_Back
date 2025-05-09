@@ -21,45 +21,38 @@ const listarUmFuncionarioCaixaPelaAbertura =
   new ListarUmFuncionarioCaixaPelaAberturaController();
 
 funcionariorCaixaRouter.post(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("criar_funcionario_caixa"), */,
+  "/",
+  verificarPermissao("criar_funcionario_caixa"),
   criarFuncionarioCaixa.handle
 );
 funcionariorCaixaRouter.get(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_funcionario_caixa"), */,
+  "/",
+  verificarPermissao("listar_funcionario_caixa"),
   listarTodosFuncionariosCaixa.handle
 );
 funcionariorCaixaRouter.get(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_funcionario_caixa"), */,
+  "/:id",
+  verificarPermissao("listar_funcionario_caixa"),
   listarUmFuncionarioCaixaPeloId.handle
 );
 funcionariorCaixaRouter.get(
-  "/:abertura" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_funcionario_caixa"), */,
+  "/:abertura",
+  verificarPermissao("listar_funcionario_caixa"),
   listarUmFuncionarioCaixaPelaAbertura.handle
 );
 funcionariorCaixaRouter.get(
-  "/:estado" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_funcionario_caixa"), */,
+  "/:estado",
+  verificarPermissao("listar_funcionario_caixa"),
   listarEstadoCaixa.handle
 );
 funcionariorCaixaRouter.put(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("atualizar_funcionario_caixa"), */,
+  "/:id",
+  verificarPermissao("atualizar_funcionario_caixa"),
   atualizarFuncionarioCaixa.handle
 );
 funcionariorCaixaRouter.delete(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("eliminar_funcionario_caixa"), */,
+  "/:id",
+  verificarPermissao("eliminar_funcionario_caixa"),
   deleteFuncionarioCaixa.handle
 );
 

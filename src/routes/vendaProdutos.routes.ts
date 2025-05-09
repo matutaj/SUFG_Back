@@ -15,33 +15,28 @@ const listarVendaProdutoPorId = new ListarVendaProdutoPorIdController();
 const eliminarVendaProduto = new DeleteVendaProdutoController();
 
 vendaProdutoRouter.post(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("criar_venda_produto"), */,
+  "/",
+  verificarPermissao("criar_venda_produto"),
   criarVendaProduto.handle
 );
 vendaProdutoRouter.get(
-  "/" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_venda_produto"), */,
+  "/",
+  verificarPermissao("listar_venda_produto"),
   listarTodasVendasProdutos.handle
 );
 vendaProdutoRouter.get(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("listar_venda_produto"), */,
+  "/:id",
+  verificarPermissao("listar_venda_produto"),
   listarVendaProdutoPorId.handle
 );
 vendaProdutoRouter.put(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("atualizar_venda_produto"), */,
+  "/:id",
+  verificarPermissao("atualizar_venda_produto"),
   atualizarVendaProduto.handle
 );
 vendaProdutoRouter.delete(
-  "/:id" /* 
-  verificarRoles(["Admin", "Gerente", "Operador de caixa"]),
-  verificarPermissao("eliminar_venda_produto"), */,
+  "/:id",
+  verificarPermissao("eliminar_venda_produto"),
   eliminarVendaProduto.handle
 );
 

@@ -10,6 +10,9 @@ interface JwtPayload {
   role: string;
   iat: number;
   exp: number;
+  permissions?: string[];
+  rolesForPermission?: string[];
+  rolesForPermissions?: { [key: string]: string[] };
 }
 
 declare module "express" {
@@ -20,24 +23,40 @@ declare module "express" {
 
 // Função para obter permissões associadas à função do usuário
 async function getPermissionsForRole(role: string): Promise<string[]> {
-  // Buscar a função pelo nome
   const funcao = await prisma.funcoes.findFirst({
     where: { nome: role },
     select: { id: true },
   });
 
   if (!funcao) {
-    return []; // Retorna vazio se a função não existir
+    return [];
   }
 
-  // Buscar permissões associadas à função na tabela funcoesPermissoes
   const permissoes = await prisma.funcoesPermissoes.findMany({
     where: { id_funcao: funcao.id },
     include: { Permissoes: true },
   });
 
-  // Retornar os nomes das permissões
   return permissoes.map((p) => p.Permissoes.nome);
+}
+
+// Função para obter funções associadas a uma permissão
+async function getRolesForPermission(permissao: string): Promise<string[]> {
+  const permissaoEncontrada = await prisma.permissoes.findFirst({
+    where: { nome: permissao },
+    select: { id: true },
+  });
+
+  if (!permissaoEncontrada) {
+    return [];
+  }
+
+  const funcoes = await prisma.funcoesPermissoes.findMany({
+    where: { id_permissao: permissaoEncontrada.id },
+    include: { funcoes: true },
+  });
+
+  return funcoes.map((f) => f.funcoes.nome);
 }
 
 // Middleware para verificar uma única permissão
@@ -53,9 +72,19 @@ export const verificarPermissao = (permissaoRequerida: string) => {
       const [, token] = authHeader.split(" ");
 
       const decoded = jwt.verify(token, authConfig.key) as JwtPayload;
-      req.user = decoded;
 
+      // Obtém permissões do usuário e funções associadas à permissão requerida
       const permissoes = await getPermissionsForRole(decoded.role);
+      const rolesForPermission = await getRolesForPermission(
+        permissaoRequerida
+      );
+
+      // Anexa informações ao req.user
+      req.user = {
+        ...decoded,
+        permissions: permissoes,
+        rolesForPermission,
+      };
 
       if (!permissoes.includes(permissaoRequerida)) {
         return next(new AppError("Permissão negada", 403));
@@ -81,9 +110,21 @@ export const verificarPermissoes = (permissoesRequeridas: string[]) => {
       const [, token] = authHeader.split(" ");
 
       const decoded = jwt.verify(token, authConfig.key) as JwtPayload;
-      req.user = decoded;
 
       const permissoes = await getPermissionsForRole(decoded.role);
+
+      // Obtém funções para todas as permissões requeridas
+      const rolesForPermissions: { [key: string]: string[] } = {};
+      for (const perm of permissoesRequeridas) {
+        rolesForPermissions[perm] = await getRolesForPermission(perm);
+      }
+
+      // Anexa informações ao req.user
+      req.user = {
+        ...decoded,
+        permissions: permissoes,
+        rolesForPermissions,
+      };
 
       const hasPermission = permissoesRequeridas.some((permissao) =>
         permissoes.includes(permissao)
@@ -151,3 +192,6 @@ export const verificarRoles = (rolesRequeridas: string[]) => {
     }
   };
 };
+
+// Exportar funções auxiliares para uso em rotas ou outros contextos
+export { getPermissionsForRole, getRolesForPermission };
