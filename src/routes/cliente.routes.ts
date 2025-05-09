@@ -29,7 +29,7 @@ const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.post(
   "/",
-  verificarPermissao("criar_clientes"),
+  verificarPermissao("criar_cliente"),
   criarClienteController.handle
 );
 clientesRouter.get(
