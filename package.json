@@ -9,7 +9,7 @@
     "vercel-build": "npx prisma migrate deploy"
   },
   "devDependencies": {
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.7.0",
     "@types/bcrypt": "^5.0.2",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
