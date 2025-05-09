@@ -44,12 +44,12 @@ clientesRouter.get(
 );
 clientesRouter.put(
   "/:id",
-  verificarPermissao("atualizar_clientes"),
+  verificarPermissao("atualizar_cliente"),
   atualizarClienteController.handle
 );
 clientesRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_clientes"),
+  verificarPermissao("eliminar_cliente"),
   deleteClienteController.handle
 );
 clientesRouter.get("/", listartodosClientes.handle);
