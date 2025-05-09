@@ -20,6 +20,10 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
 }
+enum tipo {
+  Armazem
+  Loja
+}
 
 
 model clientes {
@@ -258,8 +262,7 @@ model localizacoes {
 	id String @id @default(uuid())
   nomeLocalizacao String
   descricao String?
- 
-  
+  tipo tipo?
   produtosLocalizacoes produtosLocalizacoes[]
   transferencias transferencias[]
   createdAt    DateTime      @default(now())

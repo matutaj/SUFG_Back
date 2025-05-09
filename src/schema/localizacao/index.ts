@@ -3,6 +3,7 @@ import * as Yup from "yup";
 const criarLocalizacaoSchema = Yup.object().shape({
   descricao: Yup.string(),
   nomeLocalizacao: Yup.string().required(),
+  tipo: Yup.string().required(),
 });
 const listarLocalizacaoPeloNome = Yup.object().shape({
   nomeLocalizacao: Yup.string().required(),

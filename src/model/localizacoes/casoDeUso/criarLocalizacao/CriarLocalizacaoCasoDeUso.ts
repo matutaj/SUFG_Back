@@ -7,6 +7,7 @@ class CriarLocalizacaoCasoDeUso {
   async execute({
     nomeLocalizacao,
     descricao,
+    tipo,
   }: DadosLocalizacao): Promise<localizacoes> {
     const localizacaoRepositorio = new LocalizacaoRepositorio();
 
@@ -21,6 +22,7 @@ class CriarLocalizacaoCasoDeUso {
     const novaLocalizacao = await localizacaoRepositorio.criarLocalizacao({
       nomeLocalizacao,
       descricao,
+      tipo
     });
 
     return novaLocalizacao;
