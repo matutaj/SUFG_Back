@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ListarTodosClienteCasoDeUso } from "./listarTodosclienteCasoDeUso";
+import { ListarTodosClienteCasoDeUso } from "./ListarTodosClienteCasoDeUso";
 class ListarTodosClienteController {
   async handle(req: Request, res: Response): Promise<any> {
     const listarTodosClienteCasoDeUso = new ListarTodosClienteCasoDeUso();
