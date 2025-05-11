@@ -9,7 +9,7 @@ class AtualizarTransferenciaController {
     const {
       id_produto,
       id_funcionario,
-      id_localizacao,
+      id_produtoLocalizacao,
       dataTransferencia,
       quantidadeTransferida,
     } = req.body;
@@ -19,7 +19,7 @@ class AtualizarTransferenciaController {
       id,
       id_produto,
       id_funcionario,
-      id_localizacao,
+      id_produtoLocalizacao,
       dataTransferencia,
       quantidadeTransferida,
     });

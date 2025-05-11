@@ -5,6 +5,7 @@ const criarFuncionarioSchema = Yup.object().shape({
   numeroContribuinte: Yup.string(),
   moradaFuncionario: Yup.string(),
   telefoneFuncionario: Yup.string(),
+  senha: Yup.string(),
   emailFuncionario: Yup.string().required().email(),
   id_funcao: Yup.string()
 });
@@ -16,6 +17,7 @@ const atualizarFuncionarioSchema = Yup.object().shape({
   numeroContribuinte: Yup.string(),
   moradaFuncionario: Yup.string(),
   telefoneFuncionario: Yup.string(),
+  senha: Yup.string(),
   emailFuncionario: Yup.string(),
   id_funcao: Yup.string(),
 });

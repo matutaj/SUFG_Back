@@ -4,7 +4,7 @@ export interface DadosTransferencia {
     id?: string
     id_produto: string
     id_funcionario: string
-    id_localizacao: string
+    id_produtoLocalizacao: string
     dataTransferencia: Date
     quantidadeTransferida: number
 }

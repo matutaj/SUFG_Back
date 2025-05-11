@@ -264,7 +264,6 @@ model localizacoes {
   descricao String?
   tipo tipo?
   produtosLocalizacoes produtosLocalizacoes[]
-  transferencias transferencias[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -278,7 +277,7 @@ model produtosLocalizacoes {
   id_corredor String
   quantidadeProduto Int
   quantidadeMinimaProduto Int
-
+  transferencias transferencias[]
   produtos produtos @relation(fields: [id_produto], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Localizacoes localizacoes @relation(fields: [id_localizacao], references: [id],onDelete: Cascade, onUpdate: Cascade)
   seccoes seccoes @relation(fields: [id_seccao],references: [id],onDelete: Cascade, onUpdate: Cascade )
@@ -293,12 +292,12 @@ model transferencias {
 	id String @id @default(uuid())
   id_produto String
   id_funcionario String
-  id_localizacao String
+  id_produtoLocalizacao String
   dataTransferencia DateTime
   quantidadeTransferida Int
   funcionarios funcionarios @relation(fields: [id_funcionario], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Produtos produtos @relation(fields: [id_produto], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  Localizacoes localizacoes @relation(fields: [id_localizacao], references: [id],onDelete: Cascade, onUpdate: Cascade)
+  produtosLocalizacoes produtosLocalizacoes @relation(fields: [id_produtoLocalizacao], references: [id],onDelete: Cascade, onUpdate: Cascade)
   
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt

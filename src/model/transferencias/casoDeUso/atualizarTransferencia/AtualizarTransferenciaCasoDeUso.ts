@@ -10,7 +10,7 @@ class AtualizarTransferenciaCasoDeUso {
     id,
     id_produto,
     id_funcionario,
-    id_localizacao,
+    id_produtoLocalizacao,
     dataTransferencia,
     quantidadeTransferida,
   }: DadosTransferencia): Promise<transferencias> {
@@ -38,7 +38,7 @@ class AtualizarTransferenciaCasoDeUso {
       throw new AppError("Não existe um funcionário com esse id");
     }
 
-    const existeLocalizacao = await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
+    const existeLocalizacao = await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_produtoLocalizacao);
     if (!existeLocalizacao) {
       throw new AppError("Não existe uma localização com esse id");
     }
@@ -51,7 +51,7 @@ class AtualizarTransferenciaCasoDeUso {
       id,
       id_produto,
       id_funcionario,
-      id_localizacao,
+      id_produtoLocalizacao,
       dataTransferencia,
       quantidadeTransferida,
     });

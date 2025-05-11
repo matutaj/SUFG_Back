@@ -8,7 +8,7 @@ import { AppError } from "../../../../errors/AppError";
 class CriarTransferenciaCasoDeUso {
   async execute({
     id_funcionario,
-    id_localizacao,
+    id_produtoLocalizacao,
     id_produto,
     dataTransferencia,
     quantidadeTransferida,
@@ -30,14 +30,14 @@ class CriarTransferenciaCasoDeUso {
       throw new AppError("Não existe um funcionario com esse id");
     }
     const existeLocalizacao =
-      await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_localizacao);
+      await repositorioLocalizacao.listarUmLocalizacaoPeloId(id_produtoLocalizacao);
     if (!existeLocalizacao) {
       throw new AppError("Não existe uma localização com esse id");
     }
 
     const result = await repositorioTransferencia.criarTransferencia({
       id_funcionario,
-      id_localizacao,
+      id_produtoLocalizacao,
       id_produto,
       dataTransferencia,
       quantidadeTransferida,

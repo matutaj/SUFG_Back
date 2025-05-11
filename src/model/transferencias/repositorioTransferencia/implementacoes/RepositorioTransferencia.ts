@@ -6,7 +6,7 @@ import  prisma  from "../../../../prisma/client";
 class TransferenciaRepositorio implements ITransferencia {
   async criarTransferencia({
     id_funcionario,
-    id_localizacao,
+    id_produtoLocalizacao,
     id_produto,
     dataTransferencia,
     quantidadeTransferida,
@@ -14,7 +14,7 @@ class TransferenciaRepositorio implements ITransferencia {
     const criarTransferencia = await prisma.transferencias.create({
       data: {
         id_funcionario,
-        id_localizacao,
+        id_produtoLocalizacao,
         id_produto,
         dataTransferencia,
         quantidadeTransferida,
@@ -38,7 +38,7 @@ class TransferenciaRepositorio implements ITransferencia {
 
   async atualizarTransferencia({
     id_funcionario,
-    id_localizacao,
+    id_produtoLocalizacao,
     id_produto,
     dataTransferencia,
     quantidadeTransferida,
@@ -48,7 +48,7 @@ class TransferenciaRepositorio implements ITransferencia {
       where: { id },
       data: {
         id_funcionario,
-        id_localizacao,
+        id_produtoLocalizacao,
         id_produto,
         dataTransferencia,
         quantidadeTransferida,

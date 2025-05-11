@@ -7,7 +7,7 @@ class CriarTransferenciaController {
     const criarTransferenciaCasoDeUso = new CriarTransferenciaCasoDeUso();
     const {
       id_funcionario,
-      id_localizacao,
+      id_produtoLocalizacao,
       id_produto,
       dataTransferencia,
       quantidadeTransferida,
@@ -15,7 +15,7 @@ class CriarTransferenciaController {
     if (!await criarTransferenciaSchema.isValid(req.body)) throw new AppError("Erro na Validação dos dados");
     const result = await criarTransferenciaCasoDeUso.execute({
       id_funcionario,
-      id_localizacao,
+      id_produtoLocalizacao,
       id_produto,
       dataTransferencia,
       quantidadeTransferida,
