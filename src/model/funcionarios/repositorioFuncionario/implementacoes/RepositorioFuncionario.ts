@@ -105,7 +105,6 @@ class FuncionarioRepositorio implements IFuncionario {
         include: {
           EntradasEstoque: true,
           funcionariosCaixa: true,
-          transferencias: true,
           funcoes: true,
         },
       })) || undefined;
