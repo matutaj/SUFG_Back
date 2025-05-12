@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { redisClient } from "../server";
 
-export const cacheMiddleware = (cacheKeyPrefix: string, ttl: number = 3600) => {
+export const cacheMiddleware = (cacheKeyPrefix: string, ttl: number = 2000) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const cacheKey = `${cacheKeyPrefix}:${req.originalUrl.replace(/\/$/, "")}`;
 

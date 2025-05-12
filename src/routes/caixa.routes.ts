@@ -20,36 +20,40 @@ const listarUmCaixaPeloId = new ListarUmCaixaPeloIdController();
 
 caixaRouter.get(
   "/",
-  verificarPermissao("listar_caixa"),
+  // verificarPermissao("listar_caixa"),
   cacheMiddleware("caixas"),
   listarTodosCaixas.handle
 );
 
 caixaRouter.get(
   "/:id",
-  verificarPermissao("listar_caixa"),
+  // verificarPermissao("listar_caixa"),
   cacheMiddleware("caixas"),
   listarUmCaixaPeloId.handle
 );
 
 caixaRouter.get(
   "/nome/:nomeCaixa",
-  verificarPermissao("listar_caixa"),
+  //verificarPermissao("listar_caixa"),
   cacheMiddleware("caixas"),
   listarCaixaPeloNome.handle
 );
 
-caixaRouter.post("/", verificarPermissao("criar_caixa"), async (req, res) => {
-  const result = await criarCaixa.handle(req, res);
-  await redisClient
-    .del("caixas:/caixa")
-    .catch((err) => console.error("Erro ao invalidar cache:", err));
-  return result;
-});
+caixaRouter.post(
+  "/",
+  // verificarPermissao("criar_caixa"),
+  async (req, res) => {
+    const result = await criarCaixa.handle(req, res);
+    await redisClient
+      .del("caixas:/caixa")
+      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    return result;
+  }
+);
 
 caixaRouter.put(
   "/:id",
-  verificarPermissao("atualizar_caixa"),
+  // verificarPermissao("atualizar_caixa"),
   async (req, res) => {
     const result = await atualizarCaixa.handle(req, res);
     await Promise.all([
@@ -62,7 +66,7 @@ caixaRouter.put(
 
 caixaRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_caixa"),
+  //verificarPermissao("eliminar_caixa"),
   async (req, res) => {
     const result = await deleteCaixa.handle(req, res);
     await Promise.all([
