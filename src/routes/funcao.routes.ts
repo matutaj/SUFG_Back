@@ -20,36 +20,40 @@ const listarTodasFuncoes = new ListarTodasFuncoesController();
 
 funcaoRouter.get(
   "/",
-  verificarPermissao("listar_funcao"),
+  // verificarPermissao("listar_funcao"),
   cacheMiddleware("funcoes"),
   listarTodasFuncoes.handle
 );
 
 funcaoRouter.get(
   "/:id",
-  verificarPermissao("listar_funcao"),
+  // verificarPermissao("listar_funcao"),
   cacheMiddleware("funcoes"),
   listarFuncaoPeloId.handle
 );
 
 funcaoRouter.get(
   "/nome/:nomeFuncao",
-  verificarPermissao("listar_funcao"),
+  // verificarPermissao("listar_funcao"),
   cacheMiddleware("funcoes"),
   listarFuncaoPeloNome.handle
 );
 
-funcaoRouter.post("/", verificarPermissao("criar_funcao"), async (req, res) => {
-  const result = await criarFuncao.handle(req, res);
-  await redisClient
-    .del("funcoes:/funcao")
-    .catch((err) => console.error("Erro ao invalidar cache:", err));
-  return result;
-});
+funcaoRouter.post(
+  "/",
+  //  verificarPermissao("criar_funcao"),
+  async (req, res) => {
+    const result = await criarFuncao.handle(req, res);
+    await redisClient
+      .del("funcoes:/funcao")
+      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    return result;
+  }
+);
 
 funcaoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_funcao"),
+  // verificarPermissao("atualizar_funcao"),
   async (req, res) => {
     const result = await atualizarFuncao.handle(req, res);
     await Promise.all([
@@ -62,7 +66,7 @@ funcaoRouter.put(
 
 funcaoRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_funcao"),
+  // verificarPermissao("eliminar_funcao"),
   async (req, res) => {
     const result = await deleteFuncao.handle(req, res);
     await Promise.all([
