@@ -5,6 +5,7 @@ import {
   RelatorioParams,
 } from "./ListarRelatorioCasoDeUso";
 import { AppError } from "../../../../errors/AppError";
+import { redisClient } from "../../../../server";
 
 const endpointToTipoRelatorio: { [key: string]: string } = {
   "atividades-caixas": "atividades-caixas",
@@ -116,10 +117,28 @@ class RelatorioControlador {
         limite: parsedLimite,
       };
 
+      // Generate a unique cache key based on endpoint and query parameters
+      const cacheKey = `relatorios:/${endpoint}/${JSON.stringify(req.query)}`;
+      console.log("Cache key:", cacheKey);
+
+      // Check if data is in cache
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        console.log(`Retornando dados do cache para ${tipoRelatorio}`);
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).json(JSON.parse(cachedData));
+        return;
+      }
+
       console.log("Parâmetros para o caso de uso:", params);
 
       const gerarRelatorioCasoDeUso = new GerarRelatorioCasoDeUso();
       const response = await gerarRelatorioCasoDeUso.execute(params);
+
+      // Store result in cache with a TTL of 300 seconds (5 minutes)
+      await redisClient
+        .setEx(cacheKey, 300, JSON.stringify({ data: response.data }))
+        .catch((err) => console.error("Erro ao armazenar no cache:", err));
 
       console.log(`Gerando JSON para ${tipoRelatorio}`);
       res.setHeader("Content-Type", "application/json");

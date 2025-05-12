@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { redisClient } from "../server";
+import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { CriarFornecedorController } from "../model/fornecedores/casoDeUso/criarFornecedor/CriarFornecedorController";
 import { ListarTodosFornecedoresController } from "../model/fornecedores/casoDeUso/listarTodosFornecedores/ListarTodosFornecedoresController";
 import { ListarFornecedorPeloNomeController } from "../model/fornecedores/casoDeUso/listarFornecedorPeloNome/ListarFornecedorPeloNomeController";
@@ -26,32 +28,81 @@ const listarTodosFornecedores = new ListarTodosFornecedoresController();
 fornecedorRouter.get(
   "/",
   verificarPermissao("listar_fornecedor"),
+  cacheMiddleware("fornecedores"),
   listarTodosFornecedores.handle
 );
+
 fornecedorRouter.get(
   "/:id",
   verificarPermissao("listar_fornecedor"),
+  cacheMiddleware("fornecedores"),
   listarFornecedorPeloId.handle
 );
+
 fornecedorRouter.get(
-  "/:email",
+  "/email/:email",
   verificarPermissao("listar_fornecedor"),
+  cacheMiddleware("fornecedores"),
   listarEmailFornecedor.handle
 );
-fornecedorRouter.put(
-  "/:id",
-  verificarPermissao("atualizar_fornecedor"),
-  atualizarFornecedor.handle
+
+fornecedorRouter.get(
+  "/nome/:nome",
+  verificarPermissao("listar_fornecedor"),
+  cacheMiddleware("fornecedores"),
+  listarFornecedorPeloNome.handle
 );
-fornecedorRouter.delete(
-  "/:id",
-  verificarPermissao("eliminar_fornecedor"),
-  deleteFornecedor.handle
+
+fornecedorRouter.get(
+  "/contribuinte/:numeroContribuinte",
+  verificarPermissao("listar_fornecedor"),
+  cacheMiddleware("fornecedores"),
+  listarFornecedorNumeroContribuinte.handle
 );
+
+fornecedorRouter.get(
+  "/telefone/:telefone",
+  verificarPermissao("listar_fornecedor"),
+  cacheMiddleware("fornecedores"),
+  listarTelefoneFornecedor.handle
+);
+
 fornecedorRouter.post(
   "/",
   verificarPermissao("criar_fornecedor"),
-  criarFornecedor.handle
+  async (req, res) => {
+    const result = await criarFornecedor.handle(req, res);
+    await redisClient
+      .del("fornecedores:/fornecedor")
+      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    return result;
+  }
+);
+
+fornecedorRouter.put(
+  "/:id",
+  verificarPermissao("atualizar_fornecedor"),
+  async (req, res) => {
+    const result = await atualizarFornecedor.handle(req, res);
+    await Promise.all([
+      redisClient.del("fornecedores:/fornecedor"),
+      redisClient.del(`fornecedores:/fornecedor/${req.params.id}`),
+    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    return result;
+  }
+);
+
+fornecedorRouter.delete(
+  "/:id",
+  verificarPermissao("eliminar_fornecedor"),
+  async (req, res) => {
+    const result = await deleteFornecedor.handle(req, res);
+    await Promise.all([
+      redisClient.del("fornecedores:/fornecedor"),
+      redisClient.del(`fornecedores:/fornecedor/${req.params.id}`),
+    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    return result;
+  }
 );
 
 export { fornecedorRouter };
