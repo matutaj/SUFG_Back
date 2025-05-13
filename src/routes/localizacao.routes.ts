@@ -33,7 +33,8 @@ localizacaoRouter.get(
 
 localizacaoRouter.post(
   "/",
-  verificarPermissao("criar_localizacao")
+  verificarPermissao("criar_localizacao"),
+  criarLocalizacao.handle
   /*  async (req, res) => {
     const result = await criarLocalizacao.handle(req, res);
     await redisClient.del("localizacoes:/localizacao");
@@ -44,7 +45,8 @@ localizacaoRouter.post(
 
 localizacaoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_localizacao")
+  verificarPermissao("atualizar_localizacao"),
+  atualizarLocalizacao.handle
   /*   async (req, res) => {
     const result = await atualizarLocalizacao.handle(req, res);
     await Promise.all([
@@ -58,7 +60,8 @@ localizacaoRouter.put(
 
 localizacaoRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_localizacao")
+  verificarPermissao("eliminar_localizacao"),
+  deleteLocalizacao.handle
   /*   async (req, res) => {
     const result = await deleteLocalizacao.handle(req, res);
     await Promise.all([

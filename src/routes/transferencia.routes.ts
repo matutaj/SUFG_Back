@@ -31,7 +31,8 @@ transferenciaRouter.get(
 
 transferenciaRouter.post(
   "/",
-  verificarPermissao("criar_transferencia")
+  verificarPermissao("criar_transferencia"),
+  criarTransferencia.handle
   /*  async (req, res) => {
     const result = await criarTransferencia.handle(req, res);
     await redisClient.del("transferencias:/transferencia");
@@ -42,7 +43,8 @@ transferenciaRouter.post(
 
 transferenciaRouter.put(
   "/:id",
-  verificarPermissao("atualizar_transferencia")
+  verificarPermissao("atualizar_transferencia"),
+  atualizarTransferencia.handle
   /* async (req, res) => {
     const result = await atualizarTransferencia.handle(req, res);
     await Promise.all([
@@ -56,7 +58,8 @@ transferenciaRouter.put(
 
 transferenciaRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_transferencia")
+  verificarPermissao("eliminar_transferencia"),
+  eliminarTransferencia.handle
   /*  async (req, res) => {
     const result = await eliminarTransferencia.handle(req, res);
     await Promise.all([

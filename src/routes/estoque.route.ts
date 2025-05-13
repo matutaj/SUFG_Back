@@ -22,27 +22,28 @@ const deleteEstoqueController = new DeleteEstoqueController();
 estoqueRouter.get(
   "/",
   verificarPermissao("listar_estoque"),
-//  cacheMiddleware("estoques"),
+  //  cacheMiddleware("estoques"),
   listarTodosEstoquesController.handle
 );
 
 estoqueRouter.get(
   "/:id",
   verificarPermissao("listar_estoque"),
- // cacheMiddleware("estoques"),
+  // cacheMiddleware("estoques"),
   listarUmEstoquePeloIdController.handle
 );
 
 estoqueRouter.get(
   "/produto/:id_produto",
   verificarPermissao("listar_estoque"),
- // cacheMiddleware("estoques"),
+  // cacheMiddleware("estoques"),
   listarUmEstoquePeloLoteController.handle
 );
 
 estoqueRouter.post(
   "/",
-  verificarPermissao("criar_estoque")
+  verificarPermissao("criar_estoque"),
+  criarEstoqueController.handle
   /*   async (req, res) => {
     const result = await criarEstoqueController.handle(req, res);
     await redisClient.del("estoques:/estoque");
@@ -53,7 +54,8 @@ estoqueRouter.post(
 
 estoqueRouter.put(
   "/:id",
-  verificarPermissao("atualizar_estoque")
+  verificarPermissao("atualizar_estoque"),
+  atualizarEstoqueController.handle
   /*   async (req, res) => {
     const result = await atualizarEstoqueController.handle(req, res);
     await Promise.all([
@@ -67,7 +69,8 @@ estoqueRouter.put(
 
 estoqueRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_estoque")
+  verificarPermissao("eliminar_estoque"),
+  deleteEstoqueController.handle
   /*   async (req, res) => {
     const result = await deleteEstoqueController.handle(req, res);
     await Promise.all([

@@ -23,7 +23,8 @@ entradaEstoqueRoutes.get(
 
 entradaEstoqueRoutes.post(
   "/",
-  verificarPermissao("criar_entrada_estoque")
+  verificarPermissao("criar_entrada_estoque"),
+  criarEntradaEstoque.handle
   /*   async (req, res) => {
     const result = await criarEntradaEstoque.handle(req, res);
     await redisClient.del("entradas_estoque:/entrada_estoque");
@@ -34,7 +35,8 @@ entradaEstoqueRoutes.post(
 
 entradaEstoqueRoutes.put(
   "/:id",
-  verificarPermissao("atualizar_entrada_estoque")
+  verificarPermissao("atualizar_entrada_estoque"),
+  atualizarEntradaEstoque.handle
   /*  async (req, res) => {
     const result = await atualizarEntradaEstoque.handle(req, res);
     await redisClient.del("entradas_estoque:/entrada_estoque");
@@ -45,7 +47,8 @@ entradaEstoqueRoutes.put(
 
 entradaEstoqueRoutes.delete(
   "/:id",
-  verificarPermissao("eliminar_entrada_estoque")
+  verificarPermissao("eliminar_entrada_estoque"),
+  deleteEntradaEstoque.handle
   /*   async (req, res) => {
     const result = await deleteEntradaEstoque.handle(req, res);
     await redisClient.del("entradas_estoque:/entrada_estoque");

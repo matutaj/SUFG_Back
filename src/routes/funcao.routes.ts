@@ -40,7 +40,8 @@ funcaoRouter.get(
 );
 
 funcaoRouter.post(
-  "/"
+  "/",
+  criarFuncao.handle
   //  verificarPermissao("criar_funcao"),
   /*  async (req, res) => {
     const result = await criarFuncao.handle(req, res);
@@ -51,7 +52,8 @@ funcaoRouter.post(
 );
 
 funcaoRouter.put(
-  "/:id"
+  "/:id",
+  atualizarFuncao.handle
   // verificarPermissao("atualizar_funcao"),
   /*   async (req, res) => {
     const result = await atualizarFuncao.handle(req, res);
@@ -65,7 +67,8 @@ funcaoRouter.put(
 );
 
 funcaoRouter.delete(
-  "/:id"
+  "/:id",
+  deleteFuncao.handle
   // verificarPermissao("eliminar_funcao"),
   /*   async (req, res) => {
     const result = await deleteFuncao.handle(req, res);

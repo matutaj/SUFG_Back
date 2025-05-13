@@ -41,7 +41,8 @@ corredorRouter.get(
 
 corredorRouter.post(
   "/",
-  verificarPermissao("criar_corredor")
+  verificarPermissao("criar_corredor"),
+  criarCorredor.handle
   /*   async (req, res) => {
     const result = await criarCorredor.handle(req, res);
     await redisClient.del("corredores:/corredor");
@@ -52,7 +53,8 @@ corredorRouter.post(
 
 corredorRouter.put(
   "/:id",
-  verificarPermissao("atualizar_corredor")
+  verificarPermissao("atualizar_corredor"),
+  atualizarCorredor.handle
   /*   async (req, res) => {
     const result = await atualizarCorredor.handle(req, res);
     await Promise.all([
@@ -66,7 +68,8 @@ corredorRouter.put(
 
 corredorRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_corredor")
+  verificarPermissao("eliminar_corredor"),
+  deleteCorredor.handle
   /*   async (req, res) => {
     const result = await deleteCorredor.handle(req, res);
     await Promise.all([

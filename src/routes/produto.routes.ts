@@ -33,7 +33,8 @@ produtoRouter.get(
 
 produtoRouter.post(
   "/",
-  verificarPermissao("criar_produto")
+  verificarPermissao("criar_produto"),
+  criarProduto.handle
   /*  async (req, res) => {
     const result = await criarProduto.handle(req, res);
     await redisClient.del("produtos:/produto");
@@ -44,7 +45,8 @@ produtoRouter.post(
 
 produtoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_produto")
+  verificarPermissao("atualizar_produto"),
+  atualizarProduto.handle
   /*   async (req, res) => {
     const result = await atualizarProduto.handle(req, res);
     await Promise.all([
@@ -58,7 +60,8 @@ produtoRouter.put(
 
 produtoRouter.delete(
   "/:id",
-  verificarPermissao("deletar_produto")
+  verificarPermissao("deletar_produto"),
+  deleteProduto.handle
   /*  async (req, res) => {
     const result = await deleteProduto.handle(req, res);
     await Promise.all([

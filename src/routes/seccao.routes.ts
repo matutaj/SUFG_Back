@@ -33,7 +33,9 @@ seccaoRouter.get(
 
 seccaoRouter.post(
   "/",
-  verificarPermissao("criar_seccao") /* async (req, res) => {
+  verificarPermissao("criar_seccao"),
+  criarSeccao.handle
+  /* async (req, res) => {
   const result = await criarSeccao.handle(req, res);
   await redisClient
     .del("seccoes:/seccao")
@@ -44,7 +46,8 @@ seccaoRouter.post(
 
 seccaoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_seccao")
+  verificarPermissao("atualizar_seccao"),
+  atualizarSeccao.handle
   /*  async (req, res) => {
     const result = await atualizarSeccao.handle(req, res);
     await Promise.all([
@@ -58,7 +61,8 @@ seccaoRouter.put(
 
 seccaoRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_seccao")
+  verificarPermissao("eliminar_seccao"),
+  deleteSeccao.handle
   /* async (req, res) => {
     const result = await deleteSeccao.handle(req, res);
     await Promise.all([

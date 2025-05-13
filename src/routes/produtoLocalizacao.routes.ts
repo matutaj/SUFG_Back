@@ -33,7 +33,8 @@ produtoLocalizacaoRouter.get(
 
 produtoLocalizacaoRouter.post(
   "/",
-  verificarPermissao("criar_produto_localizacao")
+  verificarPermissao("criar_produto_localizacao"),
+  criarProdutoLocalizacao.handle
   /* async (req, res) => {
     const result = await criarProdutoLocalizacao.handle(req, res);
     await redisClient.del("produtosLocalizacoes:/produtoLocalizacao");
@@ -44,7 +45,8 @@ produtoLocalizacaoRouter.post(
 
 produtoLocalizacaoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_produto_localizacao")
+  verificarPermissao("atualizar_produto_localizacao"),
+  atualizarProdutoLocalizacao.handle
   /*   async (req, res) => {
     const result = await atualizarProdutoLocalizacao.handle(req, res);
     await Promise.all([
@@ -60,7 +62,8 @@ produtoLocalizacaoRouter.put(
 
 produtoLocalizacaoRouter.delete(
   "/:id",
-  verificarPermissao("deletar_produto_localizacao")
+  verificarPermissao("deletar_produto_localizacao"),
+  deleteProdutoLocalizacao.handle
   /*  async (req, res) => {
     const result = await deleteProdutoLocalizacao.handle(req, res);
     await Promise.all([

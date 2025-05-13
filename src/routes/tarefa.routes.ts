@@ -33,7 +33,8 @@ tarefaRouter.get(
 
 tarefaRouter.post(
   "/",
-  verificarPermissao("criar_tarefa") /*  async (req, res) => {
+  verificarPermissao("criar_tarefa"),
+  criarTarefaController.handle /*  async (req, res) => {
   const result = await criarTarefaController.handle(req, res);
   await redisClient.del("tarefas:/tarefa");
   //.catch((err) => console.error("Erro ao invalidar cache:", err));
@@ -43,7 +44,8 @@ tarefaRouter.post(
 
 tarefaRouter.put(
   "/:id",
-  verificarPermissao("atualizar_tarefa")
+  verificarPermissao("atualizar_tarefa"),
+  atualizarTarefaController.handle
   /*   async (req, res) => {
     const result = await atualizarTarefaController.handle(req, res);
     await Promise.all([
@@ -57,7 +59,8 @@ tarefaRouter.put(
 
 tarefaRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_tarefa")
+  verificarPermissao("eliminar_tarefa"),
+  eliminarTarefaController.handle
   /*   async (req, res) => {
     const result = await eliminarTarefaController.handle(req, res);
     await Promise.all([

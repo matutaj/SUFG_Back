@@ -53,7 +53,8 @@ funcionarioCaixaRouter.get(
 
 funcionarioCaixaRouter.post(
   "/",
-  verificarPermissao("criar_funcionario_caixa")
+  verificarPermissao("criar_funcionario_caixa"),
+  criarFuncionarioCaixa.handle
   /*   async (req, res) => {
     const result = await criarFuncionarioCaixa.handle(req, res);
     await redisClient.del("funcionarios_caixa:/funcionario_caixa");
@@ -64,7 +65,8 @@ funcionarioCaixaRouter.post(
 
 funcionarioCaixaRouter.put(
   "/:id",
-  verificarPermissao("atualizar_funcionario_caixa")
+  verificarPermissao("atualizar_funcionario_caixa"),
+  atualizarFuncionarioCaixa.handle
   /*  async (req, res) => {
     const result = await atualizarFuncionarioCaixa.handle(req, res);
     await Promise.all([
@@ -78,7 +80,8 @@ funcionarioCaixaRouter.put(
 
 funcionarioCaixaRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_funcionario_caixa")
+  verificarPermissao("eliminar_funcionario_caixa"),
+  deleteFuncionarioCaixa.handle
   /*   async (req, res) => {
     const result = await deleteFuncionarioCaixa.handle(req, res);
     await Promise.all([

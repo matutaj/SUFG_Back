@@ -34,7 +34,8 @@ funcaoPermissaoRoutes.get(
 
 funcaoPermissaoRoutes.post(
   "/",
-  verificarPermissao("criar_funcao_permissao")
+  verificarPermissao("criar_funcao_permissao"),
+  criarFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await criarFuncaoPermissao.handle(req, res);
     await redisClient.del("funcoes_permissoes:/funcao_permissao");
@@ -45,7 +46,8 @@ funcaoPermissaoRoutes.post(
 
 funcaoPermissaoRoutes.put(
   "/:id",
-  verificarPermissao("atualizar_funcao_permissao")
+  verificarPermissao("atualizar_funcao_permissao"),
+  atualizarFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await atualizarFuncaoPermissao.handle(req, res);
     await Promise.all([
@@ -59,7 +61,8 @@ funcaoPermissaoRoutes.put(
 
 funcaoPermissaoRoutes.delete(
   "/:id",
-  verificarPermissao("eliminar_funcao_permissao")
+  verificarPermissao("eliminar_funcao_permissao"),
+  deleteFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await deleteFuncaoPermissao.handle(req, res);
     await Promise.all([

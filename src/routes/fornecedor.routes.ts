@@ -69,7 +69,8 @@ fornecedorRouter.get(
 
 fornecedorRouter.post(
   "/",
-  verificarPermissao("criar_fornecedor")
+  verificarPermissao("criar_fornecedor"),
+  criarFornecedor.handle
   /*   async (req, res) => {
     const result = await criarFornecedor.handle(req, res);
     await redisClient.del("fornecedores:/fornecedor");
@@ -80,7 +81,8 @@ fornecedorRouter.post(
 
 fornecedorRouter.put(
   "/:id",
-  verificarPermissao("atualizar_fornecedor")
+  verificarPermissao("atualizar_fornecedor"),
+  atualizarFornecedor.handle
   /*   async (req, res) => {
     const result = await atualizarFornecedor.handle(req, res);
     await Promise.all([
@@ -94,7 +96,8 @@ fornecedorRouter.put(
 
 fornecedorRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_fornecedor")
+  verificarPermissao("eliminar_fornecedor"),
+  deleteFornecedor.handle
   /*   async (req, res) => {
     const result = await deleteFornecedor.handle(req, res);
     await Promise.all([

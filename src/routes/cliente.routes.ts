@@ -72,7 +72,8 @@ clientesRouter.get(
 
 clientesRouter.post(
   "/",
-  verificarPermissao("criar_cliente")
+  verificarPermissao("criar_cliente"),
+  criarClienteController.handle
   /*   async (req, res) => {
     const result = await criarClienteController.handle(req, res);
     await redisClient.del("clientes:/cliente");
@@ -83,7 +84,8 @@ clientesRouter.post(
 
 clientesRouter.put(
   "/:id",
-  verificarPermissao("atualizar_cliente")
+  verificarPermissao("atualizar_cliente"),
+  atualizarClienteController.handle
   /*   async (req, res) => {
     const result = await atualizarClienteController.handle(req, res);
     await Promise.all([
@@ -97,7 +99,8 @@ clientesRouter.put(
 
 clientesRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_cliente")
+  verificarPermissao("eliminar_cliente"),
+  deleteClienteController.handle
   /*   async (req, res) => {
     const result = await deleteClienteController.handle(req, res);
     await Promise.all([

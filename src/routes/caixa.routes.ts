@@ -53,8 +53,8 @@ caixaRouter.post(
 
 caixaRouter.put(
   "/:id",
-  atualizarCaixa.handle
-  // verificarPermissao("atualizar_caixa"),
+  atualizarCaixa.handle,
+  verificarPermissao("atualizar_caixa")
   /*  async (req, res) => {
     const result = await atualizarCaixa.handle(req, res);
     await Promise.all([

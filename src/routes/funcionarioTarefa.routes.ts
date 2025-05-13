@@ -36,7 +36,8 @@ funcionarioTarefaRouter.get(
 
 funcionarioTarefaRouter.post(
   "/",
-  verificarPermissao("criar_funcionario_tarefa")
+  verificarPermissao("criar_funcionario_tarefa"),
+  criarFuncionarioTarefaController.handle
   /*   async (req, res) => {
     const result = await criarFuncionarioTarefaController.handle(req, res);
     await redisClient.del("funcionarios_tarefas:/funcionario_tarefa");
@@ -47,7 +48,8 @@ funcionarioTarefaRouter.post(
 
 funcionarioTarefaRouter.put(
   "/:id",
-  verificarPermissao("atualizar_funcionario_tarefa")
+  verificarPermissao("atualizar_funcionario_tarefa"),
+  atualizarFuncionarioTarefaController.handle
   /*   async (req, res) => {
     const result = await atualizarFuncionarioTarefaController.handle(req, res);
     await Promise.all([
@@ -63,7 +65,8 @@ funcionarioTarefaRouter.put(
 
 funcionarioTarefaRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_funcionario_tarefa")
+  verificarPermissao("eliminar_funcionario_tarefa"),
+  eliminarFuncionarioTarefaController.handle
   /*   async (req, res) => {
     const result = await eliminarFuncionarioTarefaController.handle(req, res);
     await Promise.all([

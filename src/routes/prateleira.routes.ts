@@ -33,7 +33,8 @@ prateleiraRouter.get(
 
 prateleiraRouter.post(
   "/",
-  verificarPermissao("criar_prateleira")
+  verificarPermissao("criar_prateleira"),
+  criarPrateleira.handle
   /*   async (req, res) => {
     const result = await criarPrateleira.handle(req, res);
     await redisClient.del("prateleiras:/prateleira");
@@ -44,7 +45,8 @@ prateleiraRouter.post(
 
 prateleiraRouter.put(
   "/:id",
-  verificarPermissao("atualizar_prateleira")
+  verificarPermissao("atualizar_prateleira"),
+  atualizarPrateleira.handle
   /*   async (req, res) => {
     const result = await atualizarPrateleira.handle(req, res);
     await Promise.all([
@@ -58,7 +60,8 @@ prateleiraRouter.put(
 
 prateleiraRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_prateleira")
+  verificarPermissao("eliminar_prateleira"),
+  deletePrateleira.handle
   /*  async (req, res) => {
     const result = await deletePrateleira.handle(req, res);
     await Promise.all([

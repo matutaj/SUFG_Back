@@ -34,7 +34,8 @@ categoriaProdutoRouter.get(
 
 categoriaProdutoRouter.post(
   "/",
-  verificarPermissao("criar_categoria")
+  verificarPermissao("criar_categoria"),
+  criarCategoriaProduto.handle
   /*   async (req, res) => {
     const result = await criarCategoriaProduto.handle(req, res);
     await redisClient.del("categorias:/categoria");
@@ -45,7 +46,8 @@ categoriaProdutoRouter.post(
 
 categoriaProdutoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_categoria")
+  verificarPermissao("atualizar_categoria"),
+  atualizarCategoriaProduto.handle
   /*   async (req, res) => {
     const result = await atualizarCategoriaProduto.handle(req, res);
     await Promise.all([
@@ -59,7 +61,8 @@ categoriaProdutoRouter.put(
 
 categoriaProdutoRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_categoria")
+  verificarPermissao("eliminar_categoria"),
+  deleteCategoriaProduto.handle
   /*   async (req, res) => {
     const result = await deleteCategoriaProduto.handle(req, res);
     await Promise.all([
