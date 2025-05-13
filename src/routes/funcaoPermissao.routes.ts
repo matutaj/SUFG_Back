@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { redisClient } from "../server";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
+//import { redisClient } from "../server";
+//import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { CriarFuncaoPermissaoController } from "../model/funcoesPermissoes/casoDeUso/criarFuncaoPermissao/CriarFuncaoPermissaoController";
 import { ListarUmaFuncaoPermissaoPeloIdController } from "../model/funcoesPermissoes/casoDeUso/listarUmaFuncaoPermissaoPeloId/ListarUmaFuncaoPermissaoPeloIdController";
 import { AtualizarFuncaoPermissaoController } from "../model/funcoesPermissoes/casoDeUso/atualizarFuncaoPermissao/AtualizarFuncaoPermissaoController";
@@ -21,32 +21,32 @@ const listarTodasFuncoesPermissoes =
 funcaoPermissaoRoutes.get(
   "/",
   verificarPermissao("listar_funcao_permissao"),
-  cacheMiddleware("funcoes_permissoes"),
+  //cacheMiddleware("funcoes_permissoes"),
   listarTodasFuncoesPermissoes.handle
 );
 
 funcaoPermissaoRoutes.get(
   "/:id",
   verificarPermissao("listar_funcao_permissao"),
-  cacheMiddleware("funcoes_permissoes"),
+  //  cacheMiddleware("funcoes_permissoes"),
   listarUmaFuncaoPermissaoPeloId.handle
 );
 
 funcaoPermissaoRoutes.post(
   "/",
-  verificarPermissao("criar_funcao_permissao"),
-  async (req, res) => {
+  verificarPermissao("criar_funcao_permissao")
+  /*   async (req, res) => {
     const result = await criarFuncaoPermissao.handle(req, res);
     await redisClient.del("funcoes_permissoes:/funcao_permissao");
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 funcaoPermissaoRoutes.put(
   "/:id",
-  verificarPermissao("atualizar_funcao_permissao"),
-  async (req, res) => {
+  verificarPermissao("atualizar_funcao_permissao")
+  /*   async (req, res) => {
     const result = await atualizarFuncaoPermissao.handle(req, res);
     await Promise.all([
       redisClient.del("funcoes_permissoes:/funcao_permissao"),
@@ -54,13 +54,13 @@ funcaoPermissaoRoutes.put(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 funcaoPermissaoRoutes.delete(
   "/:id",
-  verificarPermissao("eliminar_funcao_permissao"),
-  async (req, res) => {
+  verificarPermissao("eliminar_funcao_permissao")
+  /*   async (req, res) => {
     const result = await deleteFuncaoPermissao.handle(req, res);
     await Promise.all([
       redisClient.del("funcoes_permissoes:/funcao_permissao"),
@@ -68,7 +68,7 @@ funcaoPermissaoRoutes.delete(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 export { funcaoPermissaoRoutes };

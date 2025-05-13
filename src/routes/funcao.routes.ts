@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { redisClient } from "../server";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
+//import { redisClient } from "../server";
+//import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { CriarFuncaoController } from "../model/funcoes/casoDeUso/criarFuncao/CriarFuncaoController";
 import { ListarTodasFuncoesController } from "../model/funcoes/casoDeUso/listarTodasFuncoes/ListarTodasFuncoesController";
 import { ListarFuncaoPeloNomeController } from "../model/funcoes/casoDeUso/listarFuncaoPeloNome/ListarFuncaoPeloNomeController";
@@ -21,39 +21,39 @@ const listarTodasFuncoes = new ListarTodasFuncoesController();
 funcaoRouter.get(
   "/",
   // verificarPermissao("listar_funcao"),
-  cacheMiddleware("funcoes"),
+  //cacheMiddleware("funcoes"),
   listarTodasFuncoes.handle
 );
 
 funcaoRouter.get(
   "/:id",
   // verificarPermissao("listar_funcao"),
-  cacheMiddleware("funcoes"),
+  //cacheMiddleware("funcoes"),
   listarFuncaoPeloId.handle
 );
 
 funcaoRouter.get(
   "/nome/:nomeFuncao",
   // verificarPermissao("listar_funcao"),
-  cacheMiddleware("funcoes"),
+  //cacheMiddleware("funcoes"),
   listarFuncaoPeloNome.handle
 );
 
 funcaoRouter.post(
-  "/",
+  "/"
   //  verificarPermissao("criar_funcao"),
-  async (req, res) => {
+  /*  async (req, res) => {
     const result = await criarFuncao.handle(req, res);
     await redisClient.del("funcoes:/funcao");
     // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 funcaoRouter.put(
-  "/:id",
+  "/:id"
   // verificarPermissao("atualizar_funcao"),
-  async (req, res) => {
+  /*   async (req, res) => {
     const result = await atualizarFuncao.handle(req, res);
     await Promise.all([
       redisClient.del("funcoes:/funcao"),
@@ -61,13 +61,13 @@ funcaoRouter.put(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 funcaoRouter.delete(
-  "/:id",
+  "/:id"
   // verificarPermissao("eliminar_funcao"),
-  async (req, res) => {
+  /*   async (req, res) => {
     const result = await deleteFuncao.handle(req, res);
     await Promise.all([
       redisClient.del("funcoes:/funcao"),
@@ -75,7 +75,7 @@ funcaoRouter.delete(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 export { funcaoRouter };

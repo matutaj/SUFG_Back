@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { redisClient } from "../server";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
+//import { redisClient } from "../server";
+//import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { CriarCaixaController } from "../model/caixas/casoDeUso/criarCaixa/CriarCaixaController";
 import { ListarCaixaPeloNomeController } from "../model/caixas/casoDeUso/listarCaixaPeloNome/ListarCaixaPeloNomeController";
 import { ListarTodosCaixasController } from "../model/caixas/casoDeUso/listarTodosCaixas/ListarTodosCaixasController";
