@@ -45,9 +45,8 @@ estoqueRouter.post(
   verificarPermissao("criar_estoque"),
   async (req, res) => {
     const result = await criarEstoqueController.handle(req, res);
-    await redisClient
-      .del("estoques:/estoque")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("estoques:/estoque");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -60,7 +59,8 @@ estoqueRouter.put(
     await Promise.all([
       redisClient.del("estoques:/estoque"),
       redisClient.del(`estoques:/estoque/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -73,7 +73,8 @@ estoqueRouter.delete(
     await Promise.all([
       redisClient.del("estoques:/estoque"),
       redisClient.del(`estoques:/estoque/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

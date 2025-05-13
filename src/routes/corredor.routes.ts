@@ -44,9 +44,8 @@ corredorRouter.post(
   verificarPermissao("criar_corredor"),
   async (req, res) => {
     const result = await criarCorredor.handle(req, res);
-    await redisClient
-      .del("corredores:/corredor")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("corredores:/corredor");
+    // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -59,7 +58,8 @@ corredorRouter.put(
     await Promise.all([
       redisClient.del("corredores:/corredor"),
       redisClient.del(`corredores:/corredor/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -72,7 +72,8 @@ corredorRouter.delete(
     await Promise.all([
       redisClient.del("corredores:/corredor"),
       redisClient.del(`corredores:/corredor/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

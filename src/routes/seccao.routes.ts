@@ -48,7 +48,8 @@ seccaoRouter.put(
     await Promise.all([
       redisClient.del("seccoes:/seccao"),
       redisClient.del(`seccoes:/seccao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -61,7 +62,8 @@ seccaoRouter.delete(
     await Promise.all([
       redisClient.del("seccoes:/seccao"),
       redisClient.del(`seccoes:/seccao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

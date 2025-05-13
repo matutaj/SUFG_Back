@@ -44,9 +44,8 @@ funcaoRouter.post(
   //  verificarPermissao("criar_funcao"),
   async (req, res) => {
     const result = await criarFuncao.handle(req, res);
-    await redisClient
-      .del("funcoes:/funcao")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("funcoes:/funcao");
+    // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -59,7 +58,8 @@ funcaoRouter.put(
     await Promise.all([
       redisClient.del("funcoes:/funcao"),
       redisClient.del(`funcoes:/funcao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -72,7 +72,8 @@ funcaoRouter.delete(
     await Promise.all([
       redisClient.del("funcoes:/funcao"),
       redisClient.del(`funcoes:/funcao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

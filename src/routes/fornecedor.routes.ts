@@ -72,9 +72,8 @@ fornecedorRouter.post(
   verificarPermissao("criar_fornecedor"),
   async (req, res) => {
     const result = await criarFornecedor.handle(req, res);
-    await redisClient
-      .del("fornecedores:/fornecedor")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("fornecedores:/fornecedor");
+    // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -87,7 +86,8 @@ fornecedorRouter.put(
     await Promise.all([
       redisClient.del("fornecedores:/fornecedor"),
       redisClient.del(`fornecedores:/fornecedor/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -100,7 +100,8 @@ fornecedorRouter.delete(
     await Promise.all([
       redisClient.del("fornecedores:/fornecedor"),
       redisClient.del(`fornecedores:/fornecedor/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

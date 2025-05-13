@@ -35,9 +35,8 @@ transferenciaRouter.post(
   verificarPermissao("criar_transferencia"),
   async (req, res) => {
     const result = await criarTransferencia.handle(req, res);
-    await redisClient
-      .del("transferencias:/transferencia")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("transferencias:/transferencia");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -50,7 +49,8 @@ transferenciaRouter.put(
     await Promise.all([
       redisClient.del("transferencias:/transferencia"),
       redisClient.del(`transferencias:/transferencia/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -63,7 +63,8 @@ transferenciaRouter.delete(
     await Promise.all([
       redisClient.del("transferencias:/transferencia"),
       redisClient.del(`transferencias:/transferencia/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

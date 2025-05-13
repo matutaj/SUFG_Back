@@ -37,9 +37,8 @@ produtoLocalizacaoRouter.post(
   verificarPermissao("criar_produto_localizacao"),
   async (req, res) => {
     const result = await criarProdutoLocalizacao.handle(req, res);
-    await redisClient
-      .del("produtosLocalizacoes:/produtoLocalizacao")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("produtosLocalizacoes:/produtoLocalizacao");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -54,7 +53,8 @@ produtoLocalizacaoRouter.put(
       redisClient.del(
         `produtosLocalizacoes:/produtoLocalizacao/${req.params.id}`
       ),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -69,7 +69,8 @@ produtoLocalizacaoRouter.delete(
       redisClient.del(
         `produtosLocalizacoes:/produtoLocalizacao/${req.params.id}`
       ),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

@@ -35,20 +35,17 @@ funcionarioTarefaRouter.get(
   listarUmFuncionarioTarefaPeloIdController.handle
 );
 
-// Rota POST com invalidação de cache
 funcionarioTarefaRouter.post(
   "/",
   verificarPermissao("criar_funcionario_tarefa"),
   async (req, res) => {
     const result = await criarFuncionarioTarefaController.handle(req, res);
-    await redisClient
-      .del("funcionarios_tarefas:/funcionario_tarefa")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("funcionarios_tarefas:/funcionario_tarefa");
+    //  .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
 
-// Rota PUT com invalidação de cache
 funcionarioTarefaRouter.put(
   "/:id",
   verificarPermissao("atualizar_funcionario_tarefa"),
@@ -59,7 +56,8 @@ funcionarioTarefaRouter.put(
       redisClient.del(
         `funcionarios_tarefas:/funcionario_tarefa/${req.params.id}`
       ),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -74,7 +72,8 @@ funcionarioTarefaRouter.delete(
       redisClient.del(
         `funcionarios_tarefas:/funcionario_tarefa/${req.params.id}`
       ),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

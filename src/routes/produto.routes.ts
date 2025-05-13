@@ -37,9 +37,8 @@ produtoRouter.post(
   verificarPermissao("criar_produto"),
   async (req, res) => {
     const result = await criarProduto.handle(req, res);
-    await redisClient
-      .del("produtos:/produto")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("produtos:/produto");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -52,7 +51,8 @@ produtoRouter.put(
     await Promise.all([
       redisClient.del("produtos:/produto"),
       redisClient.del(`produtos:/produto/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -65,7 +65,8 @@ produtoRouter.delete(
     await Promise.all([
       redisClient.del("produtos:/produto"),
       redisClient.del(`produtos:/produto/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

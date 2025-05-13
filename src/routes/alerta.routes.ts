@@ -41,9 +41,8 @@ alertaRoutes.get(
 
 alertaRoutes.post("/", verificarPermissao("criar_alerta"), async (req, res) => {
   const result = await criarAlerta.handle(req, res);
-  await redisClient
-    .del("alertas:/alerta")
-    .catch((err) => console.error("Erro ao invalidar cache:", err));
+  await redisClient.del("alertas:/alerta");
+  // .catch((err) => console.error("Erro ao invalidar cache:", err));
   return result;
 });
 
@@ -55,7 +54,8 @@ alertaRoutes.put(
     await Promise.all([
       redisClient.del("alertas:/alerta"),
       redisClient.del(`alertas:/alerta/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -68,7 +68,8 @@ alertaRoutes.delete(
     await Promise.all([
       redisClient.del("alertas:/alerta"),
       redisClient.del(`alertas:/alerta/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
