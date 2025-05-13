@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { redisClient } from "../server";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
+//import { redisClient } from "../server";
+//import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { CriarFuncionarioCaixaController } from "../model/funcionariosCaixa/casoDeUso/criarFuncionarioCaixa/CriarFuncionarioCaixaController";
 import { DeleteFuncionarioCaixaController } from "../model/funcionariosCaixa/casoDeUso/deleteFuncionarioCaixa/DeleteFuncionarioCaixaController";
 import { ListarUmFuncionarioCaixaPelaAberturaController } from "../model/funcionariosCaixa/casoDeUso/listarUmFuncionarioCaixaPelaAbertura/ListarUmFuncionarioCaixaPelaAberturaController";
@@ -26,46 +26,46 @@ const listarUmFuncionarioCaixaPelaAbertura =
 funcionarioCaixaRouter.get(
   "/",
   verificarPermissao("listar_funcionario_caixa"),
-  cacheMiddleware("funcionarios_caixa"),
+  // cacheMiddleware("funcionarios_caixa"),
   listarTodosFuncionariosCaixa.handle
 );
 
 funcionarioCaixaRouter.get(
   "/:id",
   verificarPermissao("listar_funcionario_caixa"),
-  cacheMiddleware("funcionarios_caixa"),
+  // cacheMiddleware("funcionarios_caixa"),
   listarUmFuncionarioCaixaPeloId.handle
 );
 
 funcionarioCaixaRouter.get(
   "/abertura/:abertura",
   verificarPermissao("listar_funcionario_caixa"),
-  cacheMiddleware("funcionarios_caixa"),
+  //cacheMiddleware("funcionarios_caixa"),
   listarUmFuncionarioCaixaPelaAbertura.handle
 );
 
 funcionarioCaixaRouter.get(
   "/estado/:estado",
   verificarPermissao("listar_funcionario_caixa"),
-  cacheMiddleware("funcionarios_caixa"),
+  // cacheMiddleware("funcionarios_caixa"),
   listarEstadoCaixa.handle
 );
 
 funcionarioCaixaRouter.post(
   "/",
-  verificarPermissao("criar_funcionario_caixa"),
-  async (req, res) => {
+  verificarPermissao("criar_funcionario_caixa")
+  /*   async (req, res) => {
     const result = await criarFuncionarioCaixa.handle(req, res);
     await redisClient.del("funcionarios_caixa:/funcionario_caixa");
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 funcionarioCaixaRouter.put(
   "/:id",
-  verificarPermissao("atualizar_funcionario_caixa"),
-  async (req, res) => {
+  verificarPermissao("atualizar_funcionario_caixa")
+  /*  async (req, res) => {
     const result = await atualizarFuncionarioCaixa.handle(req, res);
     await Promise.all([
       redisClient.del("funcionarios_caixa:/funcionario_caixa"),
@@ -73,13 +73,13 @@ funcionarioCaixaRouter.put(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 funcionarioCaixaRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_funcionario_caixa"),
-  async (req, res) => {
+  verificarPermissao("eliminar_funcionario_caixa")
+  /*   async (req, res) => {
     const result = await deleteFuncionarioCaixa.handle(req, res);
     await Promise.all([
       redisClient.del("funcionarios_caixa:/funcionario_caixa"),
@@ -87,7 +87,7 @@ funcionarioCaixaRouter.delete(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 export { funcionarioCaixaRouter };

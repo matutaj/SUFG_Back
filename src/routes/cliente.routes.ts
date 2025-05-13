@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { redisClient } from "../server";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
+//import { redisClient } from "../server";
+//import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { CriarClienteController } from "../model/clientes/casoDeUso/criarCliente/CriarClienteController";
 import { ListarClientePeloNomeController } from "../model/clientes/casoDeUso/listarClientePeloNome/ListarClientePeloNomeController";
 import { AtualizarClienteController } from "../model/clientes/casoDeUso/atualizarCliente/AtualizarClienteController";
@@ -31,60 +31,60 @@ const listartodosClientes = new ListarTodosClienteController();
 
 clientesRouter.get(
   "/",
-  cacheMiddleware("clientes"),
+  //cacheMiddleware("clientes"),
   listartodosClientes.handle
 );
 
 clientesRouter.get(
   "/:id",
   verificarPermissao("listar_clientes"),
-  cacheMiddleware("clientes"),
+  //cacheMiddleware("clientes"),
   listarUmClientePeloIdController.handle
 );
 
 clientesRouter.get(
   "/:email",
   verificarPermissao("listar_clientes"),
-  cacheMiddleware("clientes"),
+  // cacheMiddleware("clientes"),
   listarEmailClienteController.handle
 );
 
 clientesRouter.get(
   "/telefone/:telefone",
   verificarPermissao("listar_clientes"),
-  cacheMiddleware("clientes"),
+  //cacheMiddleware("clientes"),
   listarTelefoneClienteController.handle
 );
 
 clientesRouter.get(
   "/contribuinte/:numeroContribuinte",
   verificarPermissao("listar_clientes"),
-  cacheMiddleware("clientes"),
+  // cacheMiddleware("clientes"),
   listarNumeroContribuinteController.handle
 );
 
 clientesRouter.get(
   "/nome/:nome",
   verificarPermissao("listar_clientes"),
-  cacheMiddleware("clientes"),
+  //cacheMiddleware("clientes"),
   listarClientePeloNome.handle
 );
 
 clientesRouter.post(
   "/",
-  verificarPermissao("criar_cliente"),
-  async (req, res) => {
+  verificarPermissao("criar_cliente")
+  /*   async (req, res) => {
     const result = await criarClienteController.handle(req, res);
     await redisClient.del("clientes:/cliente");
     //  .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 clientesRouter.put(
   "/:id",
-  verificarPermissao("atualizar_cliente"),
-  async (req, res) => {
+  verificarPermissao("atualizar_cliente")
+  /*   async (req, res) => {
     const result = await atualizarClienteController.handle(req, res);
     await Promise.all([
       redisClient.del("clientes:/cliente"),
@@ -92,13 +92,13 @@ clientesRouter.put(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 clientesRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_cliente"),
-  async (req, res) => {
+  verificarPermissao("eliminar_cliente")
+  /*   async (req, res) => {
     const result = await deleteClienteController.handle(req, res);
     await Promise.all([
       redisClient.del("clientes:/cliente"),
@@ -106,7 +106,7 @@ clientesRouter.delete(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 export { clientesRouter };

@@ -1,13 +1,12 @@
 import { Router } from "express";
-import { redisClient } from "../server";
+//import { redisClient } from "../server";
 import { CriarVendaController } from "../model/vendas/casoDeUso/criarVenda/CriarVendaController";
 import { ListarTodasVendasController } from "../model/vendas/casoDeUso/listarTodasVendas/ListarTodasVendasController";
 import { ListarVendaPorIdController } from "../model/vendas/casoDeUso/listarVendaPeloId/ListarVendaPeloIdController";
 import { AtualizarVendaController } from "../model/vendas/casoDeUso/atualizarVenda/AtualizarVendaController";
 import { DeleteVendaController } from "../model/vendas/casoDeUso/eliminarVenda/EliminarVendaController";
 import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
-
+//
 const vendaRouter = Router();
 
 const criarVenda = new CriarVendaController();
@@ -19,14 +18,14 @@ const listarTodasVendas = new ListarTodasVendasController();
 vendaRouter.get(
   "/",
   verificarPermissao("listar_venda"),
-  cacheMiddleware("vendas"),
+  // cacheMiddleware("vendas"),
   listarTodasVendas.handle
 );
 
 vendaRouter.get(
   "/:id",
   verificarPermissao("listar_venda"),
-  cacheMiddleware("vendas"),
+  //cacheMiddleware("vendas"),
   listarVendaPeloId.handle
 );
 

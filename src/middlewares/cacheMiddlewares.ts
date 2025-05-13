@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { redisClient } from "../server";
+/* import { Request, Response, NextFunction } from "express";
+//import { redisClient } from "../server";
 
 export const cacheMiddleware = (cacheKeyPrefix: string, ttl: number = 3600) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -30,3 +30,4 @@ export const cacheMiddleware = (cacheKeyPrefix: string, ttl: number = 3600) => {
     }
   };
 };
+ */

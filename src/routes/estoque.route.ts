@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { redisClient } from "../server";
-import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
+//import { redisClient } from "../server";
+//import { cacheMiddleware } from "../middlewares/cacheMiddlewares";
 import { ListarTodosEstoquesController } from "../model/estoques/casoDeUso/listarTodosEstoques/ListarTodosEstoquesController";
 import { ListarUmEstoquePeloIdController } from "../model/estoques/casoDeUso/listarUmEstoquePeloId/ListarUmEstoquePeloIdController";
 import { ListarUmEstoquePeloLoteController } from "../model/estoques/casoDeUso/listarUmEstoquePeloProduto/ListarUmEstoquePeloLoteController";
@@ -22,39 +22,39 @@ const deleteEstoqueController = new DeleteEstoqueController();
 estoqueRouter.get(
   "/",
   verificarPermissao("listar_estoque"),
-  cacheMiddleware("estoques"),
+//  cacheMiddleware("estoques"),
   listarTodosEstoquesController.handle
 );
 
 estoqueRouter.get(
   "/:id",
   verificarPermissao("listar_estoque"),
-  cacheMiddleware("estoques"),
+ // cacheMiddleware("estoques"),
   listarUmEstoquePeloIdController.handle
 );
 
 estoqueRouter.get(
   "/produto/:id_produto",
   verificarPermissao("listar_estoque"),
-  cacheMiddleware("estoques"),
+ // cacheMiddleware("estoques"),
   listarUmEstoquePeloLoteController.handle
 );
 
 estoqueRouter.post(
   "/",
-  verificarPermissao("criar_estoque"),
-  async (req, res) => {
+  verificarPermissao("criar_estoque")
+  /*   async (req, res) => {
     const result = await criarEstoqueController.handle(req, res);
     await redisClient.del("estoques:/estoque");
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 estoqueRouter.put(
   "/:id",
-  verificarPermissao("atualizar_estoque"),
-  async (req, res) => {
+  verificarPermissao("atualizar_estoque")
+  /*   async (req, res) => {
     const result = await atualizarEstoqueController.handle(req, res);
     await Promise.all([
       redisClient.del("estoques:/estoque"),
@@ -62,13 +62,13 @@ estoqueRouter.put(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 estoqueRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_estoque"),
-  async (req, res) => {
+  verificarPermissao("eliminar_estoque")
+  /*   async (req, res) => {
     const result = await deleteEstoqueController.handle(req, res);
     await Promise.all([
       redisClient.del("estoques:/estoque"),
@@ -76,7 +76,7 @@ estoqueRouter.delete(
     ]);
     //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
+  } */
 );
 
 export { estoqueRouter };
