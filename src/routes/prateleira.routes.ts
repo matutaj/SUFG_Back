@@ -37,9 +37,8 @@ prateleiraRouter.post(
   verificarPermissao("criar_prateleira"),
   async (req, res) => {
     const result = await criarPrateleira.handle(req, res);
-    await redisClient
-      .del("prateleiras:/prateleira")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("prateleiras:/prateleira");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -52,7 +51,8 @@ prateleiraRouter.put(
     await Promise.all([
       redisClient.del("prateleiras:/prateleira"),
       redisClient.del(`prateleiras:/prateleira/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -65,7 +65,8 @@ prateleiraRouter.delete(
     await Promise.all([
       redisClient.del("prateleiras:/prateleira"),
       redisClient.del(`prateleiras:/prateleira/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

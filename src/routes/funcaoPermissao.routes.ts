@@ -37,9 +37,8 @@ funcaoPermissaoRoutes.post(
   verificarPermissao("criar_funcao_permissao"),
   async (req, res) => {
     const result = await criarFuncaoPermissao.handle(req, res);
-    await redisClient
-      .del("funcoes_permissoes:/funcao_permissao")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("funcoes_permissoes:/funcao_permissao");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -52,7 +51,8 @@ funcaoPermissaoRoutes.put(
     await Promise.all([
       redisClient.del("funcoes_permissoes:/funcao_permissao"),
       redisClient.del(`funcoes_permissoes:/funcao_permissao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -65,7 +65,8 @@ funcaoPermissaoRoutes.delete(
     await Promise.all([
       redisClient.del("funcoes_permissoes:/funcao_permissao"),
       redisClient.del(`funcoes_permissoes:/funcao_permissao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

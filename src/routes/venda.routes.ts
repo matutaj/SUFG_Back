@@ -46,7 +46,8 @@ vendaRouter.put(
     await Promise.all([
       redisClient.del("vendas:/venda"),
       redisClient.del(`vendas:/venda/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ])
+    .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

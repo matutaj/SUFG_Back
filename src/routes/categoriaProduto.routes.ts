@@ -37,9 +37,8 @@ categoriaProdutoRouter.post(
   verificarPermissao("criar_categoria"),
   async (req, res) => {
     const result = await criarCategoriaProduto.handle(req, res);
-    await redisClient
-      .del("categorias:/categoria")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("categorias:/categoria");
+    // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -52,7 +51,8 @@ categoriaProdutoRouter.put(
     await Promise.all([
       redisClient.del("categorias:/categoria"),
       redisClient.del(`categorias:/categoria/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

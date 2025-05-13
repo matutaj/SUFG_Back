@@ -72,9 +72,8 @@ funcionarioRouter.post(
   verificarPermissao("criar_funcionario"),
   async (req, res) => {
     const result = await criarFuncionario.handle(req, res);
-    await redisClient
-      .del("funcionarios:/funcionario")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("funcionarios:/funcionario");
+    // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -87,7 +86,8 @@ funcionarioRouter.put(
     await Promise.all([
       redisClient.del("funcionarios:/funcionario"),
       redisClient.del(`funcionarios:/funcionario/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -100,7 +100,8 @@ funcionarioRouter.delete(
     await Promise.all([
       redisClient.del("funcionarios:/funcionario"),
       redisClient.del(`funcionarios:/funcionario/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

@@ -75,9 +75,8 @@ clientesRouter.post(
   verificarPermissao("criar_cliente"),
   async (req, res) => {
     const result = await criarClienteController.handle(req, res);
-    await redisClient
-      .del("clientes:/cliente")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("clientes:/cliente");
+    //  .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -90,7 +89,8 @@ clientesRouter.put(
     await Promise.all([
       redisClient.del("clientes:/cliente"),
       redisClient.del(`clientes:/cliente/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -103,7 +103,8 @@ clientesRouter.delete(
     await Promise.all([
       redisClient.del("clientes:/cliente"),
       redisClient.del(`clientes:/cliente/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

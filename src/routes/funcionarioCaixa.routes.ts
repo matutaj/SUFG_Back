@@ -56,9 +56,8 @@ funcionarioCaixaRouter.post(
   verificarPermissao("criar_funcionario_caixa"),
   async (req, res) => {
     const result = await criarFuncionarioCaixa.handle(req, res);
-    await redisClient
-      .del("funcionarios_caixa:/funcionario_caixa")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("funcionarios_caixa:/funcionario_caixa");
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -71,7 +70,8 @@ funcionarioCaixaRouter.put(
     await Promise.all([
       redisClient.del("funcionarios_caixa:/funcionario_caixa"),
       redisClient.del(`funcionarios_caixa:/funcionario_caixa/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -84,7 +84,8 @@ funcionarioCaixaRouter.delete(
     await Promise.all([
       redisClient.del("funcionarios_caixa:/funcionario_caixa"),
       redisClient.del(`funcionarios_caixa:/funcionario_caixa/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

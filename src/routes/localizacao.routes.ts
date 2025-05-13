@@ -37,9 +37,8 @@ localizacaoRouter.post(
   verificarPermissao("criar_localizacao"),
   async (req, res) => {
     const result = await criarLocalizacao.handle(req, res);
-    await redisClient
-      .del("localizacoes:/localizacao")
-      .catch((err) => console.error("Erro ao invalidar cache:", err));
+    await redisClient.del("localizacoes:/localizacao");
+    // .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -52,7 +51,8 @@ localizacaoRouter.put(
     await Promise.all([
       redisClient.del("localizacoes:/localizacao"),
       redisClient.del(`localizacoes:/localizacao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -65,7 +65,8 @@ localizacaoRouter.delete(
     await Promise.all([
       redisClient.del("localizacoes:/localizacao"),
       redisClient.del(`localizacoes:/localizacao/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );

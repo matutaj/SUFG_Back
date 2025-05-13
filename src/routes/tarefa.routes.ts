@@ -34,9 +34,8 @@ tarefaRouter.get(
 
 tarefaRouter.post("/", verificarPermissao("criar_tarefa"), async (req, res) => {
   const result = await criarTarefaController.handle(req, res);
-  await redisClient
-    .del("tarefas:/tarefa")
-    .catch((err) => console.error("Erro ao invalidar cache:", err));
+  await redisClient.del("tarefas:/tarefa");
+  //.catch((err) => console.error("Erro ao invalidar cache:", err));
   return result;
 });
 
@@ -48,7 +47,8 @@ tarefaRouter.put(
     await Promise.all([
       redisClient.del("tarefas:/tarefa"),
       redisClient.del(`tarefas:/tarefa/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
@@ -61,7 +61,8 @@ tarefaRouter.delete(
     await Promise.all([
       redisClient.del("tarefas:/tarefa"),
       redisClient.del(`tarefas:/tarefa/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    ]);
+    //.catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
   }
 );
