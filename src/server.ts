@@ -20,7 +20,7 @@ redisClient.on("connect", () => console.log("Conectado ao Redis!"));
 
 redisClient
   .connect()
-  .catch((err) => console.error("Erro ao conectar ao Redis:", err));
+  //.catch((err) => console.error("Erro ao conectar ao Redis:", err));
 
 app.use(express.json());
 

@@ -30,39 +30,46 @@ vendaRouter.get(
   listarVendaPeloId.handle
 );
 
-vendaRouter.post("/", verificarPermissao("criar_venda"), async (req, res) => {
+vendaRouter.post(
+  "/",
+  verificarPermissao("criar_venda"),
+  criarVenda.handle
+  /* async (req, res) => {
   const result = await criarVenda.handle(req, res);
   await redisClient
     .del("vendas:/venda")
     .catch((err) => console.error("Erro ao invalidar cache:", err));
   return result;
-});
+} */
+);
 
 vendaRouter.put(
   "/:id",
   verificarPermissao("atualizar_venda"),
-  async (req, res) => {
+  atualizarVenda.handle
+  /* async (req, res) => {
     const result = await atualizarVenda.handle(req, res);
+    await Promise.all([
+      redisClient.del("vendas:/venda"),
+      redisClient.del(`vendas:/venda/${req.params.id}`),
+    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
+    return result;
+  } */
+);
+
+vendaRouter.delete(
+  "/:id",
+  verificarPermissao("eliminar_venda"),
+  eliminarVenda.handle
+  /*  async (req, res) => {
+    const result = await eliminarVenda.handle(req, res);
     await Promise.all([
       redisClient.del("vendas:/venda"),
       redisClient.del(`vendas:/venda/${req.params.id}`),
     ])
     .catch((err) => console.error("Erro ao invalidar cache:", err));
     return result;
-  }
-);
-
-vendaRouter.delete(
-  "/:id",
-  verificarPermissao("eliminar_venda"),
-  async (req, res) => {
-    const result = await eliminarVenda.handle(req, res);
-    await Promise.all([
-      redisClient.del("vendas:/venda"),
-      redisClient.del(`vendas:/venda/${req.params.id}`),
-    ]).catch((err) => console.error("Erro ao invalidar cache:", err));
-    return result;
-  }
+  } */
 );
 
 export { vendaRouter };
