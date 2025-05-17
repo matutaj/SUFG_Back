@@ -20,21 +20,18 @@ const listarTodasFuncoesPermissoes =
 
 funcaoPermissaoRoutes.get(
   "/",
-  verificarPermissao("listar_funcao_permissao"),
   //cacheMiddleware("funcoes_permissoes"),
   listarTodasFuncoesPermissoes.handle
 );
 
 funcaoPermissaoRoutes.get(
   "/:id",
-  verificarPermissao("listar_funcao_permissao"),
   //  cacheMiddleware("funcoes_permissoes"),
   listarUmaFuncaoPermissaoPeloId.handle
 );
 
 funcaoPermissaoRoutes.post(
   "/",
-  verificarPermissao("criar_funcao_permissao"),
   criarFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await criarFuncaoPermissao.handle(req, res);
@@ -46,7 +43,6 @@ funcaoPermissaoRoutes.post(
 
 funcaoPermissaoRoutes.put(
   "/:id",
-  verificarPermissao("atualizar_funcao_permissao"),
   atualizarFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await atualizarFuncaoPermissao.handle(req, res);
@@ -61,7 +57,6 @@ funcaoPermissaoRoutes.put(
 
 funcaoPermissaoRoutes.delete(
   "/:id",
-  verificarPermissao("eliminar_funcao_permissao"),
   deleteFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await deleteFuncaoPermissao.handle(req, res);
