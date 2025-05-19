@@ -34,7 +34,7 @@ funcaoPermissaoRoutes.get(
 
 funcaoPermissaoRoutes.post(
   "/",
-  verificarPermissao("criar_funcao_permissao"),
+  // verificarPermissao("criar_funcao_permissao"),
   criarFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await criarFuncaoPermissao.handle(req, res);
