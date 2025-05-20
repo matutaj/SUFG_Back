@@ -18,6 +18,7 @@ export interface FuncionarioAutenticado {
   numeroBI: string;
   token: string;
   role?: string;
+  permissoes: string[]; // Adicionar permissões à resposta
 }
 
 class LoginCasoDeUso {
@@ -38,17 +39,31 @@ class LoginCasoDeUso {
       throw new AppError("Senha incorreta", 401);
     }
 
-    // Buscar a função do funcionário
+    // Buscar a função do funcionário e suas permissões
     const funcao = await prisma.funcionarios.findFirst({
       where: { id: existeEmail.id },
-      include: { funcoes: true },
+      include: {
+        funcoes: {
+          include: {
+            funcoesPermissoes: {
+              include: {
+                Permissoes: true,
+              },
+            },
+          },
+        },
+      },
     });
 
-    if (!funcao) {
+    if (!funcao || !funcao.funcoes) {
       throw new AppError("Nenhuma função associada ao funcionário", 400);
     }
 
-    const role = funcao.funcoes?.nome;
+    const role = funcao.funcoes.nome;
+
+    const permissoes = funcao.funcoes.funcoesPermissoes
+      .map((fp) => fp.Permissoes?.nome)
+      .filter((nome): nome is string => !!nome);
 
     const tokenPayload = {
       userId: existeEmail.id,
@@ -69,6 +84,7 @@ class LoginCasoDeUso {
       numeroBI: existeEmail.numeroBI,
       token,
       role,
+      permissoes,
     };
 
     return funcionarioAutenticado;
