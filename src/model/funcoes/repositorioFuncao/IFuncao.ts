@@ -5,10 +5,11 @@ export interface DadosFuncao {
   descricao: string;
   nome: string;
 }
+
 export interface IFuncao {
   criarFuncao({}: DadosFuncao): Promise<funcoes>;
   listarTodasFuncoes(): Promise<funcoes[]>;
-  listarFuncaoPeloNome(nomeFuncao: string): Promise<funcoes | undefined>;
+  listarFuncaoPeloNome(nome: string): Promise<funcoes | undefined>;
   listarFuncaoPeloId(id: string): Promise<funcoes | undefined>;
   atualizarFuncao({}: DadosFuncao): Promise<funcoes>;
   eliminarFuncao(id: string): Promise<void>;

@@ -3,9 +3,9 @@ import { FuncaoRepositorio } from "../../repositorioFuncao/implementacoes/Reposi
 import { AppError } from "../../../../errors/AppError";
 
 class ListarFuncaoPeloNomeCasoDeUso{
-    async execute (nomeFuncao: string): Promise<funcoes> {
+    async execute (nome: string): Promise<funcoes> {
         const funcaoRepositorio = new FuncaoRepositorio();
-        const existeNomeFuncao = await funcaoRepositorio.listarFuncaoPeloNome(nomeFuncao);
+        const existeNomeFuncao = await funcaoRepositorio.listarFuncaoPeloNome(nome);
         if (!existeNomeFuncao) {
             throw new AppError("Funcao não encontrada");
         }
