@@ -7,7 +7,7 @@ import { AtualizarFuncaoPermissaoController } from "../model/funcoesPermissoes/c
 import { DeleteFuncaoPermissaoController } from "../model/funcoesPermissoes/casoDeUso/eliminarFuncaoPermissao/EliminarFuncaoPermissaoController";
 import { ListarTodasFuncoesPermissoesController } from "../model/funcoesPermissoes/casoDeUso/listarTodasFuncoesPermissoes/ListarTodasFuncoesPermissoesController";
 import { verificarPermissao } from "../middlewares/permissoes";
-
+import { listarFuncoesPermissoesPeloIdDaFuncaoControler } from "../model/funcoesPermissoes/casoDeUso/listarFuncoesPermissoesPeloIdDaFuncao/listarFuncoesPermissoesPeloIdDaFuncaoControler";
 const funcaoPermissaoRoutes = Router();
 
 const criarFuncaoPermissao = new CriarFuncaoPermissaoController();
@@ -17,6 +17,8 @@ const atualizarFuncaoPermissao = new AtualizarFuncaoPermissaoController();
 const deleteFuncaoPermissao = new DeleteFuncaoPermissaoController();
 const listarTodasFuncoesPermissoes =
   new ListarTodasFuncoesPermissoesController();
+const listarFuncaoPermissoesPeloIdFuncao =
+  new listarFuncoesPermissoesPeloIdDaFuncaoControler();
 
 funcaoPermissaoRoutes.get(
   "/",
@@ -28,6 +30,12 @@ funcaoPermissaoRoutes.get(
   "/:id",
   //  cacheMiddleware("funcoes_permissoes"),
   listarUmaFuncaoPermissaoPeloId.handle
+);
+
+funcaoPermissaoRoutes.get(
+  "/funcao/:id_funcao",
+  //  cacheMiddleware("funcoes_permissoes"),
+  listarFuncaoPermissoesPeloIdFuncao.handle
 );
 
 funcaoPermissaoRoutes.post(

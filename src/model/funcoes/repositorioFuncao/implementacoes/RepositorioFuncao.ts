@@ -45,8 +45,14 @@ class FuncaoRepositorio implements IFuncao {
   }
   async listarFuncaoPeloNome(nomeFuncao: string): Promise<funcoes | undefined> {
     const listarFuncaoPeloNome =
-      (await prisma.funcoes.findFirst({ where: { nome: nomeFuncao } })) ||
-      undefined;
+      (await prisma.funcoes.findFirst({
+        where: {
+          nome: {
+            contains: nomeFuncao,
+            mode: "insensitive",
+          },
+        },
+      })) || undefined;
     return listarFuncaoPeloNome;
   }
 }

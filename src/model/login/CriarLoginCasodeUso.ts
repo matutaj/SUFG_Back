@@ -49,12 +49,13 @@ class LoginCasoDeUso {
     }
 
     const role = funcao.funcoes?.nome;
-
+    const id_funcao = funcao.funcoes?.id;
     const tokenPayload = {
       userId: existeEmail.id,
       email: existeEmail.emailFuncionario,
       nome: existeEmail.nomeFuncionario,
       role,
+      id_funcao,
     };
 
     const token = jwt.sign(tokenPayload, authConfig.key, {

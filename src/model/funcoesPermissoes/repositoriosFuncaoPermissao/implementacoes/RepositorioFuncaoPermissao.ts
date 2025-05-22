@@ -1,6 +1,6 @@
 import { funcoesPermissoes } from "@prisma/client";
 import { DadosFuncaoPermissao, IFuncaoPermissao } from "../IFuncaoPermissao";
-import  prisma  from "../../../../prisma/client";
+import prisma from "../../../../prisma/client";
 
 class FuncaoPermissaoRepositorio implements IFuncaoPermissao {
   async criarFuncaoPermissao({
@@ -29,6 +29,16 @@ class FuncaoPermissaoRepositorio implements IFuncaoPermissao {
         where: { id_funcao, id_permissao },
       })) || undefined;
     return listarUmaFuncaoPermissaoPeloId;
+  }
+  async listarFuncoesPermissoesPeloIdDaFuncao(
+    id: string
+  ): Promise<funcoesPermissoes[]> {
+    const listarFuncoesPermissoesPeloIdDaFuncao =
+      await prisma.funcoesPermissoes.findMany({
+        where: { id_funcao: id },
+        include: { Permissoes: true, funcoes: true },
+      });
+    return listarFuncoesPermissoesPeloIdDaFuncao;
   }
   async atualizarFuncaoPermissao({
     id_funcao,
