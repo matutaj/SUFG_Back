@@ -6,6 +6,7 @@ export interface DadosFuncionarioCaixa {
   id_funcionario: string;
   estadoCaixa: boolean;
   quantidadaFaturada: number;
+  valorInicial: number;
   horarioAbertura: Date;
   horarioFechamento: Date | null;
 }

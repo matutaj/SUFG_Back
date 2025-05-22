@@ -62,7 +62,7 @@ produtoLocalizacaoRouter.put(
 
 produtoLocalizacaoRouter.delete(
   "/:id",
-  verificarPermissao("deletar_produto_localizacao"),
+  verificarPermissao("eliminar_produto_localizacao"),
   deleteProdutoLocalizacao.handle
   /*  async (req, res) => {
     const result = await deleteProdutoLocalizacao.handle(req, res);

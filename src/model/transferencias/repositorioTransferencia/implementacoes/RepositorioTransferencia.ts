@@ -11,10 +11,13 @@ class TransferenciaRepositorio implements ITransferencia {
     id_seccao_destino,
     id_prateleira_destino,
     id_corredor_destino,
+    id_produtoLocalizacao,
     quantidadeTransferida,
     dataTransferencia,
   }: DadosTransferencia) {
     try {
+      console.log('Iniciando transação para transferência:', { id_produto, quantidadeTransferida });
+
       const result = await prisma.$transaction(async (tx) => {
         // Validar chaves estrangeiras
         const funcionario = await tx.funcionarios.findUnique({ where: { id: id_funcionario } });
@@ -38,12 +41,28 @@ class TransferenciaRepositorio implements ITransferencia {
         const corredor = await tx.corredores.findUnique({ where: { id: id_corredor_destino } });
         if (!corredor) throw new Error('Corredor não encontrado.');
 
+        // Validar a localização de destino
+        const destino = await tx.produtosLocalizacoes.findFirst({
+          where: {
+            id: id_produtoLocalizacao,
+            id_produto,
+            id_localizacao: id_localizacao_destino,
+            id_seccao: id_seccao_destino,
+            id_prateleira: id_prateleira_destino,
+            id_corredor: id_corredor_destino,
+          },
+        });
+
+        if (!destino) {
+          throw new Error('Localização de destino não encontrada.');
+        }
+
         // Validar dataTransferencia
         if (!(dataTransferencia instanceof Date) || isNaN(dataTransferencia.getTime())) {
           throw new Error('Formato de data inválido.');
         }
 
-        // 1. Validar a localização de origem
+        // Validar a localização de origem
         const origem = await tx.produtosLocalizacoes.findFirst({
           where: {
             id_produto,
@@ -55,13 +74,14 @@ class TransferenciaRepositorio implements ITransferencia {
           throw new Error('Localização de origem não encontrada.');
         }
 
+        // Validar quantidade
         if (origem.quantidadeProduto < quantidadeTransferida) {
           throw new Error(
             `Quantidade insuficiente na origem. Disponível: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`,
           );
         }
 
-        // 2. Validar o estoque total (opcional, para consistência)
+        // Validar estoque total
         const estoque = await tx.estoques.findFirst({
           where: { id_produto },
         });
@@ -70,53 +90,7 @@ class TransferenciaRepositorio implements ITransferencia {
           throw new Error('Estoque não encontrado para o produto.');
         }
 
-        // 3. Atualizar a localização de origem
-        await tx.produtosLocalizacoes.update({
-          where: { id: origem.id },
-          data: {
-            quantidadeProduto: origem.quantidadeProduto - quantidadeTransferida,
-            updatedAt: new Date(),
-          },
-        });
-
-        // 4. Verificar ou criar a localização de destino
-        let destino = await tx.produtosLocalizacoes.findFirst({
-          where: {
-            id_produto,
-            id_localizacao: id_localizacao_destino,
-            id_seccao: id_seccao_destino,
-            id_prateleira: id_prateleira_destino,
-            id_corredor: id_corredor_destino,
-          },
-        });
-
-        if (destino) {
-          // Atualizar localização de destino existente
-          destino = await tx.produtosLocalizacoes.update({
-            where: { id: destino.id },
-            data: {
-              quantidadeProduto: destino.quantidadeProduto + quantidadeTransferida,
-              updatedAt: new Date(),
-            },
-          });
-        } else {
-          // Criar nova localização de destino
-          destino = await tx.produtosLocalizacoes.create({
-            data: {
-              id_produto,
-              id_localizacao: id_localizacao_destino,
-              id_seccao: id_seccao_destino,
-              id_prateleira: id_prateleira_destino,
-              id_corredor: id_corredor_destino,
-              quantidadeProduto: quantidadeTransferida,
-              quantidadeMinimaProduto: 0,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          });
-        }
-
-        // 5. Criar o registro de transferência
+        // Criar o registro de transferência
         const transferencia = await tx.transferencias.create({
           data: {
             id_produto,
@@ -207,18 +181,8 @@ class TransferenciaRepositorio implements ITransferencia {
           );
         }
 
-        // Reverter a quantidade na localização de destino antiga
-        const destinoAntigo = transferencia.produtosLocalizacoes;
-        await tx.produtosLocalizacoes.update({
-          where: { id: destinoAntigo.id },
-          data: {
-            quantidadeProduto: destinoAntigo.quantidadeProduto - transferencia.quantidadeTransferida,
-            updatedAt: new Date(),
-          },
-        });
-
-        // Validar ou criar a nova localização de destino
-        let destinoNovo = await tx.produtosLocalizacoes.findFirst({
+        // Validar a localização de destino
+        const destino = await tx.produtosLocalizacoes.findFirst({
           where: {
             id_produto,
             id_localizacao: id_localizacao_destino,
@@ -228,30 +192,8 @@ class TransferenciaRepositorio implements ITransferencia {
           },
         });
 
-        if (destinoNovo) {
-          // Atualizar localização de destino existente
-          destinoNovo = await tx.produtosLocalizacoes.update({
-            where: { id: destinoNovo.id },
-            data: {
-              quantidadeProduto: destinoNovo.quantidadeProduto + quantidadeTransferida,
-              updatedAt: new Date(),
-            },
-          });
-        } else {
-          // Criar nova localização de destino
-          destinoNovo = await tx.produtosLocalizacoes.create({
-            data: {
-              id_produto,
-              id_localizacao: id_localizacao_destino,
-              id_seccao: id_seccao_destino,
-              id_prateleira: id_prateleira_destino,
-              id_corredor: id_corredor_destino,
-              quantidadeProduto: quantidadeTransferida,
-              quantidadeMinimaProduto: 0,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          });
+        if (!destino) {
+          throw new Error('Localização de destino não encontrada.');
         }
 
         // Atualizar a transferência
@@ -260,7 +202,7 @@ class TransferenciaRepositorio implements ITransferencia {
           data: {
             id_funcionario,
             id_produto,
-            id_produtoLocalizacao: destinoNovo.id,
+            id_produtoLocalizacao: destino.id,
             dataTransferencia,
             quantidadeTransferida,
             updatedAt: new Date(),

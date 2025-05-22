@@ -12,6 +12,7 @@ class CriarFuncionarioCaixaCasodeUso {
     id_caixa,
     id_funcionario,
     quantidadaFaturada,
+    valorInicial
   }: DadosFuncionarioCaixa): Promise<funcionariosCaixa> {
     const funcionarioCaixaRepositorio = new FuncionarioCaixaRepositorio();
     const caixaRepositorio = new CaixaRepositorio();
@@ -43,6 +44,7 @@ class CriarFuncionarioCaixaCasodeUso {
       horarioAbertura,
       horarioFechamento,
       quantidadaFaturada,
+      valorInicial
     });
     return result;
   }

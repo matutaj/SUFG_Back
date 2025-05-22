@@ -20,21 +20,21 @@ const deleteCategoriaProduto = new DeleteCategoriaProdutoController();
 
 categoriaProdutoRouter.get(
   "/",
-  verificarPermissao("listar_categoria"),
+  verificarPermissao("listar_categoria_produto"),
   //cacheMiddleware("categorias"),
   listarTodasCategoriasProdutos.handle
 );
 
 categoriaProdutoRouter.get(
   "/:id",
-  verificarPermissao("listar_categoria"),
+  verificarPermissao("listar_categoria_produto"),
   //cacheMiddleware("categorias"),
   listarCategoriaProdutoPeloId.handle
 );
 
 categoriaProdutoRouter.post(
   "/",
-  verificarPermissao("criar_categoria"),
+  verificarPermissao("criar_categoria_produto"),
   criarCategoriaProduto.handle
   /*   async (req, res) => {
     const result = await criarCategoriaProduto.handle(req, res);
@@ -46,7 +46,7 @@ categoriaProdutoRouter.post(
 
 categoriaProdutoRouter.put(
   "/:id",
-  verificarPermissao("atualizar_categoria"),
+  verificarPermissao("atualizar_categoria_produto"),
   atualizarCategoriaProduto.handle
   /*   async (req, res) => {
     const result = await atualizarCategoriaProduto.handle(req, res);
@@ -61,7 +61,7 @@ categoriaProdutoRouter.put(
 
 categoriaProdutoRouter.delete(
   "/:id",
-  verificarPermissao("eliminar_categoria"),
+  verificarPermissao("eliminar_categoria_produto"),
   deleteCategoriaProduto.handle
   /*   async (req, res) => {
     const result = await deleteCategoriaProduto.handle(req, res);

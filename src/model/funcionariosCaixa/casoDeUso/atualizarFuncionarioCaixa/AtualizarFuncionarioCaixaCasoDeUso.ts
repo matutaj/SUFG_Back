@@ -14,6 +14,7 @@ class AtualizarFuncionarioCaixaCasoDeUso {
     quantidadaFaturada,
     horarioAbertura,
     horarioFechamento,
+    valorInicial
   }: Partial<DadosFuncionarioCaixa>): Promise<funcionariosCaixa> {
     const repositorioFuncionarioCaixa = new FuncionarioCaixaRepositorio();
     const repositorioCaixa = new CaixaRepositorio();
@@ -56,6 +57,7 @@ class AtualizarFuncionarioCaixaCasoDeUso {
 
     const result = await repositorioFuncionarioCaixa.atualizarFuncionarioCaixa({
       id,
+      valorInicial: valorInicial !== undefined ? valorInicial : Number(existeFuncionarioCaixa.valorInicial),
       id_caixa: id_caixa || existeFuncionarioCaixa.id_caixa,
       id_funcionario: id_funcionario || existeFuncionarioCaixa.id_funcionario,
       estadoCaixa: estadoCaixa !== undefined ? estadoCaixa : existeFuncionarioCaixa.estadoCaixa,

@@ -154,8 +154,7 @@ model fornecedores {
   telefoneFornecedor Int
   emailFornecedor String
 
-  EstradasEstoque entradasEstoque[]
-  FuncionariosCaixa funcionariosCaixa []  
+  EntradasEstoque entradasEstoque[]
   
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -309,15 +308,14 @@ model funcionariosCaixa {
   id_funcionario String
   estadoCaixa Boolean
   quantidadaFaturada Decimal @db.Decimal(10, 2)
+  valorInicial Decimal? @db.Decimal(10, 2)
   horarioAbertura DateTime
   horarioFechamento DateTime?
-
   caixas caixas @relation(fields: [id_caixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Funcionarios funcionarios @relation(fields: [id_funcionario], references: [id],onDelete: Cascade, onUpdate: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   vendas vendas[]
-  fornecedores fornecedores[]
 }
 
 model alertas {

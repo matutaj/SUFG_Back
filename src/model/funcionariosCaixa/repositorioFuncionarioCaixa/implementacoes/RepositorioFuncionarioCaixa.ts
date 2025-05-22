@@ -10,6 +10,7 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
     quantidadaFaturada,
     id_caixa,
     id_funcionario,
+    valorInicial
   }: DadosFuncionarioCaixa): Promise<funcionariosCaixa> {
     return await prisma.funcionariosCaixa.create({
       data: {
@@ -17,6 +18,7 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
         horarioAbertura,
         horarioFechamento,
         quantidadaFaturada,
+        valorInicial,
         id_caixa,
         id_funcionario,
       },
@@ -69,6 +71,7 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
       id_funcionario,
       estadoCaixa,
       quantidadaFaturada,
+      valorInicial,
       horarioAbertura,
       horarioFechamento,
     } = dadosFuncionarioCaixa;
@@ -79,6 +82,7 @@ class FuncionarioCaixaRepositorio implements IFuncionarioCaixa {
         ...(id_funcionario && { id_funcionario }),
         ...(estadoCaixa !== undefined && { estadoCaixa }),
         ...(quantidadaFaturada !== undefined && { quantidadaFaturada }),
+        ...(valorInicial !== undefined && { valorInicial }),
         ...(horarioAbertura && { horarioAbertura }),
         ...(horarioFechamento && { horarioFechamento }),
       },

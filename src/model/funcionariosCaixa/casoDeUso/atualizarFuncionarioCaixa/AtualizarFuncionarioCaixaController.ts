@@ -14,6 +14,7 @@ class AtualizarFuncionarioCaixaController {
       quantidadaFaturada,
       horarioAbertura,
       horarioFechamento,
+      valorInicial
     } = req.body;
     const { id } = req.params;
 
@@ -37,6 +38,7 @@ class AtualizarFuncionarioCaixaController {
       quantidadaFaturada,
       horarioAbertura,
       horarioFechamento,
+      valorInicial
     });
     return res.status(200).json(result);
   }

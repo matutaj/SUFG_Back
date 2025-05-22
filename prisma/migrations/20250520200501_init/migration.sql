@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "tipo" AS ENUM ('Armazem', 'Loja');
+
 -- CreateTable
 CREATE TABLE "clientes" (
     "id" TEXT NOT NULL,
@@ -13,8 +16,42 @@ CREATE TABLE "clientes" (
 );
 
 -- CreateTable
+CREATE TABLE "funcoes" (
+    "id" TEXT NOT NULL,
+    "nome" TEXT NOT NULL,
+    "descricao" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "funcoes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "permissoes" (
+    "id" TEXT NOT NULL,
+    "nome" TEXT NOT NULL,
+    "descricao" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "permissoes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "funcoesPermissoes" (
+    "id" TEXT NOT NULL,
+    "id_funcao" TEXT NOT NULL,
+    "id_permissao" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "funcoesPermissoes_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "funcionarios" (
     "id" TEXT NOT NULL,
+    "id_funcao" TEXT,
     "numeroBI" TEXT NOT NULL,
     "nomeFuncionario" TEXT NOT NULL,
     "senha" TEXT NOT NULL,
@@ -206,6 +243,7 @@ CREATE TABLE "localizacoes" (
     "id" TEXT NOT NULL,
     "nomeLocalizacao" TEXT NOT NULL,
     "descricao" TEXT,
+    "tipo" "tipo",
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -233,7 +271,7 @@ CREATE TABLE "transferencias" (
     "id" TEXT NOT NULL,
     "id_produto" TEXT NOT NULL,
     "id_funcionario" TEXT NOT NULL,
-    "id_localizacao" TEXT NOT NULL,
+    "id_produtoLocalizacao" TEXT NOT NULL,
     "dataTransferencia" TIMESTAMP(3) NOT NULL,
     "quantidadeTransferida" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -270,71 +308,14 @@ CREATE TABLE "alertas" (
     CONSTRAINT "alertas_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "funcoes" (
-    "id" TEXT NOT NULL,
-    "nome" TEXT NOT NULL,
-    "descricao" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+-- AddForeignKey
+ALTER TABLE "funcoesPermissoes" ADD CONSTRAINT "funcoesPermissoes_id_funcao_fkey" FOREIGN KEY ("id_funcao") REFERENCES "funcoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-    CONSTRAINT "funcoes_pkey" PRIMARY KEY ("id")
-);
+-- AddForeignKey
+ALTER TABLE "funcoesPermissoes" ADD CONSTRAINT "funcoesPermissoes_id_permissao_fkey" FOREIGN KEY ("id_permissao") REFERENCES "permissoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- CreateTable
-CREATE TABLE "permissoes" (
-    "id" TEXT NOT NULL,
-    "nome" TEXT NOT NULL,
-    "descricao" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "permissoes_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "funcionariosFuncoes" (
-    "id" TEXT NOT NULL,
-    "id_funcionario" TEXT NOT NULL,
-    "id_funcao" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "funcionariosFuncoes_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "funcionariosPermissoes" (
-    "id" TEXT NOT NULL,
-    "id_funcionario" TEXT NOT NULL,
-    "id_permissao" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "funcionariosPermissoes_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "funcoesPermissoes" (
-    "id" TEXT NOT NULL,
-    "id_funcao" TEXT NOT NULL,
-    "id_permissao" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "funcoesPermissoes_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "_fornecedoresTofuncionariosCaixa" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
-
-    CONSTRAINT "_fornecedoresTofuncionariosCaixa_AB_pkey" PRIMARY KEY ("A","B")
-);
-
--- CreateIndex
-CREATE INDEX "_fornecedoresTofuncionariosCaixa_B_index" ON "_fornecedoresTofuncionariosCaixa"("B");
+-- AddForeignKey
+ALTER TABLE "funcionarios" ADD CONSTRAINT "funcionarios_id_funcao_fkey" FOREIGN KEY ("id_funcao") REFERENCES "funcoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "funcionariosTarefas" ADD CONSTRAINT "funcionariosTarefas_id_funcionario_fkey" FOREIGN KEY ("id_funcionario") REFERENCES "funcionarios"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -394,7 +375,7 @@ ALTER TABLE "transferencias" ADD CONSTRAINT "transferencias_id_funcionario_fkey"
 ALTER TABLE "transferencias" ADD CONSTRAINT "transferencias_id_produto_fkey" FOREIGN KEY ("id_produto") REFERENCES "produtos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transferencias" ADD CONSTRAINT "transferencias_id_localizacao_fkey" FOREIGN KEY ("id_localizacao") REFERENCES "localizacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transferencias" ADD CONSTRAINT "transferencias_id_produtoLocalizacao_fkey" FOREIGN KEY ("id_produtoLocalizacao") REFERENCES "produtosLocalizacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "funcionariosCaixa" ADD CONSTRAINT "funcionariosCaixa_id_caixa_fkey" FOREIGN KEY ("id_caixa") REFERENCES "caixas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -407,27 +388,3 @@ ALTER TABLE "alertas" ADD CONSTRAINT "alertas_id_caixa_fkey" FOREIGN KEY ("id_ca
 
 -- AddForeignKey
 ALTER TABLE "alertas" ADD CONSTRAINT "alertas_id_produto_fkey" FOREIGN KEY ("id_produto") REFERENCES "produtos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "funcionariosFuncoes" ADD CONSTRAINT "funcionariosFuncoes_id_funcionario_fkey" FOREIGN KEY ("id_funcionario") REFERENCES "funcionarios"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "funcionariosFuncoes" ADD CONSTRAINT "funcionariosFuncoes_id_funcao_fkey" FOREIGN KEY ("id_funcao") REFERENCES "funcoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "funcionariosPermissoes" ADD CONSTRAINT "funcionariosPermissoes_id_funcionario_fkey" FOREIGN KEY ("id_funcionario") REFERENCES "funcionarios"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "funcionariosPermissoes" ADD CONSTRAINT "funcionariosPermissoes_id_permissao_fkey" FOREIGN KEY ("id_permissao") REFERENCES "permissoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "funcoesPermissoes" ADD CONSTRAINT "funcoesPermissoes_id_funcao_fkey" FOREIGN KEY ("id_funcao") REFERENCES "funcoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "funcoesPermissoes" ADD CONSTRAINT "funcoesPermissoes_id_permissao_fkey" FOREIGN KEY ("id_permissao") REFERENCES "permissoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_fornecedoresTofuncionariosCaixa" ADD CONSTRAINT "_fornecedoresTofuncionariosCaixa_A_fkey" FOREIGN KEY ("A") REFERENCES "fornecedores"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_fornecedoresTofuncionariosCaixa" ADD CONSTRAINT "_fornecedoresTofuncionariosCaixa_B_fkey" FOREIGN KEY ("B") REFERENCES "funcionariosCaixa"("id") ON DELETE CASCADE ON UPDATE CASCADE;
