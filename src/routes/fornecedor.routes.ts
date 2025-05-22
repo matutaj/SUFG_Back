@@ -40,28 +40,28 @@ fornecedorRouter.get(
 );
 
 fornecedorRouter.get(
-  "/email/:email",
+  "/:email",
   verificarPermissao("listar_fornecedor"),
   //cacheMiddleware("fornecedores"),
   listarEmailFornecedor.handle
 );
 
 fornecedorRouter.get(
-  "/nome/:nome",
+  "/:nome",
   verificarPermissao("listar_fornecedor"),
   //cacheMiddleware("fornecedores"),
   listarFornecedorPeloNome.handle
 );
 
 fornecedorRouter.get(
-  "/contribuinte/:numeroContribuinte",
+  "/:numeroContribuinte",
   verificarPermissao("listar_fornecedor"),
   //cacheMiddleware("fornecedores"),
   listarFornecedorNumeroContribuinte.handle
 );
 
 fornecedorRouter.get(
-  "/telefone/:telefone",
+  "/:telefoneFornecedor",
   verificarPermissao("listar_fornecedor"),
   //cacheMiddleware("fornecedores"),
   listarTelefoneFornecedor.handle

@@ -33,7 +33,7 @@ funcaoRouter.get(
 );
 
 funcaoRouter.get(
-  "/nome/:nomeFuncao",
+  "/:nome",
   // verificarPermissao("listar_funcao"),
   //cacheMiddleware("funcoes"),
   listarFuncaoPeloNome.handle
