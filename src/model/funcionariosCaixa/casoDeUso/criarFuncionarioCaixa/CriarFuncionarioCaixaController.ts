@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { CriarFuncionarioCaixaCasodeUso } from "./CriarFuncionarioCaixaCasoDeUso";
+import { CriarFuncionarioCaixaCasoDeUso } from "./CriarFuncionarioCaixaCasoDeUso";
 import { criarFuncionarioCaixaSchema } from "../../../../schema/funcionariosCaixa";
 import { AppError } from "../../../../errors/AppError";
 class CriarFuncionarioCaixaController {
   async handle(req: Request, res: Response): Promise<any> {
-    const funcionarioCaixaCasoDeUso = new CriarFuncionarioCaixaCasodeUso();
+    const funcionarioCaixaCasoDeUso = new CriarFuncionarioCaixaCasoDeUso();
 
     //if (!(await criarFuncionarioCaixaSchema.isValid(req.body)))
     //throw new AppError("Erro na Validação dos dados");

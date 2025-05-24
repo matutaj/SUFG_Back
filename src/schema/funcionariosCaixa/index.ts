@@ -3,6 +3,8 @@ import * as Yup from "yup";
 const criarFuncionarioCaixaSchema = Yup.object().shape({
   id_caixa: Yup.string().required(),
   id_funcionario: Yup.string().required(),
+  valorInicial: Yup.number(),
+  estadoCaixa: Yup.boolean(),
   quantidadaFaturada: Yup.number(),
   horarioAbertura: Yup.date(),
   horarioFechamento: Yup.date(),
@@ -14,6 +16,7 @@ const atualizarFuncionarioCaixaSchema = Yup.object().shape({
   id_caixa: Yup.string().uuid().optional(),
   id_funcionario: Yup.string().uuid().optional(),
   estadoCaixa: Yup.boolean().optional(),
+  valorInicial: Yup.number(),
   quantidadaFaturada: Yup.number().min(0).optional(),
   horarioAbertura: Yup.date().nullable().optional(),
   horarioFechamento: Yup.string().matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.*Z$/, 'Formato de data inválido').nullable().optional(),

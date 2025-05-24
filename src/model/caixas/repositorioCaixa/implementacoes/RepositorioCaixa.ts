@@ -3,11 +3,12 @@ import { DadosCaixa, ICaixa } from "../ICaixa";
 import  prisma  from "../../../../prisma/client";
 
 class CaixaRepositorio implements ICaixa {
-  async criarCaixa({ descricao, nomeCaixa }: DadosCaixa): Promise<caixas> {
+  async criarCaixa({ descricao, nomeCaixa, mac }: DadosCaixa): Promise<caixas> {
     const criarCaixa = await prisma.caixas.create({
       data: {
         descricao,
         nomeCaixa,
+        mac
       },
     });
     return criarCaixa;
@@ -29,6 +30,7 @@ class CaixaRepositorio implements ICaixa {
   async atualizarCaixa({
     descricao,
     nomeCaixa,
+    mac,
     id,
   }: DadosCaixa): Promise<caixas> {
     const atualizarCaixa = await prisma.caixas.update({
@@ -36,9 +38,15 @@ class CaixaRepositorio implements ICaixa {
       data: {
         descricao,
         nomeCaixa,
+        mac
       },
     });
     return atualizarCaixa;
+  }
+  async listarUmCaixaPeloMac(mac: string): Promise<caixas | undefined> {
+    const listarUmCaixaPeloMac =
+      (await prisma.caixas.findFirst({ where: { mac } })) || undefined;
+    return listarUmCaixaPeloMac;
   }
   async eliminarCaixa(id: string): Promise<void> {
     await prisma.caixas.delete({ where: { id } });

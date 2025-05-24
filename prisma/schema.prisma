@@ -191,7 +191,7 @@ model caixas {
 	id String @id @default(uuid())
   nomeCaixa String
   descricao String?
-
+  mac String?
   funcionariosCaixa funcionariosCaixa []
   alertas alertas[]
   createdAt    DateTime      @default(now())

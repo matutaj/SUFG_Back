@@ -7,6 +7,7 @@ import { ListarTodosCaixasController } from "../model/caixas/casoDeUso/listarTod
 import { AtualizarCaixaController } from "../model/caixas/casoDeUso/atualizarCaixa/AtualizarCaixaController";
 import { DeleteCaixaController } from "../model/caixas/casoDeUso/deleteCaixa/DeleteCaixaController";
 import { ListarUmCaixaPeloIdController } from "../model/caixas/casoDeUso/listarCaixaPeloId/ListarCaixaPeloIdController";
+import { ListarCaixaPeloMacController } from "../model/caixas/casoDeUso/listarCaixaPeloMac/ListarCaixaPeloMacController";
 import { verificarPermissao, verificarRoles } from "../middlewares/permissoes";
 
 const caixaRouter = Router();
@@ -15,6 +16,7 @@ const atualizarCaixa = new AtualizarCaixaController();
 const deleteCaixa = new DeleteCaixaController();
 const criarCaixa = new CriarCaixaController();
 const listarCaixaPeloNome = new ListarCaixaPeloNomeController();
+const listarCaixaPeloMac = new ListarCaixaPeloMacController();
 const listarTodosCaixas = new ListarTodosCaixasController();
 const listarUmCaixaPeloId = new ListarUmCaixaPeloIdController();
 
@@ -39,6 +41,13 @@ caixaRouter.get(
   listarCaixaPeloNome.handle
 );
 
+caixaRouter.get(
+  "/mac/:mac",
+  //verificarPermissao("listar_caixa"),
+  //cacheMiddleware("caixas"),
+  listarCaixaPeloMac.handle
+);
+
 caixaRouter.post(
   "/",
   verificarPermissao("criar_caixa"),
@@ -53,8 +62,8 @@ caixaRouter.post(
 
 caixaRouter.put(
   "/:id",
-  atualizarCaixa.handle,
-  verificarPermissao("atualizar_caixa")
+  verificarPermissao("atualizar_caixa"),
+  atualizarCaixa.handle
   /*  async (req, res) => {
     const result = await atualizarCaixa.handle(req, res);
     await Promise.all([

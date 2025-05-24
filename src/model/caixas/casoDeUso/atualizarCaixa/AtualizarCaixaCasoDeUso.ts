@@ -8,6 +8,7 @@ class AtualizarCaixaCasoDeUso {
     id,
     nomeCaixa,
     descricao,
+    mac
   }: DadosCaixa): Promise<caixas> {
     const repositorioCaixa = new CaixaRepositorio();
 
@@ -26,11 +27,16 @@ class AtualizarCaixaCasoDeUso {
     if (caixaComMesmoNome && caixaComMesmoNome.id !== id) {
       throw new AppError("Já existe um caixa com esse nome");
     }
+    const caixaComMesmoMac = await repositorioCaixa.listarUmCaixaPeloMac(mac);
+    if (caixaComMesmoMac && caixaComMesmoMac.id !== id) {
+      throw new AppError("Já existe um caixa com esse mac");
+    }
 
     const result = await repositorioCaixa.atualizarCaixa({
       id,
       nomeCaixa,
       descricao,
+      mac
     });
 
     return result;
