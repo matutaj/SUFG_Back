@@ -6,6 +6,8 @@ export interface DadosProdutoLocalizacao {
     id_prateleira: string
     id_corredor: string
 	id_produto: string
+    lote: string
+    dataValidadeLote: Date
     id_localizacao: string
     quantidadeProduto: number
     quantidadeMinimaProduto: number

@@ -10,6 +10,7 @@ class VendaRepositorio implements IVenda {
     id_cliente,
     dataValidade,
     id_funcionarioCaixa,
+    metodoPagamento
   }: DadosVenda): Promise<vendas> {
     const criarVenda = await prisma.vendas.create({
       data: {
@@ -19,6 +20,7 @@ class VendaRepositorio implements IVenda {
         dataValidade,
         id_cliente,
         id_funcionarioCaixa,
+        metodoPagamento
       },
     });
     return criarVenda;

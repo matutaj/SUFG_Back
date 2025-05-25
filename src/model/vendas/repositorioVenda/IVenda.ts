@@ -4,6 +4,7 @@ export interface DadosVenda {
   id?: string;
   id_cliente: string;
   id_funcionarioCaixa: string;
+  metodoPagamento: string;
   numeroDocumento: string;
   dataEmissao: Date;
   dataValidade: Date;

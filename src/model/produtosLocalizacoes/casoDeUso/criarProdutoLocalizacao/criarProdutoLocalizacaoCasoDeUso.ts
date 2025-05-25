@@ -16,6 +16,8 @@ class CriarProdutoLocalizacaoCasoDeUso {
     id_seccao,
     quantidadeMinimaProduto,
     quantidadeProduto,
+    lote,
+    dataValidadeLote
   }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
     const repositorioProdutoLocalizacao = new ProdutoLocalizacaoRepositorio();
     const repositorioCorredor = new CorredorRepositorio();
@@ -61,6 +63,8 @@ class CriarProdutoLocalizacaoCasoDeUso {
       id_seccao,
       quantidadeMinimaProduto,
       quantidadeProduto,
+      lote,
+      dataValidadeLote
     });
     return result;
   }
