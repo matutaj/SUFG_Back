@@ -14,6 +14,7 @@ class AtualizarVendaCasoDeUso {
     dataEmissao,
     dataValidade,
     valorTotal,
+    metodoPagamento
   }: DadosVenda): Promise<vendas> {
     const repositorioVenda = new VendaRepositorio();
     const repositorioCliente = new ClienteRepositorio();
@@ -62,6 +63,7 @@ class AtualizarVendaCasoDeUso {
       dataEmissao,
       dataValidade,
       valorTotal,
+      metodoPagamento
     });
 
     return result;

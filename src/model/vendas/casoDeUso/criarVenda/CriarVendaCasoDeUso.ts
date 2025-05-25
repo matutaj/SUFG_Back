@@ -9,6 +9,7 @@ export interface DadosVenda {
   dataEmissao: Date;
   dataValidade: Date;
   id_funcionarioCaixa: string;
+  metodoPagamento: string;
   numeroDocumento: string;
   valorTotal: number;
   vendasProdutos: {
@@ -122,6 +123,7 @@ class CriarVendaCasoDeUso {
         id_funcionarioCaixa: dadosVenda.id_funcionarioCaixa.toString(), // Garante que é string
         numeroDocumento: dadosVenda.numeroDocumento,
         valorTotal: dadosVenda.valorTotal,
+        metodoPagamento: dadosVenda.metodoPagamento,
       });
 
       // Cria os produtos da venda de forma assíncrona, usando o id_venda recém-criado

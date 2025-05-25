@@ -14,6 +14,8 @@ class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
     id_corredor,
     id_prateleira,
     id_seccao,
+    lote,
+    dataValidadeLote
   }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
     const criarProdutoLocalizacao = await prisma.produtosLocalizacoes.create({
       data: {
@@ -24,6 +26,8 @@ class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
         id_corredor,
         id_prateleira,
         id_seccao,
+        lote,
+        dataValidadeLote
       },
     });
     return criarProdutoLocalizacao;
@@ -50,6 +54,8 @@ class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
     id_corredor,
     id_prateleira,
     id_seccao,
+    lote,
+    dataValidadeLote
   }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
     const atualizarProdutoLocalizacao =
       await prisma.produtosLocalizacoes.update({
@@ -62,6 +68,8 @@ class ProdutoLocalizacaoRepositorio implements IProdutoLocalizacao {
           id_corredor,
           id_prateleira,
           id_seccao,
+          lote,
+          dataValidadeLote
         },
       });
     return atualizarProdutoLocalizacao;

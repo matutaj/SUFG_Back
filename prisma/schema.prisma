@@ -206,6 +206,7 @@ model vendas {
   numeroDocumento String
   dataEmissao DateTime
   dataValidade DateTime
+  metodoPagamento String?
   valorTotal Decimal @db.Decimal(10, 2)
   clientes clientes @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: Cascade)
   funcionariosCaixa funcionariosCaixa @relation(fields: [id_funcionarioCaixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -274,6 +275,8 @@ model produtosLocalizacoes {
   id_seccao String
   id_prateleira String
   id_corredor String
+  lote String?
+  dataValidadeLote DateTime?
   quantidadeProduto Int
   quantidadeMinimaProduto Int
   transferencias transferencias[]

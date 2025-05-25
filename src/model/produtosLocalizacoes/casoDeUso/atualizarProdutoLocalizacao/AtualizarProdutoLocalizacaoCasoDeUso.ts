@@ -15,6 +15,8 @@ class AtualizarProdutoLocalizacaoCasoDeUso {
     id_corredor,
     id_produto,
     id_localizacao,
+    lote,
+    dataValidadeLote,
     quantidadeProduto,
     quantidadeMinimaProduto,
   }: DadosProdutoLocalizacao): Promise<produtosLocalizacoes> {
@@ -86,6 +88,8 @@ class AtualizarProdutoLocalizacaoCasoDeUso {
         id_localizacao,
         quantidadeProduto,
         quantidadeMinimaProduto,
+        lote,
+        dataValidadeLote
       });
 
     return result;
