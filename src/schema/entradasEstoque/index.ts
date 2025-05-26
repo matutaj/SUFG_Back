@@ -9,10 +9,10 @@ const criarEntradaSchema = Yup.object().shape({
   custoUnitario: Yup.number().required(),
 });
 const listarEntradaPeloIdSchema = Yup.object().shape({
-  id_entrada: Yup.string().required(),
+  id: Yup.string().required(),
 });
 const atualizarEntradaSchema = Yup.object().shape({
-  id_entrada: Yup.string(),
+  id: Yup.string(),
   id_fornecedor: Yup.string(),
   id_produto: Yup.string(),
   id_funcionario: Yup.string(),
@@ -21,7 +21,7 @@ const atualizarEntradaSchema = Yup.object().shape({
   dataEntrada: Yup.date(),
 });
 const deletarEntradaSchema = Yup.object().shape({
-  id_entrada: Yup.string().required(),
+  id: Yup.string().required(),
 });
 export {
   criarEntradaSchema,
