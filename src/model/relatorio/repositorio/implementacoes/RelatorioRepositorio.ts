@@ -277,7 +277,14 @@ export class RelatorioRepository implements IRelatorioRepository {
       where: { dataTransferencia: { gte: dataInicio, lte: dataFim } },
       include: {
         Produtos: { select: { nomeProduto: true } },
-        Localizacoes: { select: { nomeLocalizacao: true } },
+        produtosLocalizacoes: {
+          include: {
+            Localizacoes: { select: { nomeLocalizacao: true } },
+            seccoes: { select: { nomeSeccao: true } },
+            corredores: { select: { nomeCorredor: true } },
+            prateleiras: { select: { nomePrateleira: true } },
+          },
+        },
         funcionarios: { select: { nomeFuncionario: true } },
       },
     });
@@ -287,7 +294,18 @@ export class RelatorioRepository implements IRelatorioRepository {
       quantidadeTransferida: transferencia.quantidadeTransferida,
       dataTransferencia: transferencia.dataTransferencia,
       nomeLocalizacao:
-        transferencia.Localizacoes?.nomeLocalizacao ?? "Desconhecido",
+        transferencia.produtosLocalizacoes?.Localizacoes?.nomeLocalizacao ??
+        "Desconhecido",
+      corredor:
+        transferencia.produtosLocalizacoes?.corredores?.nomeCorredor ??
+        "Desconhecido",
+      prateleira:
+        transferencia.produtosLocalizacoes?.prateleiras?.nomePrateleira ??
+        "Desconhecido",
+      seccao:
+        transferencia.produtosLocalizacoes?.seccoes?.nomeSeccao ??
+        "Desconhecido",
+
       funcionarioNome:
         transferencia.funcionarios?.nomeFuncionario ?? "Desconhecido",
     }));
@@ -298,26 +316,47 @@ export class RelatorioRepository implements IRelatorioRepository {
     dataFim: Date
   ): Promise<{
     totalFaturado: number;
-    vendas: { numeroDocumento: string; valorTotal: number }[];
+    vendas: {
+      nomeProduto: string;
+      totalFaturado: number;
+      dataEmissao: Date;
+      funcionariosCaixa: string;
+    }[];
   }> {
     const vendas = await prisma.vendas.findMany({
       where: { dataEmissao: { gte: dataInicio, lte: dataFim } },
-      select: { numeroDocumento: true, valorTotal: true },
+      select: {
+        numeroDocumento: true,
+        valorTotal: true,
+        dataEmissao: true,
+        funcionariosCaixa: {
+          select: { Funcionarios: { select: { nomeFuncionario: true } } },
+        },
+        vendasProdutos: {
+          select: { produtos: { select: { nomeProduto: true } } },
+        },
+      },
     });
 
     const totalFaturado = vendas.reduce(
       (acc, venda) => acc + Number(venda.valorTotal),
       0
     );
+
+    const vendasFormatadas = vendas.flatMap((venda) =>
+      venda.vendasProdutos.map((vendaProduto) => ({
+        nomeProduto: vendaProduto.produtos.nomeProduto,
+        totalFaturado: Number(venda.valorTotal),
+        dataEmissao: venda.dataEmissao,
+        funcionariosCaixa:
+          venda.funcionariosCaixa.Funcionarios?.nomeFuncionario ??
+          "Desconhecido",
+      }))
+    );
+
     return {
       totalFaturado,
-      vendas: vendas.map(
-        (venda) =>
-          ({
-            numeroDocumento: venda.numeroDocumento,
-            valorTotal: Number(venda.valorTotal),
-          } as { numeroDocumento: string; valorTotal: number })
-      ),
+      vendas: vendasFormatadas,
     };
   }
 

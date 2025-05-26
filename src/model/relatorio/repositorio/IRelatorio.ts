@@ -89,12 +89,14 @@ export interface IRelatorioRepository {
       funcionarioNome: string;
     }[]
   >;
-  listarFaturamentoPorPeriodo(
-    dataInicio: Date,
-    dataFim: Date
-  ): Promise<{
+listarFaturamentoPorPeriodo(dataInicio: Date, dataFim: Date): Promise<{
     totalFaturado: number;
-    vendas: { numeroDocumento: string; valorTotal: number }[];
+    vendas: {
+      nomeProduto: string;
+      totalFaturado: number;
+      dataEmissao: Date;
+      funcionariosCaixa: string;
+    }[];
   }>;
   listarRelatorioVendas(
     dataInicio: Date,

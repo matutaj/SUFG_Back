@@ -15,7 +15,7 @@ class TransferenciaRepositorio implements ITransferencia {
     dataTransferencia,
   }: DadosTransferencia): Promise<transferencias> {
     try {
-      console.log('Iniciando transação para transferência:', {
+      console.log("Iniciando transação para transferência:", {
         id_produto,
         id_localizacao_origem,
         id_localizacao_destino,
@@ -24,36 +24,55 @@ class TransferenciaRepositorio implements ITransferencia {
 
       const result = await prisma.$transaction(async (tx) => {
         // Validar chaves estrangeiras
-        console.log('Validando chaves estrangeiras...');
-        const funcionario = await tx.funcionarios.findUnique({ where: { id: id_funcionario } });
-        if (!funcionario) throw new Error('Funcionário não encontrado.');
+        console.log("Validando chaves estrangeiras...");
+        const funcionario = await tx.funcionarios.findUnique({
+          where: { id: id_funcionario },
+        });
+        if (!funcionario) throw new Error("Funcionário não encontrado.");
 
-        const produto = await tx.produtos.findUnique({ where: { id: id_produto } });
-        if (!produto) throw new Error('Produto não encontrado.');
+        const produto = await tx.produtos.findUnique({
+          where: { id: id_produto },
+        });
+        if (!produto) throw new Error("Produto não encontrado.");
 
-        const localizacaoOrigem = await tx.localizacoes.findUnique({ where: { id: id_localizacao_origem } });
-        if (!localizacaoOrigem) throw new Error('Localização de origem não encontrada.');
+        const localizacaoOrigem = await tx.localizacoes.findUnique({
+          where: { id: id_localizacao_origem },
+        });
+        if (!localizacaoOrigem)
+          throw new Error("Localização de origem não encontrada.");
 
-        const localizacaoDestino = await tx.localizacoes.findUnique({ where: { id: id_localizacao_destino } });
-        if (!localizacaoDestino) throw new Error('Localização de destino não encontrada.');
+        const localizacaoDestino = await tx.localizacoes.findUnique({
+          where: { id: id_localizacao_destino },
+        });
+        if (!localizacaoDestino)
+          throw new Error("Localização de destino não encontrada.");
 
-        const seccao = await tx.seccoes.findUnique({ where: { id: id_seccao_destino } });
-        if (!seccao) throw new Error('Seção não encontrada.');
+        const seccao = await tx.seccoes.findUnique({
+          where: { id: id_seccao_destino },
+        });
+        if (!seccao) throw new Error("Seção não encontrada.");
 
-        const prateleira = await tx.prateleiras.findUnique({ where: { id: id_prateleira_destino } });
-        if (!prateleira) throw new Error('Prateleira não encontrada.');
+        const prateleira = await tx.prateleiras.findUnique({
+          where: { id: id_prateleira_destino },
+        });
+        if (!prateleira) throw new Error("Prateleira não encontrada.");
 
-        const corredor = await tx.corredores.findUnique({ where: { id: id_corredor_destino } });
-        if (!corredor) throw new Error('Corredor não encontrada.');
+        const corredor = await tx.corredores.findUnique({
+          where: { id: id_corredor_destino },
+        });
+        if (!corredor) throw new Error("Corredor não encontrada.");
 
         // Validar dataTransferencia
-        console.log('Validando dataTransferencia...');
-        if (!(dataTransferencia instanceof Date) || isNaN(dataTransferencia.getTime())) {
-          throw new Error('Formato de data inválido.');
+        console.log("Validando dataTransferencia...");
+        if (
+          !(dataTransferencia instanceof Date) ||
+          isNaN(dataTransferencia.getTime())
+        ) {
+          throw new Error("Formato de data inválido.");
         }
 
         // Validar a localização de origem
-        console.log('Buscando localização de origem...');
+        console.log("Buscando localização de origem...");
         const origem = await tx.produtosLocalizacoes.findFirst({
           where: {
             id_produto,
@@ -62,22 +81,29 @@ class TransferenciaRepositorio implements ITransferencia {
         });
 
         if (!origem) {
-          console.log('Localização de origem não encontrada:', { id_produto, id_localizacao_origem });
-          throw new Error('Localização de origem não encontrada.');
+          console.log("Localização de origem não encontrada:", {
+            id_produto,
+            id_localizacao_origem,
+          });
+          throw new Error("Localização de origem não encontrada.");
         }
 
         // Validar quantidade
         console.log(
-          `Quantidade disponível na origem ${origem.id}: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`,
+          `Quantidade disponível na origem ${origem.id}: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`
         );
         if (origem.quantidadeProduto < quantidadeTransferida) {
           throw new Error(
-            `Quantidade insuficiente na origem. Disponível: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`,
+            `Quantidade insuficiente na origem. Disponível: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`
           );
         }
 
         // Atualizar localização de origem
-        console.log(`Atualizando localização de origem ${origem.id} para ${origem.quantidadeProduto - quantidadeTransferida}`);
+        console.log(
+          `Atualizando localização de origem ${origem.id} para ${
+            origem.quantidadeProduto - quantidadeTransferida
+          }`
+        );
         await tx.produtosLocalizacoes.update({
           where: { id: origem.id },
           data: {
@@ -87,7 +113,7 @@ class TransferenciaRepositorio implements ITransferencia {
         });
 
         // Validar ou criar localização de destino
-        console.log('Buscando localização de destino...');
+        console.log("Buscando localização de destino...");
         let destino = await tx.produtosLocalizacoes.findFirst({
           where: {
             id_produto,
@@ -99,16 +125,21 @@ class TransferenciaRepositorio implements ITransferencia {
         });
 
         if (destino) {
-          console.log(`Atualizando localização de destino ${destino.id} para ${destino.quantidadeProduto + quantidadeTransferida}`);
+          console.log(
+            `Atualizando localização de destino ${destino.id} para ${
+              destino.quantidadeProduto + quantidadeTransferida
+            }`
+          );
           await tx.produtosLocalizacoes.update({
             where: { id: destino.id },
             data: {
-              quantidadeProduto: destino.quantidadeProduto + quantidadeTransferida,
+              quantidadeProduto:
+                destino.quantidadeProduto + quantidadeTransferida,
               updatedAt: new Date(),
             },
           });
         } else {
-          console.log('Criando nova localização de destino...');
+          console.log("Criando nova localização de destino...");
           destino = await tx.produtosLocalizacoes.create({
             data: {
               id_produto,
@@ -125,17 +156,17 @@ class TransferenciaRepositorio implements ITransferencia {
         }
 
         // Validar estoque total
-        console.log('Validando estoque total...');
+        console.log("Validando estoque total...");
         const estoque = await tx.estoques.findFirst({
           where: { id_produto },
         });
 
         if (!estoque) {
-          throw new Error('Estoque não encontrado para o produto.');
+          throw new Error("Estoque não encontrado para o produto.");
         }
 
         // Criar o registro de transferência
-        console.log('Criando registro de transferência...');
+        console.log("Criando registro de transferência...");
         const transferencia = await tx.transferencias.create({
           data: {
             id_produto,
@@ -148,14 +179,14 @@ class TransferenciaRepositorio implements ITransferencia {
           },
         });
 
-        console.log('Transferência criada com sucesso:', transferencia.id);
+        console.log("Transferência criada com sucesso:", transferencia.id);
         return transferencia;
       });
 
       return result;
     } catch (error: any) {
-      console.error('Erro ao criar transferência:', error);
-      throw new Error(error.message || 'Falha ao processar a transferência.');
+      console.error("Erro ao criar transferência:", error);
+      throw new Error(error.message || "Falha ao processar a transferência.");
     }
   }
 
@@ -179,34 +210,53 @@ class TransferenciaRepositorio implements ITransferencia {
           include: { produtosLocalizacoes: true },
         });
         if (!transferencia) {
-          throw new Error('Transferência não encontrada.');
+          throw new Error("Transferência não encontrada.");
         }
 
         // Validar chaves estrangeiras
-        const funcionario = await tx.funcionarios.findUnique({ where: { id: id_funcionario } });
-        if (!funcionario) throw new Error('Funcionário não encontrado.');
+        const funcionario = await tx.funcionarios.findUnique({
+          where: { id: id_funcionario },
+        });
+        if (!funcionario) throw new Error("Funcionário não encontrado.");
 
-        const produto = await tx.produtos.findUnique({ where: { id: id_produto } });
-        if (!produto) throw new Error('Produto não encontrado.');
+        const produto = await tx.produtos.findUnique({
+          where: { id: id_produto },
+        });
+        if (!produto) throw new Error("Produto não encontrado.");
 
-        const localizacaoOrigem = await tx.localizacoes.findUnique({ where: { id: id_localizacao_origem } });
-        if (!localizacaoOrigem) throw new Error('Localização de origem não encontrada.');
+        const localizacaoOrigem = await tx.localizacoes.findUnique({
+          where: { id: id_localizacao_origem },
+        });
+        if (!localizacaoOrigem)
+          throw new Error("Localização de origem não encontrada.");
 
-        const localizacaoDestino = await tx.localizacoes.findUnique({ where: { id: id_localizacao_destino } });
-        if (!localizacaoDestino) throw new Error('Localização de destino não encontrada.');
+        const localizacaoDestino = await tx.localizacoes.findUnique({
+          where: { id: id_localizacao_destino },
+        });
+        if (!localizacaoDestino)
+          throw new Error("Localização de destino não encontrada.");
 
-        const seccao = await tx.seccoes.findUnique({ where: { id: id_seccao_destino } });
-        if (!seccao) throw new Error('Seção não encontrada.');
+        const seccao = await tx.seccoes.findUnique({
+          where: { id: id_seccao_destino },
+        });
+        if (!seccao) throw new Error("Seção não encontrada.");
 
-        const prateleira = await tx.prateleiras.findUnique({ where: { id: id_prateleira_destino } });
-        if (!prateleira) throw new Error('Prateleira não encontrada.');
+        const prateleira = await tx.prateleiras.findUnique({
+          where: { id: id_prateleira_destino },
+        });
+        if (!prateleira) throw new Error("Prateleira não encontrada.");
 
-        const corredor = await tx.corredores.findUnique({ where: { id: id_corredor_destino } });
-        if (!corredor) throw new Error('Corredor não encontrado.');
+        const corredor = await tx.corredores.findUnique({
+          where: { id: id_corredor_destino },
+        });
+        if (!corredor) throw new Error("Corredor não encontrado.");
 
         // Validar dataTransferencia
-        if (!(dataTransferencia instanceof Date) || isNaN(dataTransferencia.getTime())) {
-          throw new Error('Formato de data inválido.');
+        if (
+          !(dataTransferencia instanceof Date) ||
+          isNaN(dataTransferencia.getTime())
+        ) {
+          throw new Error("Formato de data inválido.");
         }
 
         // Validar a localização de origem
@@ -218,12 +268,12 @@ class TransferenciaRepositorio implements ITransferencia {
         });
 
         if (!origem) {
-          throw new Error('Localização de origem não encontrada.');
+          throw new Error("Localização de origem não encontrada.");
         }
 
         if (origem.quantidadeProduto < quantidadeTransferida) {
           throw new Error(
-            `Quantidade insuficiente na origem. Disponível: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`,
+            `Quantidade insuficiente na origem. Disponível: ${origem.quantidadeProduto}, Solicitado: ${quantidadeTransferida}`
           );
         }
 
@@ -239,7 +289,7 @@ class TransferenciaRepositorio implements ITransferencia {
         });
 
         if (!destino) {
-          throw new Error('Localização de destino não encontrada.');
+          throw new Error("Localização de destino não encontrada.");
         }
 
         // Atualizar a transferência
@@ -260,8 +310,8 @@ class TransferenciaRepositorio implements ITransferencia {
 
       return result;
     } catch (error: any) {
-      console.error('Erro ao atualizar transferência:', error);
-      throw new Error(error.message || 'Falha ao atualizar a transferência.');
+      console.error("Erro ao atualizar transferência:", error);
+      throw new Error(error.message || "Falha ao atualizar a transferência.");
     }
   }
 
