@@ -1,5 +1,6 @@
 import { IRelatorioRepository } from "../IRelatorio";
 import prisma from "../../../../prisma/client";
+import { format } from "date-fns";
 
 export class RelatorioRepository implements IRelatorioRepository {
   async listarAtividadesCaixas(
@@ -11,7 +12,15 @@ export class RelatorioRepository implements IRelatorioRepository {
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarioNome: string;
-      vendas: { numeroDocumento: string; valorTotal: number }[];
+      vendas: {
+        numeroDocumento: string;
+        valorTotal: number;
+        dataEmissao: Date;
+        vendasProdutos: {
+          produtos: { nomeProduto: string };
+          quantidadeVendida: number;
+        }[];
+      }[];
     }[]
   > {
     const where: any = { horarioAbertura: { gte: dataInicio, lte: dataFim } };
@@ -27,7 +36,17 @@ export class RelatorioRepository implements IRelatorioRepository {
         caixas: { select: { nomeCaixa: true } },
         Funcionarios: { select: { nomeFuncionario: true } },
         vendas: {
-          select: { numeroDocumento: true, valorTotal: true },
+          select: {
+            numeroDocumento: true,
+            valorTotal: true,
+            dataEmissao: true,
+            vendasProdutos: {
+              select: {
+                produtos: { select: { nomeProduto: true } },
+                quantidadeVendida: true,
+              },
+            },
+          },
           where: { dataEmissao: { gte: dataInicio, lte: dataFim } },
         },
       },
@@ -48,10 +67,15 @@ export class RelatorioRepository implements IRelatorioRepository {
         ...item.vendas.map((venda) => ({
           numeroDocumento: venda.numeroDocumento,
           valorTotal: Number(venda.valorTotal),
+          dataEmissao: venda.dataEmissao,
+          vendasProdutos: venda.vendasProdutos.map((vp) => ({
+            produtos: { nomeProduto: vp.produtos.nomeProduto },
+            quantidadeVendida: vp.quantidadeVendida,
+          })),
         }))
       );
       return acc;
-    }, {} as Record<string, { nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: { numeroDocumento: string; valorTotal: number }[] }>);
+    }, {} as Record<string, { nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: { numeroDocumento: string; valorTotal: number; dataEmissao: Date; vendasProdutos: { produtos: { nomeProduto: string }; quantidadeVendida: number }[] }[] }>);
 
     return Object.values(grouped);
   }
@@ -270,6 +294,9 @@ export class RelatorioRepository implements IRelatorioRepository {
       quantidadeTransferida: number;
       dataTransferencia: Date;
       nomeLocalizacao: string;
+      corredor: string;
+      prateleira: string;
+      seccao: string;
       funcionarioNome: string;
     }[]
   > {
@@ -305,7 +332,6 @@ export class RelatorioRepository implements IRelatorioRepository {
       seccao:
         transferencia.produtosLocalizacoes?.seccoes?.nomeSeccao ??
         "Desconhecido",
-
       funcionarioNome:
         transferencia.funcionarios?.nomeFuncionario ?? "Desconhecido",
     }));
