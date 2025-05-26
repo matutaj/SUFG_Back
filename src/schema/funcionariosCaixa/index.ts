@@ -13,13 +13,13 @@ const listarFuncionarioCaixaPeloIdSchema = Yup.object().shape({
   id_funcionarioCaixa: Yup.string().required(),
 });
 const atualizarFuncionarioCaixaSchema = Yup.object().shape({
-  id_caixa: Yup.string().uuid().optional(),
-  id_funcionario: Yup.string().uuid().optional(),
-  estadoCaixa: Yup.boolean().optional(),
+  id_caixa: Yup.string(),
+  id_funcionario: Yup.string(),
+  estadoCaixa: Yup.boolean(),
   valorInicial: Yup.number(),
-  quantidadaFaturada: Yup.number().min(0).optional(),
-  horarioAbertura: Yup.date().nullable().optional(),
-  horarioFechamento: Yup.string().matches(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.*Z$/, 'Formato de data inválido').nullable().optional(),
+  quantidadaFaturada: Yup.number(),
+  horarioAbertura: Yup.date(),
+  horarioFechamento: Yup.string(),
 });
 const deletarFuncionarioCaixaSchema = Yup.object().shape({
   id_funcionarioCaixa: Yup.string().required(),

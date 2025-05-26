@@ -14,19 +14,24 @@ class AtualizarFuncionarioCaixaCasoDeUso {
     quantidadaFaturada,
     horarioAbertura,
     horarioFechamento,
-    valorInicial
+    valorInicial,
   }: Partial<DadosFuncionarioCaixa>): Promise<funcionariosCaixa> {
     const repositorioFuncionarioCaixa = new FuncionarioCaixaRepositorio();
     const repositorioCaixa = new CaixaRepositorio();
     const repositorioFuncionario = new FuncionarioRepositorio();
 
     if (!id) {
-      throw new AppError("O ID do funcionário-caixa é obrigatório para atualização");
+      throw new AppError(
+        "O ID do funcionário-caixa é obrigatório para atualização"
+      );
     }
 
-    const existeFuncionarioCaixa = await repositorioFuncionarioCaixa.listarUmFuncionarioCaixaPeloId(id);
+    const existeFuncionarioCaixa =
+      await repositorioFuncionarioCaixa.listarUmFuncionarioCaixaPeloId(id);
     if (!existeFuncionarioCaixa) {
-      throw new AppError("Não existe um registro de funcionário-caixa com esse id");
+      throw new AppError(
+        "Não existe um registro de funcionário-caixa com esse id"
+      );
     }
 
     // Validar id_caixa apenas se fornecido
@@ -38,8 +43,12 @@ class AtualizarFuncionarioCaixaCasoDeUso {
     }
 
     // Validar id_funcionario apenas se fornecido
-    if (id_funcionario && id_funcionario !== existeFuncionarioCaixa.id_funcionario) {
-      const existeFuncionario = await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
+    if (
+      id_funcionario &&
+      id_funcionario !== existeFuncionarioCaixa.id_funcionario
+    ) {
+      const existeFuncionario =
+        await repositorioFuncionario.listarUmFuncionarioPeloId(id_funcionario);
       if (!existeFuncionario) {
         throw new AppError("Não existe um funcionário com esse id");
       }
@@ -57,13 +66,24 @@ class AtualizarFuncionarioCaixaCasoDeUso {
 
     const result = await repositorioFuncionarioCaixa.atualizarFuncionarioCaixa({
       id,
-      valorInicial: valorInicial !== undefined ? valorInicial : Number(existeFuncionarioCaixa.valorInicial),
+      valorInicial:
+        valorInicial !== undefined
+          ? valorInicial
+          : Number(existeFuncionarioCaixa.valorInicial),
       id_caixa: id_caixa || existeFuncionarioCaixa.id_caixa,
       id_funcionario: id_funcionario || existeFuncionarioCaixa.id_funcionario,
-      estadoCaixa: estadoCaixa !== undefined ? estadoCaixa : existeFuncionarioCaixa.estadoCaixa,
-      quantidadaFaturada: quantidadaFaturada !== undefined ? quantidadaFaturada : Number(existeFuncionarioCaixa.quantidadaFaturada),
-      horarioAbertura: horarioAbertura || existeFuncionarioCaixa.horarioAbertura,
-      horarioFechamento: horarioFechamento || existeFuncionarioCaixa.horarioFechamento,
+      estadoCaixa:
+        estadoCaixa !== undefined
+          ? estadoCaixa
+          : existeFuncionarioCaixa.estadoCaixa,
+      quantidadaFaturada:
+        quantidadaFaturada !== undefined
+          ? quantidadaFaturada
+          : Number(existeFuncionarioCaixa.quantidadaFaturada),
+      horarioAbertura:
+        horarioAbertura || existeFuncionarioCaixa.horarioAbertura,
+      horarioFechamento:
+        horarioFechamento || existeFuncionarioCaixa.horarioFechamento,
     });
 
     return result;
