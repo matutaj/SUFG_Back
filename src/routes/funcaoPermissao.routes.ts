@@ -65,7 +65,7 @@ funcaoPermissaoRoutes.put(
 );
 
 funcaoPermissaoRoutes.delete(
-  "/:id",
+  "/deletar/:id",
   deleteFuncaoPermissao.handle
   /*   async (req, res) => {
     const result = await deleteFuncaoPermissao.handle(req, res);
