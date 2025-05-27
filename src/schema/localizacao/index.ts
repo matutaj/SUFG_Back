@@ -13,10 +13,10 @@ const atualizarLocalizacaoSchema = Yup.object().shape({
   nomeLocalizacao: Yup.string(),
 });
 const deletarLocalizacaoSchema = Yup.object().shape({
-  id_localizacao: Yup.string().required(),
+  id: Yup.string().required(),
 });
 const listarLocalizacaoPeloIdSchema = Yup.object().shape({
-  id_localizacao: Yup.string().required(),
+  id: Yup.string().required(),
 });
 export {
   criarLocalizacaoSchema,
