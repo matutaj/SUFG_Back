@@ -14,6 +14,7 @@ export interface IRelatorioRepository {
         numeroDocumento: string;
         valorTotal: number;
         dataEmissao: Date;
+        metodoPagamento: string | null;
         vendasProdutos: {
           produtos: { nomeProduto: string };
           quantidadeVendida: number;

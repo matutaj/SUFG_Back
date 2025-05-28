@@ -16,6 +16,7 @@ export class RelatorioRepository implements IRelatorioRepository {
       quantidadeFaturada: number;
       funcionarioNome: string;
       vendas: {
+        metodoPagamento: string | null;
         numeroDocumento: string;
         valorTotal: number;
         dataEmissao: Date;
@@ -46,6 +47,7 @@ export class RelatorioRepository implements IRelatorioRepository {
             numeroDocumento: true,
             valorTotal: true,
             dataEmissao: true,
+            metodoPagamento: true,
             vendasProdutos: {
               select: {
                 produtos: { select: { nomeProduto: true } },
@@ -75,6 +77,7 @@ export class RelatorioRepository implements IRelatorioRepository {
           numeroDocumento: venda.numeroDocumento ?? "",
           valorTotal: Number(venda.valorTotal) || 0,
           dataEmissao: venda.dataEmissao,
+          metodoPagamento: venda.metodoPagamento,
           vendasProdutos: venda.vendasProdutos.map((vp) => ({
             produtos: { nomeProduto: vp.produtos.nomeProduto },
             quantidadeVendida: Number(vp.quantidadeVendida) || 0,
@@ -82,7 +85,7 @@ export class RelatorioRepository implements IRelatorioRepository {
         }))
       );
       return acc;
-    }, {} as Record<string, { idCaixa: string; nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: { numeroDocumento: string; valorTotal: number; dataEmissao: Date; vendasProdutos: { produtos: { nomeProduto: string }; quantidadeVendida: number }[] }[] }>);
+    }, {} as Record<string, { idCaixa: string; nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: { metodoPagamento: string | null; numeroDocumento: string; valorTotal: number; dataEmissao: Date; vendasProdutos: { produtos: { nomeProduto: string }; quantidadeVendida: number }[] }[] }>);
 
     return Object.values(grouped);
   }
