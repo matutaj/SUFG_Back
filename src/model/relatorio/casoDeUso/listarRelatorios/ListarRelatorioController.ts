@@ -17,6 +17,7 @@ const endpointToTipoRelatorio: { [key: string]: string } = {
   transferencias: "transferencias",
   "faturamento-periodo": "faturamento-periodo",
   "relatorio-vendas": "relatorio-vendas",
+  "funcionario-mais-faturado": "funcionario-mais-faturado",
   "vendas-cliente": "vendas-cliente",
 };
 
@@ -56,12 +57,13 @@ class RelatorioControlador {
         throw new AppError("ID do cliente é obrigatório", 400);
       }
 
-      if (tipoRelatorio !== "atividades-do-dia" && (!dataInicio || !dataFim)) {
-        throw new AppError("Datas de início e fim são obrigatórias", 400);
-      }
-
       if (tipoRelatorio === "atividades-do-dia" && !data) {
         throw new AppError("Data é obrigatória", 400);
+      }
+
+      // Apenas dataInicio é obrigatória para relatórios de período
+      if (tipoRelatorio !== "atividades-do-dia" && !dataInicio) {
+        throw new AppError("Data de início é obrigatória", 400);
       }
 
       let parsedDataInicio: Date | undefined;
@@ -117,30 +119,9 @@ class RelatorioControlador {
         limite: parsedLimite,
       };
 
-      /* // Generate a unique cache key based on endpoint and query parameters
-      const cacheKey = `relatorios:/${endpoint}/${JSON.stringify(req.query)}`;
-      console.log("Cache key:", cacheKey);
-
-      // Check if data is in cache
-      const cachedData = await redisClient.get(cacheKey);
-      if (cachedData) {
-        console.log(`Retornando dados do cache para ${tipoRelatorio}`);
-        res.setHeader("Content-Type", "application/json");
-        res.status(200).json(JSON.parse(cachedData));
-        return;
-      }
-
-      console.log("Parâmetros para o caso de uso:", params); */
-
       const gerarRelatorioCasoDeUso = new GerarRelatorioCasoDeUso();
       const response = await gerarRelatorioCasoDeUso.execute(params);
 
-      /*    // Store result in cache with a TTL of 300 seconds (5 minutes)
-      await redisClient
-        .setEx(cacheKey, 300, JSON.stringify({ data: response.data }))
-        .catch((err) => console.error("Erro ao armazenar no cache:", err));
-
-      console.log(`Gerando JSON para ${tipoRelatorio}`); */
       res.setHeader("Content-Type", "application/json");
       res.status(200).json({ data: response.data });
     } catch (error) {

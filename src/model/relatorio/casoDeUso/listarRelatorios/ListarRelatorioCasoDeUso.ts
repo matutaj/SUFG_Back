@@ -51,6 +51,15 @@ class GerarRelatorioCasoDeUso {
           idCaixa
         );
         break;
+      case "funcionario-mais-faturado":
+        if (!dataInicio) {
+          throw new AppError("Data de início é obrigatória");
+        }
+        resultado = await this.repositorio.listarFuncionarioMaisFaturado(
+          dataInicio,
+          dataFim
+        );
+        break;
 
       case "atividades-do-dia":
         if (!data) {

@@ -21,6 +21,14 @@ export interface IRelatorioRepository {
       }[];
     }[]
   >;
+  listarFuncionarioMaisFaturado(
+    dataInicio: Date,
+    dataFim?: Date
+  ): Promise<{
+    funcionarioNome: string;
+    totalFaturado: number;
+    quantidadeVendas: number;
+  }>;
   listarAtividadesDoDia(data: Date): Promise<
     {
       nomeTarefa: string;

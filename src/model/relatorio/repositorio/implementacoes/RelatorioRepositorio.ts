@@ -1,6 +1,7 @@
 import { IRelatorioRepository } from "../IRelatorio";
 import prisma from "../../../../prisma/client";
 import { format } from "date-fns";
+import { AppError } from "../../../../errors/AppError";
 
 export class RelatorioRepository implements IRelatorioRepository {
   async listarAtividadesCaixas(
@@ -85,7 +86,67 @@ export class RelatorioRepository implements IRelatorioRepository {
 
     return Object.values(grouped);
   }
+  async listarFuncionarioMaisFaturado(
+    dataInicio: Date,
+    dataFim?: Date
+  ): Promise<{
+    funcionarioNome: string;
+    totalFaturado: number;
+    quantidadeVendas: number;
+  }> {
+    // Define dataFim como a data atual se não fornecida
+    const endDate = dataFim || new Date();
 
+    // Busca vendas no período
+    const vendas = await prisma.vendas.findMany({
+      where: {
+        dataEmissao: {
+          gte: dataInicio,
+          lte: endDate,
+        },
+      },
+      include: {
+        funcionariosCaixa: {
+          include: {
+            Funcionarios: { select: { nomeFuncionario: true } },
+          },
+        },
+      },
+    });
+
+    // Agrupa vendas por funcionário e calcula o total faturado
+    const aggregated = vendas.reduce((acc, venda) => {
+      const funcionarioNome =
+        venda.funcionariosCaixa?.Funcionarios?.nomeFuncionario ??
+        "Desconhecido";
+      const key = funcionarioNome;
+
+      if (!acc[key]) {
+        acc[key] = {
+          funcionarioNome,
+          totalFaturado: 0,
+          quantidadeVendas: 0,
+        };
+      }
+
+      acc[key].totalFaturado += Number(venda.valorTotal) || 0;
+      acc[key].quantidadeVendas += 1;
+
+      return acc;
+    }, {} as Record<string, { funcionarioNome: string; totalFaturado: number; quantidadeVendas: number }>);
+
+    // Converte o objeto agrupado em array e encontra o funcionário com maior faturamento
+    const result = Object.values(aggregated);
+    if (result.length === 0) {
+      throw new AppError("Nenhuma venda encontrada no período", 404);
+    }
+
+    const topFuncionario = result.reduce((max, current) =>
+      current.totalFaturado > max.totalFaturado ? current : max
+    );
+
+    return topFuncionario;
+  }
   async listarAtividadesDoDia(data: Date): Promise<
     {
       nomeTarefa: string;
