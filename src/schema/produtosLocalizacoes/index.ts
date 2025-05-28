@@ -8,7 +8,6 @@ const listarProdutoLocalizacaoPeloIdSchema = Yup.object().shape({
   id: Yup.string().required(),
 });
 const atualizarProdutoLocalizacaoSchema = Yup.object().shape({
-  id: Yup.string(),
   id_localizacao: Yup.string(),
   id_produto: Yup.string(),
 });
