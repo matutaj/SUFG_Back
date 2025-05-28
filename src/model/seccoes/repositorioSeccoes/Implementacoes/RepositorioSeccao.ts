@@ -16,9 +16,13 @@ class SeccaoRepositorio implements ISeccao {
   }
 
   async listarUmaSeccaoPeloId(id: string): Promise<seccoes | undefined> {
-    const listarUmSeccaoPeloId =
-      (await prisma.seccoes.findUnique({ where: { id } })) || undefined;
-    return listarUmSeccaoPeloId;
+    if (!id) {
+      throw new Error('ID da secção não pode ser vazio ou indefinido.');
+    }
+  
+    return await prisma.seccoes.findUnique({
+      where: { id }
+    }) || undefined;
   }
 
   async listarUmaSeccaoPeloNome(

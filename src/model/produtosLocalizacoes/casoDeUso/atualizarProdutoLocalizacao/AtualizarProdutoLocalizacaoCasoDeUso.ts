@@ -41,12 +41,15 @@ class AtualizarProdutoLocalizacaoCasoDeUso {
       );
     }
 
-    const existeSeccao = await repositorioSeccao.listarUmaSeccaoPeloId(
-      id_seccao
-    );
+    if (!id_seccao || id_seccao.trim() === '') {
+      throw new AppError("ID da seção é obrigatório e não pode ser vazio.");
+    }
+    
+    const existeSeccao = await repositorioSeccao.listarUmaSeccaoPeloId(id_seccao);
     if (!existeSeccao) {
       throw new AppError("Não existe uma seção com esse id");
     }
+    
 
     const existePrateleira =
       await repositorioPrateleira.listarUmaPrateleiraPeloId(id_prateleira);
