@@ -2,13 +2,23 @@ export interface IRelatorioRepository {
   listarAtividadesCaixas(
     dataInicio: Date,
     dataFim: Date,
-    idProduto?: string
+    idProduto?: string,
+    idCaixa?: string
   ): Promise<
     {
+      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarioNome: string;
-      vendas: { numeroDocumento: string; valorTotal: number }[];
+      vendas: {
+        numeroDocumento: string;
+        valorTotal: number;
+        dataEmissao: Date;
+        vendasProdutos: {
+          produtos: { nomeProduto: string };
+          quantidadeVendida: number;
+        }[];
+      }[];
     }[]
   >;
   listarAtividadesDoDia(data: Date): Promise<
@@ -89,7 +99,10 @@ export interface IRelatorioRepository {
       funcionarioNome: string;
     }[]
   >;
-listarFaturamentoPorPeriodo(dataInicio: Date, dataFim: Date): Promise<{
+  listarFaturamentoPorPeriodo(
+    dataInicio: Date,
+    dataFim: Date
+  ): Promise<{
     totalFaturado: number;
     vendas: {
       nomeProduto: string;

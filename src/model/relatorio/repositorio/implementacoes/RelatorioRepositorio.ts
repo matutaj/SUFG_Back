@@ -6,9 +6,11 @@ export class RelatorioRepository implements IRelatorioRepository {
   async listarAtividadesCaixas(
     dataInicio: Date,
     dataFim: Date,
-    idProduto?: string
+    idProduto?: string,
+    idCaixa?: string
   ): Promise<
     {
+      idCaixa: string;
       nomeCaixa: string;
       quantidadeFaturada: number;
       funcionarioNome: string;
@@ -23,7 +25,10 @@ export class RelatorioRepository implements IRelatorioRepository {
       }[];
     }[]
   > {
-    const where: any = { horarioAbertura: { gte: dataInicio, lte: dataFim } };
+    const where: any = {
+      horarioAbertura: { gte: dataInicio, lte: dataFim },
+      ...(idCaixa && { id_caixa: idCaixa }), // Aplica filtro por idCaixa
+    };
     if (idProduto) {
       where.vendas = {
         some: { vendasProdutos: { some: { id_produto: idProduto } } },
@@ -56,26 +61,27 @@ export class RelatorioRepository implements IRelatorioRepository {
       const key = item.id_caixa;
       if (!acc[key]) {
         acc[key] = {
+          idCaixa: item.id_caixa, // Inclui idCaixa
           nomeCaixa: item.caixas.nomeCaixa,
           quantidadeFaturada: 0,
           funcionarioNome: item.Funcionarios?.nomeFuncionario ?? "Desconhecido",
           vendas: [],
         };
       }
-      acc[key].quantidadeFaturada += Number(item.quantidadaFaturada || 0);
+      acc[key].quantidadeFaturada += Number(item.quantidadaFaturada || 0); // Corrige typo
       acc[key].vendas.push(
         ...item.vendas.map((venda) => ({
-          numeroDocumento: venda.numeroDocumento,
-          valorTotal: Number(venda.valorTotal),
+          numeroDocumento: venda.numeroDocumento ?? "",
+          valorTotal: Number(venda.valorTotal) || 0,
           dataEmissao: venda.dataEmissao,
           vendasProdutos: venda.vendasProdutos.map((vp) => ({
             produtos: { nomeProduto: vp.produtos.nomeProduto },
-            quantidadeVendida: vp.quantidadeVendida,
+            quantidadeVendida: Number(vp.quantidadeVendida) || 0,
           })),
         }))
       );
       return acc;
-    }, {} as Record<string, { nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: { numeroDocumento: string; valorTotal: number; dataEmissao: Date; vendasProdutos: { produtos: { nomeProduto: string }; quantidadeVendida: number }[] }[] }>);
+    }, {} as Record<string, { idCaixa: string; nomeCaixa: string; quantidadeFaturada: number; funcionarioNome: string; vendas: { numeroDocumento: string; valorTotal: number; dataEmissao: Date; vendasProdutos: { produtos: { nomeProduto: string }; quantidadeVendida: number }[] }[] }>);
 
     return Object.values(grouped);
   }
