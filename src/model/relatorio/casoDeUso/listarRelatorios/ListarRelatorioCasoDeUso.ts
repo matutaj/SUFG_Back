@@ -47,7 +47,8 @@ class GerarRelatorioCasoDeUso {
         resultado = await this.repositorio.listarAtividadesCaixas(
           dataInicio,
           dataFim,
-          idProduto
+          idProduto,
+          idCaixa
         );
         break;
 
