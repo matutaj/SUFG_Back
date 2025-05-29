@@ -5,7 +5,7 @@ import { AppError } from "../../../../errors/AppError";
 import { ClienteRepositorio } from "../../../clientes/repositorioCliente/implementacoes/RepositorioCliente";
 
 export interface DadosVenda {
-  id_cliente?: string; // Tornar opcional se for criar novo cliente
+  id_cliente?: string | null; // Explicita que pode ser null
   dataEmissao: Date;
   dataValidade: Date;
   id_funcionarioCaixa: string;
@@ -15,21 +15,20 @@ export interface DadosVenda {
   vendasProdutos: {
     id_produto: string;
     quantidade: number;
-    valorTotal?: number; // Opcional
+    valorTotal?: number;
   }[];
 }
 
 export interface Cliente {
-  emailCliente: string;
-  moradaCliente: string;
+  emailCliente: string | null;
+  moradaCliente: string | null;
   nomeCliente: string;
-  telefoneCliente: string;
-  numeroContribuinte: string;
+  telefoneCliente: string | null;
+  numeroContribuinte: string | null; // Permitir null
 }
 
 export interface DadosWrapper {
   Dados?: {
-    // Tornar opcional para evitar erros se ausente
     cliente?: Cliente[];
     dadosVenda: DadosVenda;
   };
@@ -47,23 +46,27 @@ class CriarVendaCasoDeUso {
     const vendaProdutoRepositorio = new VendaProdutoRepositorio();
     const repositorioCliente = new ClienteRepositorio();
 
-    // Validação inicial: verifica se dadosVenda existe
     if (!dadosVenda) {
       throw new AppError("Dados da venda não fornecidos!", 400);
     }
 
-    let finalIdCliente: string | null = null;
+    let finalIdCliente: string | null = dadosVenda.id_cliente || null;
 
     if (cliente && cliente.length > 0) {
       try {
         const primeiroCliente = cliente[0];
 
+        // Validar campos obrigatórios do cliente
+        if (!primeiroCliente.nomeCliente) {
+          throw new AppError("Nome do cliente é obrigatório.", 400);
+        }
+
         const novoCliente = await repositorioCliente.criarCliente({
-          emailCliente: primeiroCliente.emailCliente,
-          moradaCliente: primeiroCliente.moradaCliente,
+          emailCliente: primeiroCliente.emailCliente || null,
+          moradaCliente: primeiroCliente.moradaCliente || null,
           nomeCliente: primeiroCliente.nomeCliente,
-          numeroContribuinte: primeiroCliente.numeroContribuinte,
-          telefoneCliente: primeiroCliente.telefoneCliente,
+          numeroContribuinte: primeiroCliente.numeroContribuinte || null,
+          telefoneCliente: primeiroCliente.telefoneCliente || null,
         });
 
         if (!novoCliente || !novoCliente.id) {
@@ -72,29 +75,12 @@ class CriarVendaCasoDeUso {
 
         finalIdCliente = novoCliente.id;
       } catch (error) {
+        console.error("Erro ao criar cliente:", error);
         throw new AppError(
           `Erro ao criar cliente: ${(error as Error).message}`,
           500
         );
       }
-    } else if (dadosVenda.id_cliente) {
-      if (!dadosVenda.id_cliente) {
-        throw new AppError("ID do cliente inválido.", 400);
-      }
-      finalIdCliente = dadosVenda.id_cliente.toString();
-    } else {
-      throw new AppError(
-        "Nenhum cliente ou ID de cliente fornecido para a venda! Por favor, forneça os dados de um novo cliente ou o ID de um cliente existente.",
-        400
-      );
-    }
-
-    // Validação final: assegura que temos um ID de cliente válido
-    if (!finalIdCliente) {
-      throw new AppError(
-        "Nenhum cliente associado à venda após tentativa de criação!",
-        400
-      );
     }
 
     // Validação dos produtos da venda
@@ -113,28 +99,33 @@ class CriarVendaCasoDeUso {
       throw new AppError("Datas inválidas!", 400);
     }
 
-    // Agora cria a venda usando o ID do cliente (seja recém-criado ou fornecido)
+    // Validar método de pagamento
+    const metodosValidos = ['DINHEIRO', 'CARTAO', 'TRANSFERENCIA'];
+    if (!metodosValidos.includes(dadosVenda.metodoPagamento)) {
+      throw new AppError("Método de pagamento inválido.", 400);
+    }
+
     try {
-      // Cria a venda sem os produtos (ou com um formato que o repositório espera)
+      // Criar a venda
       const result = await vendaRepositorio.criarVenda({
         id_cliente: finalIdCliente,
-        dataEmissao: dataEmissao,
-        dataValidade: dataValidade,
-        id_funcionarioCaixa: dadosVenda.id_funcionarioCaixa.toString(), // Garante que é string
+        dataEmissao,
+        dataValidade,
+        id_funcionarioCaixa: dadosVenda.id_funcionarioCaixa.toString(),
         numeroDocumento: dadosVenda.numeroDocumento,
         valorTotal: dadosVenda.valorTotal,
         metodoPagamento: dadosVenda.metodoPagamento,
       });
 
-      // Cria os produtos da venda de forma assíncrona, usando o id_venda recém-criado
+      // Criar os produtos da venda
       await Promise.all(
         dadosVenda.vendasProdutos.map(async (produto) => {
-          if (!produto.id_produto || !produto.quantidade) {
-            throw new AppError("Cada produto deve ter ID e quantidade.", 400);
+          if (!produto.id_produto || !produto.quantidade || produto.quantidade <= 0) {
+            throw new AppError("Cada produto deve ter ID válido e quantidade maior que zero.", 400);
           }
 
           await vendaProdutoRepositorio.criarVendaProduto({
-            id_venda: result.id, // Agora temos o ID da venda
+            id_venda: result.id,
             id_produto: produto.id_produto,
             quantidadeVendida: produto.quantidade,
           });
@@ -143,7 +134,7 @@ class CriarVendaCasoDeUso {
 
       return result;
     } catch (error) {
-      console.error("Erro detalhado:", error);
+      console.error("Erro ao criar venda:", error);
       throw new AppError(
         `Erro ao criar venda: ${(error as Error).message}`,
         500

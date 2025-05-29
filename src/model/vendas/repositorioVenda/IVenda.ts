@@ -2,7 +2,7 @@ import { vendas } from "@prisma/client";
 
 export interface DadosVenda {
   id?: string;
-  id_cliente: string;
+  id_cliente?: string | null;
   id_funcionarioCaixa: string;
   metodoPagamento: string;
   numeroDocumento: string;
