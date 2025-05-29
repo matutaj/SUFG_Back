@@ -201,14 +201,14 @@ model caixas {
 
 model vendas {
 	id String @id @default(uuid())
-  id_cliente String
+  id_cliente String?
   id_funcionarioCaixa String
   numeroDocumento String
   dataEmissao DateTime
   dataValidade DateTime
   metodoPagamento String?
   valorTotal Decimal @db.Decimal(10, 2)
-  clientes clientes @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  clientes clientes? @relation(fields: [id_cliente], references: [id], onDelete: Cascade, onUpdate: Cascade)
   funcionariosCaixa funcionariosCaixa @relation(fields: [id_funcionarioCaixa], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vendasProdutos vendasProdutos[]
   createdAt    DateTime      @default(now())

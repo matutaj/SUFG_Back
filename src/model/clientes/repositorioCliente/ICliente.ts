@@ -2,11 +2,11 @@ import { clientes } from "@prisma/client";
 
 export interface DadosCliente {
   id?: string;
-  numeroContribuinte: string;
+  numeroContribuinte: string | null;
   nomeCliente: string;
-  moradaCliente: string;
-  telefoneCliente: string;
-  emailCliente: string;
+  moradaCliente: string | null;
+  telefoneCliente: string | null;
+  emailCliente: string | null;
 }
 
 export interface IClientes {
