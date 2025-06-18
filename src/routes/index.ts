@@ -25,8 +25,15 @@ import { tarefaRouter } from "./tarefa.routes";
 import { funcionarioTarefaRouter } from "./funcionarioTarefa.routes";
 import { relatorioRouter } from "./relatorio.routes";
 
-const routes = Router();
+import fs from "fs";
+import yaml from "js-yaml";
+import swaggerUi from "swagger-ui-express";
+const swaggerDocument = yaml.load(
+  fs.readFileSync("./swagger.yaml", "utf8")
+) as Record<string, any>;
 
+const routes = Router();
+routes.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 routes.use("/estoque", estoqueRouter);
 routes.use("/tarefa", tarefaRouter);
 routes.use("/funcionarioTarefa", funcionarioTarefaRouter);
