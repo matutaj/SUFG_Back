@@ -1348,3 +1348,1410 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FuncionarioTarefa
+                                $ref: "#/components/schemas/FuncionarioTarefa"
+        "404":
+          description: Tarefa não encontrada
+    delete:
+      tags: [Funcionários Tarefas]
+      summary: Remove uma tarefa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Tarefa removida
+        "404":
+          description: Tarefa não encontrada
+
+  /funcionario-tarefa/funcionario/{id_funcionario}:
+    get:
+      tags: [Funcionários Tarefas]
+      summary: Busca tarefas por funcionário
+      parameters:
+        - in: path
+          name: id_funcionario
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FuncionarioTarefa"
+        "404":
+          description: Nenhuma tarefa encontrada
+
+  /funcionario-tarefa/tarefa/{id_tarefa}:
+    get:
+      tags: [Funcionários Tarefas]
+      summary: Busca funcionários por tarefa
+      parameters:
+        - in: path
+          name: id_tarefa
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de funcionários associados à tarefa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FuncionarioTarefa"
+        "404":
+          description: Nenhum funcionário encontrado
+
+  # Funções
+  /funcao:
+    get:
+      tags: [Funções]
+      summary: Lista todas as funções
+      responses:
+        "200":
+          description: Lista de funções
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Funcao"
+    post:
+      tags: [Funções]
+      summary: Cria uma nova função
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncaoInput"
+      responses:
+        "201":
+          description: Função criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcao"
+        "400":
+          description: Dados inválidos
+
+  /funcao/{id}:
+    get:
+      tags: [Funções]
+      summary: Obtém uma função pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da função
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcao"
+        "404":
+          description: Função não encontrada
+    put:
+      tags: [Funções]
+      summary: Atualiza uma função
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncaoInput"
+      responses:
+        "200":
+          description: Função atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcao"
+        "404":
+          description: Função não encontrada
+    delete:
+      tags: [Funções]
+      summary: Remove uma função
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Função removida
+        "404":
+          description: Função não encontrada
+
+  /funcao/nome/{nomeFuncao}:
+    get:
+      tags: [Funções]
+      summary: Busca funções pelo nome
+      parameters:
+        - in: path
+          name: nomeFuncao
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de funções encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Funcao"
+        "404":
+          description: Nenhuma função encontrada
+
+  # Localizações
+  /localizacao:
+    get:
+      tags: [Localizações]
+      summary: Lista todas as localizações
+      responses:
+        "200":
+          description: Lista de localizações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Localizacao"
+    post:
+      tags: [Localizações]
+      summary: Cria uma nova localização
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocalizacaoInput"
+      responses:
+        "201":
+          description: Localização criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Localizacao"
+        "400":
+          description: Dados inválidos
+
+  /localizacao/{id}:
+    get:
+      tags: [Localizações]
+      summary: Obtém uma localização pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da localização
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Localizacao"
+        "404":
+          description: Localização não encontrada
+    put:
+      tags: [Localizações]
+      summary: Atualiza uma localização
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocalizacaoInput"
+      responses:
+        "200":
+          description: Localização atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Localizacao"
+        "404":
+          description: Localização não encontrada
+    delete:
+      tags: [Localizações]
+      summary: Remove uma localização
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Localização removida
+        "404":
+          description: Localização não encontrada
+
+  /localizacao/nome/{nomeLocalizacao}:
+    get:
+      tags: [Localizações]
+      summary: Busca localizações pelo nome
+      parameters:
+        - in: path
+          name: nomeLocalizacao
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de localizações encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Localizacao"
+        "404":
+          description: Nenhuma localização encontrada
+
+  # Prateleiras
+  /prateleira:
+    get:
+      tags: [Prateleiras]
+      summary: Lista todas as prateleiras
+      responses:
+        "200":
+          description: Lista de prateleiras
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Prateleira"
+    post:
+      tags: [Prateleiras]
+      summary: Cria uma nova prateleira
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrateleiraInput"
+      responses:
+        "201":
+          description: Prateleira criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prateleira"
+        "400":
+          description: Dados inválidos
+
+  /prateleira/{id}:
+    get:
+      tags: [Prateleiras]
+      summary: Obtém uma prateleira pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da prateleira
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prateleira"
+        "404":
+          description: Prateleira não encontrada
+    put:
+      tags: [Prateleiras]
+      summary: Atualiza uma prateleira
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrateleiraInput"
+      responses:
+        "200":
+          description: Prateleira atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Prateleira"
+        "404":
+          description: Prateleira não encontrada
+    delete:
+      tags: [Prateleiras]
+      summary: Remove uma prateleira
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Prateleira removida
+        "404":
+          description: Prateleira não encontrada
+
+  /prateleira/nome/{nomePrateleira}:
+    get:
+      tags: [Prateleiras]
+      summary: Busca prateleiras pelo nome
+      parameters:
+        - in: path
+          name: nomePrateleira
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de prateleiras encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Prateleira"
+        "404":
+          description: Nenhuma prateleira encontrada
+
+  # Produtos
+  /produto:
+    get:
+      tags: [Produtos]
+      summary: Lista todos os produtos
+      responses:
+        "200":
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Produto"
+    post:
+      tags: [Produtos]
+      summary: Cria um novo produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoInput"
+      responses:
+        "201":
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Produto"
+        "400":
+          description: Dados inválidos
+
+  /produto/{id}:
+    get:
+      tags: [Produtos]
+      summary: Obtém um produto pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do produto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Produto"
+        "404":
+          description: Produto não encontrado
+    put:
+      tags: [Produtos]
+      summary: Atualiza um produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoInput"
+      responses:
+        "200":
+          description: Produto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Produto"
+        "404":
+          description: Produto não encontrado
+    delete:
+      tags: [Produtos]
+      summary: Remove um produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Produto removido
+        "404":
+          description: Produto não encontrado
+
+  /produto/nome/{nomeProduto}:
+    get:
+      tags: [Produtos]
+      summary: Busca produtos pelo nome
+      parameters:
+        - in: path
+          name: nomeProduto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de produtos encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Produto"
+        "404":
+          description: Nenhum produto encontrado
+
+  /produto/codigo-barras/{codigoBarras}:
+    get:
+      tags: [Produtos]
+      summary: Busca produto por código de barras
+      parameters:
+        - in: path
+          name: codigoBarras
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do produto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Produto"
+        "404":
+          description: Produto não encontrado
+
+  /produto/categoria/{id_categoria}:
+    get:
+      tags: [Produtos]
+      summary: Busca produtos por categoria
+      parameters:
+        - in: path
+          name: id_categoria
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Produto"
+        "404":
+          description: Nenhum produto encontrado
+
+  # Produtos Localizações
+  /produto-localizacao:
+    get:
+      tags: [Produtos Localizações]
+      summary: Lista todas as localizações de produtos
+      responses:
+        "200":
+          description: Lista de localizações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoLocalizacao"
+    post:
+      tags: [Produtos Localizações]
+      summary: Cria uma nova localização para produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoLocalizacaoInput"
+      responses:
+        "201":
+          description: Localização criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProdutoLocalizacao"
+        "400":
+          description: Dados inválidos
+
+  /produto-localizacao/{id}:
+    get:
+      tags: [Produtos Localizações]
+      summary: Obtém uma localização de produto pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da localização
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProdutoLocalizacao"
+        "404":
+          description: Localização não encontrada
+    put:
+      tags: [Produtos Localizações]
+      summary: Atualiza uma localização de produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProdutoLocalizacaoInput"
+      responses:
+        "200":
+          description: Localização atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProdutoLocalizacao"
+        "404":
+          description: Localização não encontrada
+    delete:
+      tags: [Produtos Localizações]
+      summary: Remove uma localização de produto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Localização removida
+        "404":
+          description: Localização não encontrada
+
+  /produto-localizacao/produto/{id_produto}:
+    get:
+      tags: [Produtos Localizações]
+      summary: Busca localizações por produto
+      parameters:
+        - in: path
+          name: id_produto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de localizações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoLocalizacao"
+        "404":
+          description: Nenhuma localização encontrada
+
+  /produto-localizacao/localizacao/{id_localizacao}:
+    get:
+      tags: [Produtos Localizações]
+      summary: Busca produtos por localização
+      parameters:
+        - in: path
+          name: id_localizacao
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoLocalizacao"
+        "404":
+          description: Nenhum produto encontrado
+
+  # Relatórios
+  /relatorio/vendas:
+    get:
+      tags: [Relatórios]
+      summary: Gera relatório de vendas
+      parameters:
+        - in: query
+          name: dataInicio
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: dataFim
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Relatório de vendas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RelatorioVendas"
+        "400":
+          description: Parâmetros inválidos
+
+  /relatorio/estoque:
+    get:
+      tags: [Relatórios]
+      summary: Gera relatório de estoque
+      responses:
+        "200":
+          description: Relatório de estoque
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RelatorioEstoque"
+
+  /relatorio/funcionarios:
+    get:
+      tags: [Relatórios]
+      summary: Gera relatório de atividades de funcionários
+      parameters:
+        - in: query
+          name: dataInicio
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: dataFim
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Relatório de funcionários
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RelatorioFuncionarios"
+        "400":
+          description: Parâmetros inválidos
+
+  # Seções
+  /secao:
+    get:
+      tags: [Seções]
+      summary: Lista todas as seções
+      responses:
+        "200":
+          description: Lista de seções
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Secao"
+    post:
+      tags: [Seções]
+      summary: Cria uma nova seção
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SecaoInput"
+      responses:
+        "201":
+          description: Seção criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Secao"
+        "400":
+          description: Dados inválidos
+
+  /secao/{id}:
+    get:
+      tags: [Seções]
+      summary: Obtém uma seção pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da seção
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Secao"
+        "404":
+          description: Seção não encontrada
+    put:
+      tags: [Seções]
+      summary: Atualiza uma seção
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SecaoInput"
+      responses:
+        "200":
+          description: Seção atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Secao"
+        "404":
+          description: Seção não encontrada
+    delete:
+      tags: [Seções]
+      summary: Remove uma seção
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Seção removida
+        "404":
+          description: Seção não encontrada
+
+  /secao/nome/{nomeSecao}:
+    get:
+      tags: [Seções]
+      summary: Busca seções pelo nome
+      parameters:
+        - in: path
+          name: nomeSecao
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de seções encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Secao"
+        "404":
+          description: Nenhuma seção encontrada
+
+  # Tarefas
+  /tarefa:
+    get:
+      tags: [Tarefas]
+      summary: Lista todas as tarefas
+      responses:
+        "200":
+          description: Lista de tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tarefa"
+    post:
+      tags: [Tarefas]
+      summary: Cria uma nova tarefa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TarefaInput"
+      responses:
+        "201":
+          description: Tarefa criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tarefa"
+        "400":
+          description: Dados inválidos
+
+  /tarefa/{id}:
+    get:
+      tags: [Tarefas]
+      summary: Obtém uma tarefa pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da tarefa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tarefa"
+        "404":
+          description: Tarefa não encontrada
+    put:
+      tags: [Tarefas]
+      summary: Atualiza uma tarefa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TarefaInput"
+      responses:
+        "200":
+          description: Tarefa atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tarefa"
+        "404":
+          description: Tarefa não encontrada
+    delete:
+      tags: [Tarefas]
+      summary: Remove uma tarefa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Tarefa removida
+        "404":
+          description: Tarefa não encontrada
+
+  /tarefa/nome/{nomeTarefa}:
+    get:
+      tags: [Tarefas]
+      summary: Busca tarefas pelo nome
+      parameters:
+        - in: path
+          name: nomeTarefa
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de tarefas encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tarefa"
+        "404":
+          description: Nenhuma tarefa encontrada
+
+  /tarefa/status/{status}:
+    get:
+      tags: [Tarefas]
+      summary: Busca tarefas por status
+      parameters:
+        - in: path
+          name: status
+          required: true
+          schema:
+            type: string
+            enum: [pendente, em_andamento, concluida, cancelada]
+      responses:
+        "200":
+          description: Lista de tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tarefa"
+        "404":
+          description: Nenhuma tarefa encontrada
+
+  # Transferências
+  /transferencia:
+    get:
+      tags: [Transferências]
+      summary: Lista todas as transferências
+      responses:
+        "200":
+          description: Lista de transferências
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transferencia"
+    post:
+      tags: [Transferências]
+      summary: Cria uma nova transferência
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferenciaInput"
+      responses:
+        "201":
+          description: Transferência criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transferencia"
+        "400":
+          description: Dados inválidos
+
+  /transferencia/{id}:
+    get:
+      tags: [Transferências]
+      summary: Obtém uma transferência pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da transferência
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transferencia"
+        "404":
+          description: Transferência não encontrada
+    put:
+      tags: [Transferências]
+      summary: Atualiza uma transferência
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferenciaInput"
+      responses:
+        "200":
+          description: Transferência atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transferencia"
+        "404":
+          description: Transferência não encontrada
+    delete:
+      tags: [Transferências]
+      summary: Remove uma transferência
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Transferência removida
+        "404":
+          description: Transferência não encontrada
+
+  /transferencia/produto/{id_produto}:
+    get:
+      tags: [Transferências]
+      summary: Busca transferências por produto
+      parameters:
+        - in: path
+          name: id_produto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de transferências
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transferencia"
+        "404":
+          description: Nenhuma transferência encontrada
+
+  /transferencia/origem/{id_origem}:
+    get:
+      tags: [Transferências]
+      summary: Busca transferências por local de origem
+      parameters:
+        - in: path
+          name: id_origem
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de transferências
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transferencia"
+        "404":
+          description: Nenhuma transferência encontrada
+
+  /transferencia/destino/{id_destino}:
+    get:
+      tags: [Transferências]
+      summary: Busca transferências por local de destino
+      parameters:
+        - in: path
+          name: id_destino
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de transferências
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transferencia"
+        "404":
+          description: Nenhuma transferência encontrada
+
+  # Vendas
+  /venda:
+    get:
+      tags: [Vendas]
+      summary: Lista todas as vendas
+      responses:
+        "200":
+          description: Lista de vendas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Venda"
+    post:
+      tags: [Vendas]
+      summary: Cria uma nova venda
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendaInput"
+      responses:
+        "201":
+          description: Venda criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Venda"
+        "400":
+          description: Dados inválidos
+
+  /venda/{id}:
+    get:
+      tags: [Vendas]
+      summary: Obtém uma venda pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da venda
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Venda"
+        "404":
+          description: Venda não encontrada
+    put:
+      tags: [Vendas]
+      summary: Atualiza uma venda
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendaInput"
+      responses:
+        "200":
+          description: Venda atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Venda"
+        "404":
+          description: Venda não encontrada
+    delete:
+      tags: [Vendas]
+      summary: Remove uma venda
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Venda removida
+        "404":
+          description: Venda não encontrada
+
+  /venda/cliente/{id_cliente}:
+    get:
+      tags: [Vendas]
+      summary: Busca vendas por cliente
+      parameters:
+        - in: path
+          name: id_cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de vendas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Venda"
+        "404":
+          description: Nenhuma venda encontrada
+
+  /venda/funcionario/{id_funcionario}:
+    get:
+      tags: [Vendas]
+      summary: Busca vendas por funcionário
+      parameters:
+        - in: path
+          name: id_funcionario
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de vendas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Venda"
+        "404":
+          description: Nenhuma venda encontrada
+
+  /venda/data/{data}:
+    get:
+      tags: [Vendas]
+      summary: Busca vendas por data
+      parameters:
+        - in: path
+          name: data
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Lista de vendas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Venda"
+        "404":
+          description: Nenhuma venda encontrada
+
+  # Vendas Produtos
+  /venda-produto:
+    get:
+      tags: [Vendas Produtos]
+      summary: Lista todos os produtos de vendas
+      responses:
+        "200":
+          description: Lista de produtos de vendas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VendaProduto"
+    post:
+      tags: [Vendas Produtos]
+      summary: Adiciona um produto a uma venda
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendaProdutoInput"
+      responses:
+        "201":
+          description: Produto adicionado à venda
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendaProduto"
+        "400":
+          description: Dados inválidos
+
+  /venda-produto/{id}:
+    get:
+      tags: [Vendas Produtos]
+      summary: Obtém um produto de venda pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do produto da venda
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendaProduto"
+        "404":
+          description: Produto de venda não encontrado
+    put:
+      tags: [Vendas Produtos]
+      summary: Atualiza um produto de venda
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendaProdutoInput"
+      responses:
+        "200":
+          description: Produto de venda atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendaProduto"
+        "404":
+          description: Produto de venda não encontrado
+    delete:
+      tags: [Vendas Produtos]
+      summary: Remove um produto de venda
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Produto de venda removido
+        "404":
