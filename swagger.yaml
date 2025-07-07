@@ -13,19 +13,48 @@ servers:
 tags:
   - name: Autenticação
     description: Endpoints para login e autenticação
+  - name: Alertas
+    description: Gerenciamento de alertas do sistema
+  - name: Caixas
+    description: Gerenciamento de caixas registradoras
+  - name: Categorias de Produto
+    description: Gerenciamento de categorias de produtos
   - name: Clientes
     description: Gerenciamento de clientes
-  - name: Produtos
-    description: Gerenciamento de produtos
+  - name: Corredores
+    description: Gerenciamento de corredores de armazenamento
+  - name: Entradas de Estoque
+    description: Gerenciamento de entradas no estoque
   - name: Estoque
-    description: Operações de estoque
-  - name: Vendas
-    description: Processamento de vendas
+    description: Gerenciamento do estoque atual
   - name: Funcionários
     description: Gerenciamento de funcionários
+  - name: Funcionários Caixas
+    description: Associação de funcionários a caixas
+  - name: Funcionários Tarefas
+    description: Tarefas atribuídas a funcionários
+  - name: Funções
+    description: Gerenciamento de funções/funções de funcionários
+  - name: Localizações
+    description: Gerenciamento de localizações físicas
+  - name: Prateleiras
+    description: Gerenciamento de prateleiras
+  - name: Produtos
+    description: Gerenciamento de produtos
+  - name: Produtos Localizações
+    description: Localização física de produtos
+  - name: Relatórios
+    description: Geração de relatórios do sistema
+  - name: Seções
+    description: Gerenciamento de seções de armazenamento
   - name: Tarefas
     description: Gerenciamento de tarefas
-  # Adicione outras tags conforme necessário para cada entidade
+  - name: Transferências
+    description: Gerenciamento de transferências de estoque
+  - name: Vendas
+    description: Gerenciamento de vendas
+  - name: Vendas Produtos
+    description: Produtos associados a vendas
 
 paths:
   /login:
@@ -60,12 +89,372 @@ paths:
                   token:
                     type: string
                   usuario:
-                    $ref: "#/components/schemas/Usuario"
+                    $ref: "#/components/schemas/Funcionario"
         "401":
           description: Credenciais inválidas
         "400":
           description: Dados inválidos
 
+  # Alertas
+  /alerta:
+    get:
+      tags: [Alertas]
+      summary: Lista todos os alertas
+      responses:
+        "200":
+          description: Lista de alertas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alerta"
+    post:
+      tags: [Alertas]
+      summary: Cria um novo alerta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlertaInput"
+      responses:
+        "201":
+          description: Alerta criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alerta"
+        "400":
+          description: Dados inválidos
+
+  /alerta/{id}:
+    get:
+      tags: [Alertas]
+      summary: Obtém um alerta pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do alerta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alerta"
+        "404":
+          description: Alerta não encontrado
+    put:
+      tags: [Alertas]
+      summary: Atualiza um alerta
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlertaInput"
+      responses:
+        "200":
+          description: Alerta atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alerta"
+        "404":
+          description: Alerta não encontrado
+    delete:
+      tags: [Alertas]
+      summary: Remove um alerta
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Alerta removido
+        "404":
+          description: Alerta não encontrado
+
+  /alerta/nome/{nomeAlerta}:
+    get:
+      tags: [Alertas]
+      summary: Busca alertas pelo nome
+      parameters:
+        - in: path
+          name: nomeAlerta
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de alertas encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alerta"
+        "404":
+          description: Nenhum alerta encontrado
+
+  # Caixas
+  /caixa:
+    get:
+      tags: [Caixas]
+      summary: Lista todos os caixas
+      responses:
+        "200":
+          description: Lista de caixas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Caixa"
+    post:
+      tags: [Caixas]
+      summary: Cria um novo caixa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaixaInput"
+      responses:
+        "201":
+          description: Caixa criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Caixa"
+        "400":
+          description: Dados inválidos
+
+  /caixa/{id}:
+    get:
+      tags: [Caixas]
+      summary: Obtém um caixa pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do caixa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Caixa"
+        "404":
+          description: Caixa não encontrado
+    put:
+      tags: [Caixas]
+      summary: Atualiza um caixa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaixaInput"
+      responses:
+        "200":
+          description: Caixa atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Caixa"
+        "404":
+          description: Caixa não encontrado
+    delete:
+      tags: [Caixas]
+      summary: Remove um caixa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Caixa removido
+        "404":
+          description: Caixa não encontrado
+
+  /caixa/nome/{nomeCaixa}:
+    get:
+      tags: [Caixas]
+      summary: Busca caixas pelo nome
+      parameters:
+        - in: path
+          name: nomeCaixa
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de caixas encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Caixa"
+        "404":
+          description: Nenhum caixa encontrado
+
+  /caixa/mac/{mac}:
+    get:
+      tags: [Caixas]
+      summary: Busca caixa pelo endereço MAC
+      parameters:
+        - in: path
+          name: mac
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do caixa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Caixa"
+        "404":
+          description: Caixa não encontrado
+
+  # Categorias de Produto
+  /categoria-produto:
+    get:
+      tags: [Categorias de Produto]
+      summary: Lista todas as categorias de produto
+      responses:
+        "200":
+          description: Lista de categorias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoriaProduto"
+    post:
+      tags: [Categorias de Produto]
+      summary: Cria uma nova categoria de produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoriaProdutoInput"
+      responses:
+        "201":
+          description: Categoria criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoriaProduto"
+        "400":
+          description: Dados inválidos
+
+  /categoria-produto/{id}:
+    get:
+      tags: [Categorias de Produto]
+      summary: Obtém uma categoria pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da categoria
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoriaProduto"
+        "404":
+          description: Categoria não encontrada
+    put:
+      tags: [Categorias de Produto]
+      summary: Atualiza uma categoria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoriaProdutoInput"
+      responses:
+        "200":
+          description: Categoria atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoriaProduto"
+        "404":
+          description: Categoria não encontrada
+    delete:
+      tags: [Categorias de Produto]
+      summary: Remove uma categoria
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Categoria removida
+        "404":
+          description: Categoria não encontrada
+
+  /categoria-produto/nome/{nomeCategoria}:
+    get:
+      tags: [Categorias de Produto]
+      summary: Busca categorias pelo nome
+      parameters:
+        - in: path
+          name: nomeCategoria
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de categorias encontradas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoriaProduto"
+        "404":
+          description: Nenhuma categoria encontrada
+
+  # Clientes
   /cliente:
     get:
       tags: [Clientes]
@@ -141,8 +530,6 @@ paths:
                 $ref: "#/components/schemas/Cliente"
         "404":
           description: Cliente não encontrado
-        "400":
-          description: Dados inválidos
     delete:
       tags: [Clientes]
       summary: Remove um cliente
@@ -158,43 +545,126 @@ paths:
         "404":
           description: Cliente não encontrado
 
-  # Padrão para todas as outras rotas (repetir o mesmo padrão para cada entidade)
-  /produto:
+  /cliente/nome/{nomeCliente}:
     get:
-      tags: [Produtos]
-      summary: Lista todos os produtos
+      tags: [Clientes]
+      summary: Busca clientes pelo nome
+      parameters:
+        - in: path
+          name: nomeCliente
+          required: true
+          schema:
+            type: string
       responses:
         "200":
-          description: Lista de produtos
+          description: Lista de clientes encontrados
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Produto"
+                  $ref: "#/components/schemas/Cliente"
+        "404":
+          description: Nenhum cliente encontrado
+
+  /cliente/email/{emailCliente}:
+    get:
+      tags: [Clientes]
+      summary: Busca cliente pelo email
+      parameters:
+        - in: path
+          name: emailCliente
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        "200":
+          description: Dados do cliente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "404":
+          description: Cliente não encontrado
+
+  /cliente/telefone/{telefoneCliente}:
+    get:
+      tags: [Clientes]
+      summary: Busca cliente pelo telefone
+      parameters:
+        - in: path
+          name: telefoneCliente
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do cliente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "404":
+          description: Cliente não encontrado
+
+  /cliente/contribuinte/{numeroContribuinte}:
+    get:
+      tags: [Clientes]
+      summary: Busca cliente pelo número de contribuinte
+      parameters:
+        - in: path
+          name: numeroContribuinte
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do cliente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "404":
+          description: Cliente não encontrado
+
+  # Corredores
+  /corredor:
+    get:
+      tags: [Corredores]
+      summary: Lista todos os corredores
+      responses:
+        "200":
+          description: Lista de corredores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Corredor"
     post:
-      tags: [Produtos]
-      summary: Cria um novo produto
+      tags: [Corredores]
+      summary: Cria um novo corredor
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProdutoInput"
+              $ref: "#/components/schemas/CorredorInput"
       responses:
         "201":
-          description: Produto criado
+          description: Corredor criado com sucesso
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Produto"
+                $ref: "#/components/schemas/Corredor"
         "400":
           description: Dados inválidos
 
-  /produto/{id}:
+  /corredor/{id}:
     get:
-      tags: [Produtos]
-      summary: Obtém um produto pelo ID
+      tags: [Corredores]
+      summary: Obtém um corredor pelo ID
       parameters:
         - in: path
           name: id
@@ -203,16 +673,16 @@ paths:
             type: string
       responses:
         "200":
-          description: Dados do produto
+          description: Dados do corredor
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Produto"
+                $ref: "#/components/schemas/Corredor"
         "404":
-          description: Produto não encontrado
+          description: Corredor não encontrado
     put:
-      tags: [Produtos]
-      summary: Atualiza um produto
+      tags: [Corredores]
+      summary: Atualiza um corredor
       parameters:
         - in: path
           name: id
@@ -224,21 +694,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProdutoInput"
+              $ref: "#/components/schemas/CorredorInput"
       responses:
         "200":
-          description: Produto atualizado
+          description: Corredor atualizado
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Produto"
+                $ref: "#/components/schemas/Corredor"
         "404":
-          description: Produto não encontrado
-        "400":
-          description: Dados inválidos
+          description: Corredor não encontrado
     delete:
-      tags: [Produtos]
-      summary: Remove um produto
+      tags: [Corredores]
+      summary: Remove um corredor
       parameters:
         - in: path
           name: id
@@ -247,151 +715,636 @@ paths:
             type: string
       responses:
         "204":
-          description: Produto removido
+          description: Corredor removido
         "404":
-          description: Produto não encontrado
+          description: Corredor não encontrado
 
-  # Continuar com o mesmo padrão para todas as outras rotas...
-  # /estoque, /tarefa, /funcionario, etc...
+  /corredor/nome/{nomeCorredor}:
+    get:
+      tags: [Corredores]
+      summary: Busca corredores pelo nome
+      parameters:
+        - in: path
+          name: nomeCorredor
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de corredores encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Corredor"
+        "404":
+          description: Nenhum corredor encontrado
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+  # Entradas de Estoque
+  /entrada-estoque:
+    get:
+      tags: [Entradas de Estoque]
+      summary: Lista todas as entradas de estoque
+      responses:
+        "200":
+          description: Lista de entradas de estoque
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EntradaEstoque"
+    post:
+      tags: [Entradas de Estoque]
+      summary: Cria uma nova entrada de estoque
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntradaEstoqueInput"
+      responses:
+        "201":
+          description: Entrada de estoque criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntradaEstoque"
+        "400":
+          description: Dados inválidos
 
-  schemas:
-    Usuario:
-      type: object
-      properties:
-        id:
-          type: string
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        funcao:
-          type: string
-      example:
-        id: 1
-        nome: Admin
-        email: admin@example.com
-        funcao: ADMIN
+  /entrada-estoque/{id}:
+    get:
+      tags: [Entradas de Estoque]
+      summary: Obtém uma entrada de estoque pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da entrada de estoque
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntradaEstoque"
+        "404":
+          description: Entrada de estoque não encontrada
+    put:
+      tags: [Entradas de Estoque]
+      summary: Atualiza uma entrada de estoque
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntradaEstoqueInput"
+      responses:
+        "200":
+          description: Entrada de estoque atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntradaEstoque"
+        "404":
+          description: Entrada de estoque não encontrada
+    delete:
+      tags: [Entradas de Estoque]
+      summary: Remove uma entrada de estoque
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Entrada de estoque removida
+        "404":
+          description: Entrada de estoque não encontrada
 
-    Cliente:
-      type: object
-      properties:
-        id:
-          type: string
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        telefone:
-          type: string
-        endereco:
-          type: string
-        dataNascimento:
-          type: string
-          format: date
-      example:
-        id: 1
-        nome: João Silva
-        email: joao@example.com
-        telefone: "(11) 99999-9999"
-        endereco: "Rua Exemplo, 123"
-        dataNascimento: "1990-01-01"
+  /entrada-estoque/produto/{id_produto}:
+    get:
+      tags: [Entradas de Estoque]
+      summary: Busca entradas de estoque por produto
+      parameters:
+        - in: path
+          name: id_produto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de entradas de estoque
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EntradaEstoque"
+        "404":
+          description: Nenhuma entrada encontrada
 
-    ClienteInput:
-      type: object
-      required: [nome, email]
-      properties:
-        nome:
-          type: string
-        email:
-          type: string
-          format: email
-        telefone:
-          type: string
-        endereco:
-          type: string
-        dataNascimento:
-          type: string
-          format: date
-      example:
-        nome: João Silva
-        email: joao@example.com
-        telefone: "(11) 99999-9999"
-        endereco: "Rua Exemplo, 123"
-        dataNascimento: "1990-01-01"
+  # Estoque
+  /estoque:
+    get:
+      tags: [Estoque]
+      summary: Lista todos os registros de estoque
+      responses:
+        "200":
+          description: Lista de estoques
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Estoque"
+    post:
+      tags: [Estoque]
+      summary: Cria um novo registro de estoque
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EstoqueInput"
+      responses:
+        "201":
+          description: Estoque criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Estoque"
+        "400":
+          description: Dados inválidos
 
-    Produto:
-      type: object
-      properties:
-        id:
-          type: string
-        nome:
-          type: string
-        descricao:
-          type: string
-        preco:
-          type: number
-          format: float
-        quantidadeEstoque:
-          type: integer
-        categoria:
-          $ref: "#/components/schemas/CategoriaProduto"
-      example:
-        id: 1
-        nome: "Produto Exemplo"
-        descricao: "Descrição do produto"
-        preco: 99.99
-        quantidadeEstoque: 100
-        categoria:
-          id: 1
-          nome: "Eletrônicos"
+  /estoque/{id}:
+    get:
+      tags: [Estoque]
+      summary: Obtém um registro de estoque pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do estoque
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Estoque"
+        "404":
+          description: Estoque não encontrado
+    put:
+      tags: [Estoque]
+      summary: Atualiza um registro de estoque
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EstoqueInput"
+      responses:
+        "200":
+          description: Estoque atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Estoque"
+        "404":
+          description: Estoque não encontrado
+    delete:
+      tags: [Estoque]
+      summary: Remove um registro de estoque
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Estoque removido
+        "404":
+          description: Estoque não encontrado
 
-    ProdutoInput:
-      type: object
-      required: [nome, preco]
-      properties:
-        nome:
-          type: string
-        descricao:
-          type: string
-        preco:
-          type: number
-          format: float
-        quantidadeEstoque:
-          type: integer
-        categoriaId:
-          type: integer
-      example:
-        nome: "Produto Exemplo"
-        descricao: "Descrição do produto"
-        preco: 99.99
-        quantidadeEstoque: 100
-        categoriaId: 1
+  /estoque/produto/{id_produto}:
+    get:
+      tags: [Estoque]
+      summary: Busca estoque por produto
+      parameters:
+        - in: path
+          name: id_produto
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do estoque
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Estoque"
+        "404":
+          description: Estoque não encontrado
 
-    CategoriaProduto:
-      type: object
-      properties:
-        id:
-          type: integer
-        nome:
-          type: string
-        descricao:
-          type: string
-      example:
-        id: 1
-        nome: "Eletrônicos"
-        descricao: "Produtos eletrônicos"
+  # Funcionários
+  /funcionario:
+    get:
+      tags: [Funcionários]
+      summary: Lista todos os funcionários
+      responses:
+        "200":
+          description: Lista de funcionários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Funcionario"
+    post:
+      tags: [Funcionários]
+      summary: Cria um novo funcionário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncionarioInput"
+      responses:
+        "201":
+          description: Funcionário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcionario"
+        "400":
+          description: Dados inválidos
 
-    # Adicionar schemas para todas as outras entidades...
-    # Funcionario, Tarefa, Estoque, Venda, etc...
+  /funcionario/{id}:
+    get:
+      tags: [Funcionários]
+      summary: Obtém um funcionário pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do funcionário
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcionario"
+        "404":
+          description: Funcionário não encontrado
+    put:
+      tags: [Funcionários]
+      summary: Atualiza um funcionário
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncionarioInput"
+      responses:
+        "200":
+          description: Funcionário atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcionario"
+        "404":
+          description: Funcionário não encontrado
+    delete:
+      tags: [Funcionários]
+      summary: Remove um funcionário
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Funcionário removido
+        "404":
+          description: Funcionário não encontrado
 
-security:
-  - bearerAuth: []
+  /funcionario/nome/{nomeFuncionario}:
+    get:
+      tags: [Funcionários]
+      summary: Busca funcionários pelo nome
+      parameters:
+        - in: path
+          name: nomeFuncionario
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de funcionários encontrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Funcionario"
+        "404":
+          description: Nenhum funcionário encontrado
+
+  /funcionario/email/{emailFuncionario}:
+    get:
+      tags: [Funcionários]
+      summary: Busca funcionário pelo email
+      parameters:
+        - in: path
+          name: emailFuncionario
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        "200":
+          description: Dados do funcionário
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcionario"
+        "404":
+          description: Funcionário não encontrado
+
+  /funcionario/telefone/{telefoneFuncionario}:
+    get:
+      tags: [Funcionários]
+      summary: Busca funcionário pelo telefone
+      parameters:
+        - in: path
+          name: telefoneFuncionario
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do funcionário
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcionario"
+        "404":
+          description: Funcionário não encontrado
+
+  /funcionario/contribuinte/{numeroBI}:
+    get:
+      tags: [Funcionários]
+      summary: Busca funcionário pelo número de BI
+      parameters:
+        - in: path
+          name: numeroBI
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados do funcionário
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Funcionario"
+        "404":
+          description: Funcionário não encontrado
+
+  # Funcionários Caixas
+  /funcionario-caixa:
+    get:
+      tags: [Funcionários Caixas]
+      summary: Lista todas as associações de funcionários a caixas
+      responses:
+        "200":
+          description: Lista de associações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FuncionarioCaixa"
+    post:
+      tags: [Funcionários Caixas]
+      summary: Cria uma nova associação de funcionário a caixa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncionarioCaixaInput"
+      responses:
+        "201":
+          description: Associação criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FuncionarioCaixa"
+        "400":
+          description: Dados inválidos
+
+  /funcionario-caixa/{id}:
+    get:
+      tags: [Funcionários Caixas]
+      summary: Obtém uma associação pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da associação
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FuncionarioCaixa"
+        "404":
+          description: Associação não encontrada
+    put:
+      tags: [Funcionários Caixas]
+      summary: Atualiza uma associação
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncionarioCaixaInput"
+      responses:
+        "200":
+          description: Associação atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FuncionarioCaixa"
+        "404":
+          description: Associação não encontrada
+    delete:
+      tags: [Funcionários Caixas]
+      summary: Remove uma associação
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Associação removida
+        "404":
+          description: Associação não encontrada
+
+  /funcionario-caixa/caixa/{id_caixa}:
+    get:
+      tags: [Funcionários Caixas]
+      summary: Busca associações por caixa
+      parameters:
+        - in: path
+          name: id_caixa
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de associações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FuncionarioCaixa"
+        "404":
+          description: Nenhuma associação encontrada
+
+  /funcionario-caixa/funcionario/{id_funcionario}:
+    get:
+      tags: [Funcionários Caixas]
+      summary: Busca associações por funcionário
+      parameters:
+        - in: path
+          name: id_funcionario
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de associações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FuncionarioCaixa"
+        "404":
+          description: Nenhuma associação encontrada
+
+  # Funcionários Tarefas
+  /funcionario-tarefa:
+    get:
+      tags: [Funcionários Tarefas]
+      summary: Lista todas as tarefas de funcionários
+      responses:
+        "200":
+          description: Lista de tarefas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FuncionarioTarefa"
+    post:
+      tags: [Funcionários Tarefas]
+      summary: Cria uma nova tarefa para funcionário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncionarioTarefaInput"
+      responses:
+        "201":
+          description: Tarefa criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FuncionarioTarefa"
+        "400":
+          description: Dados inválidos
+
+  /funcionario-tarefa/{id}:
+    get:
+      tags: [Funcionários Tarefas]
+      summary: Obtém uma tarefa pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Dados da tarefa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FuncionarioTarefa"
+        "404":
+          description: Tarefa não encontrada
+    put:
+      tags: [Funcionários Tarefas]
+      summary: Atualiza uma tarefa
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FuncionarioTarefaInput"
+      responses:
+        "200":
+          description: Tarefa atualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FuncionarioTarefa
